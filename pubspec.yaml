@@ -1,0 +1,58 @@
+name: permis
+description: A new Flutter application.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  cupertino_icons: ^0.1.3
+  font_awesome_flutter: ^8.10.0
+  flutter_svg: ^0.19.1
+  animated_bottom_navigation_bar: ^0.1.2+2
+  icon_picker: ^1.1.0
+  line_icons: ^0.2.0
+  frino_icons: ^1.0.1+4
+  sleek_circular_slider: ^1.2.0+web
+  liquid_progress_indicator: ^0.3.2
+
+
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+flutter:
+
+  uses-material-design: true
+  assets:
+    - assets/iconTheme/
+    - assets/imageQuestion/
+
+  fonts:
+    - family: reglages
+      fonts:
+       - asset: assets/fonts/reglages.ttf
+    - family: themes
+      fonts:
+       - asset: assets/fonts/themes.ttf
+    - family: cours
+      fonts:
+       - asset: assets/fonts/cours.ttf
+    - family: chrono
+      fonts:
+       - asset: assets/fonts/chrono.ttf
+    - family: jeux
+      fonts:
+       - asset: assets/fonts/jeux.ttf
+
