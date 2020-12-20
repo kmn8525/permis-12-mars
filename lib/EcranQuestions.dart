@@ -30,6 +30,8 @@ class _EcranQuestionState extends State<EcranQuestion> {
   bool choix_1;
   bool choix_2;
   bool choix_3;
+  bool valeur_choisi;
+
 
   bool clic_bouton_A = false;
   bool clic_bouton_B = false;
@@ -137,42 +139,42 @@ class _EcranQuestionState extends State<EcranQuestion> {
 // ----- ON TESTE SI   A ET B  SONT SELECTIONNER ---- //
         // --------------------------------------//
         else if ((a != null) & (b != null) )
-          {
-            verif_a = definition.getBonneReponseA();
-            verif_b = definition.getBonneReponseB();
-            verif_c = definition.getBonneReponseC();
+        {
+          verif_a = definition.getBonneReponseA();
+          verif_b = definition.getBonneReponseB();
+          verif_c = definition.getBonneReponseC();
 
-            if ((verif_a == a) & (verif_b == b)) {
-              couleurApresSelection_A = Colors.green;
-              couleurApresSelection_B = Colors.green;
-              couleurApresSelection_C = Colors.red;
-
-            }
-
-            else if (verif_a == a)
-            {
-              couleurApresSelection_A = Colors.green;
-              couleurApresSelection_B = Colors.red;
-              couleurPardefault_C = Colors.white;
-
-            }
-            else if (verif_b == b )
-              {
-                couleurApresSelection_B = Colors.green;
-                couleurApresSelection_A = Colors.red;
-                couleurPardefault_C = Colors.white;
-
-              }
-            else
-              {
-                couleurApresSelection_B = Colors.red;
-                couleurApresSelection_A = Colors.red;
-
-                couleurPardefault_C = Colors.green;
-
-              }
+          if ((verif_a == a) & (verif_b == b)) {
+            couleurApresSelection_A = Colors.green;
+            couleurApresSelection_B = Colors.green;
+            couleurApresSelection_C = Colors.red;
 
           }
+
+          else if (verif_a == a)
+          {
+            couleurApresSelection_A = Colors.green;
+            couleurApresSelection_B = Colors.red;
+            couleurPardefault_C = Colors.white;
+
+          }
+          else if (verif_b == b )
+          {
+            couleurApresSelection_B = Colors.green;
+            couleurApresSelection_A = Colors.red;
+            couleurPardefault_C = Colors.white;
+
+          }
+          else
+          {
+            couleurApresSelection_B = Colors.red;
+            couleurApresSelection_A = Colors.red;
+
+            couleurPardefault_C = Colors.green;
+
+          }
+
+        }
 
         // --------------------------------------//
 // ----- ON TESTE SI   A ET C  SONT SELECTIONNER ---- //
@@ -380,7 +382,7 @@ class _EcranQuestionState extends State<EcranQuestion> {
 
 
 
-       }
+      }
 
 
 
@@ -416,6 +418,9 @@ class _EcranQuestionState extends State<EcranQuestion> {
 
     definition.questionSuivante();
     definition.optionSuivante();
+    numeroImage++;
+
+
     resetColor();
   }
 
@@ -427,13 +432,44 @@ class _EcranQuestionState extends State<EcranQuestion> {
 
       visibilite_bouton_Valider = !visibilite_bouton_Valider;
       visibilite_bouton_Suivant = !visibilite_bouton_Suivant;
+
+      print('choix_1  choix_2 choix_3  $choix_1  $choix_2 $choix_3   ') ;
+      //visibilite_bouton_C = ! visibilite_bouton_C ;
     });
   }
 
   void _aChoisi(int value) {
     print('kmnn');
   }
+  bool valeurChoisiA() {
+    if (clic_bouton_A == true) {
+      valeur_choisi = true;
+    } else {
+      valeur_choisi = null;
+    }
 
+    return valeur_choisi;
+  }
+
+  bool valeurChoisiB() {
+    if (clic_bouton_B == true) {
+      valeur_choisi = true;
+    } else {
+      valeur_choisi = null;
+    }
+
+    return valeur_choisi;
+  }
+
+  bool valeurChoisiC() {
+    if (clic_bouton_C == true) {
+      valeur_choisi = true;
+    } else {
+      valeur_choisi = null;
+    }
+
+    return valeur_choisi;
+  }
 
 
 
@@ -442,23 +478,19 @@ class _EcranQuestionState extends State<EcranQuestion> {
         .of(context)
         .size
         .height;
-    String reponse_C = definition.getOptionC() ;
 
-
+    //  Incrementation du numeros de L'image
     setState(() {
-    if (  reponse_C  == 'null' ) {
+      if (  definition.getOptionC()   == 'null' ) {
 
 
         visibilite_bouton_C = false ;
 
-    }
-    else {
-      visibilite_bouton_C = true ;
-    }
+      }
+      else {
+        visibilite_bouton_C = true ;
+      }
     });
-    //  Incrementation du numeros de L'image
-    numeroImage++;
-
 
     return Scaffold(
       appBar: AppBar(
@@ -499,258 +531,259 @@ class _EcranQuestionState extends State<EcranQuestion> {
                   /////////////////////////////////////////////////////////////////////
                   ///// ---------------   BOUTON  1  -------------- /////////
                   /////////////////////////////////////////////////////////////////////
-
                   Row(
                     children: <Widget>[
-
-                      InkWell(
-                        child: AbsorbPointer(
-                          absorbing: desactive_boutonA,
-                          child: Container(
-                            margin: EdgeInsets.all(30),
-                            child: Center(
+                      Container(
+                        child: Container(
+                          margin: EdgeInsets.all(30),
+                          child: AbsorbPointer(
+                            absorbing: desactive_boutonA,
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                // side: BorderSide(color: Colors.red)
+                              ),
+                              elevation: 3,
+                              textColor: Colors.black,
                               child: Text(
                                 definition.getOptionA(),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
+                                ),
                               ),
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(13.0),
+                              onPressed: () {
+                                setState(() {
+                                  clic_bouton_A = !clic_bouton_A;
+                                });
+                                print('--------- 6 ------------');
+                                print(
+                                    'choix_1  : $choix_1 -  clic_bouton_A : $clic_bouton_A');
+
+                                choix_1 = valeurChoisiA();
+                                print('---------  6.1  ------------');
+                                print(
+                                    'choix_1   :$choix_1  - clic_bouton_A : $clic_bouton_A');
+
+                                print(
+                                    'choix_2   :$choix_2 - clic_bouton_B : $clic_bouton_B');
+                                print(
+                                    'couleurApresSelection_A   :$couleurApresSelection_A - couleurPardefault_A : $clic_bouton_B');
+                              },
                               color: clic_bouton_A
                                   ? couleurApresSelection_A
                                   : couleurPardefault_A,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: kBoutonDegrade,
-                                  offset: Offset(0, 2),
-                                  blurRadius: 2,
-                                ),
-                              ],
                             ),
-                            height: 50.0,
-                            width: 250,
                           ),
+                          height: 50.0,
+                          width: 250,
                         ),
-                        onTap: () {
-                          choix_1 = true;
-
-                          setState(() {
-                            clic_bouton_A = !clic_bouton_A;
-                          });
-                        },
                       ),
-                      InkWell(
-                        child: AbsorbPointer(
-                          absorbing: desactive_boutonA,
-                          child: Container(
-                            child: Center(
+                      Container(
+                        child: Container(
+                          child: AbsorbPointer(
+                            absorbing: desactive_boutonA,
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                // side: BorderSide(color: Colors.red)
+                              ),
+                              elevation: 3,
+                              textColor: Colors.black,
                               child: Text(
                                 'A',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
+                                ),
                               ),
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(13.0),
+                              onPressed: () {
+                                setState(() {
+                                  clic_bouton_A = !clic_bouton_A;
+                                });
+                                print('--------- 6 ------------');
+                                print(
+                                    'choix_1  : $choix_1 -  clic_bouton_A : $clic_bouton_A');
+
+                                choix_1 = valeurChoisiA();
+                                print('---------  6.1  ------------');
+                                print(
+                                    'choix_1   :$choix_1  - clic_bouton_A : $clic_bouton_A');
+
+                                print(
+                                    'choix_2   :$choix_2 - clic_bouton_B : $clic_bouton_B');
+                                print(
+                                    'couleurApresSelection_A   :$couleurApresSelection_A - couleurPardefault_A : $clic_bouton_B');
+                              },
                               color: clic_bouton_A
                                   ? couleurApresSelection_A
                                   : couleurPardefault_A,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: kBoutonDegrade,
-                                  offset: Offset(0, 2),
-                                  blurRadius: 2,
-                                ),
-                              ],
                             ),
-                            height: 50.0,
-                            width: 50,
                           ),
+                          height: 50.0,
+                          width: 50,
                         ),
-                        onTap: () {
-                          choix_1 = true;
-
-                          setState(() {
-                            clic_bouton_A = !clic_bouton_A;
-                          });
-                        },
                       ),
                     ],
                   ),
+
 
                   /////////////////////////////////////////////////////////////////////
                   ///// ---------------   BOUTON  2  -------------- /////////
                   /////////////////////////////////////////////////////////////////////
-
                   Row(
-
                     children: <Widget>[
-                      InkWell(
-                        child: AbsorbPointer(
-                          absorbing: desactive_boutonB,
-                          child: Container(
-                            margin: EdgeInsets.all(30),
-                            child: Center(
+                      Container(
+                        child: Container(
+                          margin: EdgeInsets.all(30),
+                          child: AbsorbPointer(
+                            absorbing: desactive_boutonB,
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                // side: BorderSide(color: Colors.red)
+                              ),
+                              elevation: 3,
+                              textColor: Colors.black,
                               child: Text(
                                 definition.getOptionB(),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(13.0),
-                              color: clic_bouton_B
-                                  ? couleurApresSelection_B
-                                  : couleurPardefault_B,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: kBoutonDegrade,
-                                  offset: Offset(0, 2),
-                                  blurRadius: 2,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
                                 ),
-                              ],
-                            ),
-                            height: 50.0,
-                            width: 250,
-                          ),
-                        ),
-                        onTap: () {
-                          choix_2 = true;
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  clic_bouton_B = !clic_bouton_B;
+                                });
+                                print('--------- 6 ------------');
 
-                          setState(() {
-                            clic_bouton_B = !clic_bouton_B;
-                          });
-                        },
+                                choix_2 = valeurChoisiB();
+                               },
+                              color: clic_bouton_B ? couleurApresSelection_B : couleurPardefault_B,
+                            ),
+                          ),
+                          height: 50.0,
+                          width: 250,
+                        ),
                       ),
-                      InkWell(
-                        child: AbsorbPointer(
-                          absorbing: desactive_boutonB,
-                          child: Container(
-                            child: Center(
+                      Container(
+                        child: Container(
+                          child: AbsorbPointer(
+                            absorbing: desactive_boutonB,
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                // side: BorderSide(color: Colors.red)
+                              ),
+                              elevation: 3,
+                              textColor: Colors.black,
                               child: Text(
                                 'B',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(13.0),
-                              color: clic_bouton_B
-                                  ? couleurApresSelection_B
-                                  : couleurPardefault_B,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: kBoutonDegrade,
-                                  offset: Offset(0, 2),
-                                  blurRadius: 2,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
                                 ),
-                              ],
-                            ),
-                            height: 50.0,
-                            width: 50,
-                          ),
-                        ),
-                        onTap: () {
-                          choix_2 = true;
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  clic_bouton_B = !clic_bouton_B;
+                                });
 
-                          setState(() {
-                            clic_bouton_B = !clic_bouton_B ;
-                          });
-                        },
+                                choix_2 = valeurChoisiB();
+                                },
+                              color: clic_bouton_B ? couleurApresSelection_B : couleurPardefault_B,
+                            ),
+                          ),
+                          height: 50.0,
+                          width: 50,
+                        ),
                       ),
                     ],
-
                   ),
+
+
 
                   /////////////////////////////////////////////////////////////////////
                   ///// ---------------   BOUTON  3  -------------- /////////
                   /////////////////////////////////////////////////////////////////////
 
                   Row(
-
                     children: <Widget>[
                       Visibility(
                         visible: visibilite_bouton_C,
-                        child: InkWell(
+                        child: Container(
+                          margin: EdgeInsets.all(30),
                           child: AbsorbPointer(
                             absorbing: desactive_boutonC,
-                            child: Container(
-                              margin: EdgeInsets.all(30),
-                              child: Center(
-                                child: Text(
-                                   reponse_C ,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                // side: BorderSide(color: Colors.red)
+                              ),
+                              elevation: 3,
+                              textColor: Colors.black,
+                              child: Text(
+                                definition.getOptionC() ,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
                                 ),
                               ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(13.0),
-                                color: clic_bouton_C ? couleurApresSelection_C : couleurPardefault_C,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: kBoutonDegrade,
-                                    offset: Offset(0, 2),
-                                    blurRadius: 2,
-                                  ),
-                                ],
-                              ),
-                              height: 50.0,
-                              width: 250,
+                              onPressed: () {
+                                setState(() {
+
+                                  clic_bouton_C = !clic_bouton_C;
+                                });
+                                choix_3 = valeurChoisiC();
+
+                              },
+                              color: clic_bouton_C ? couleurApresSelection_C : couleurPardefault_C,
                             ),
                           ),
-                          onTap: () {
-                            choix_3 = true;
-
-                            setState(() {
-                              clic_bouton_C = !clic_bouton_C;
-                            });
-                          },
+                          height: 50,
+                          width: 250,
                         ),
                       ),
 
                       Visibility(
                         visible: visibilite_bouton_C,
-                        child: InkWell(
+                        child: Container(
                           child: AbsorbPointer(
                             absorbing: desactive_boutonC,
-                            child: Container(
-                              child: Center(
-                                child: Text(
-                                  'C',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                // side: BorderSide(color: Colors.red)
+                              ),
+                              elevation: 3,
+                              textColor: Colors.black,
+                              child: Text(
+                                'C',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
                                 ),
                               ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(13.0),
-                                color: clic_bouton_C
-                                    ? couleurApresSelection_C
-                                    : couleurPardefault_C,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: kBoutonDegrade,
-                                    offset: Offset(0, 2),
-                                    blurRadius: 2,
-                                  ),
-                                ],
-                              ),
-                              height: 50.0,
-                              width: 50,
+                              onPressed: () {
+                                setState(() {
+
+                                  clic_bouton_C = !clic_bouton_C;
+                                });
+                                choix_3 = valeurChoisiC();
+
+                              },
+                              color: clic_bouton_C
+                                  ? couleurApresSelection_C
+                                  : couleurPardefault_C,
                             ),
                           ),
-                          onTap: () {
-                            choix_3 = true;
-
-                            setState(() {
-                              clic_bouton_C = !clic_bouton_C ;
-                            });
-                          },
+                          height: 50.0,
+                          width: 50,
                         ),
                       ),
                     ],
-
                   ),
-
                 ],
               ),
             ],
@@ -773,6 +806,8 @@ class _EcranQuestionState extends State<EcranQuestion> {
                         icon: Icons.play_circle_outline,
                       ),
                       onPressed: () {
+                        print('choix_1  choix_2 choix_3  $choix_1  $choix_2 $choix_3   ') ;
+
                         checkAnswer(choix_1, choix_2, choix_3);
                         BoutonValider();
                         setState(() {
