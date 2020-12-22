@@ -147,7 +147,7 @@ Widget _constructeurBouttons() {
         SizedBox(width: 14.0),
         Expanded(
           child: InkWell(
-            onTap: () => print("Message"),
+            onTap: () => print("THEME"),
             child: Container(
               height: 40.0,
               decoration: BoxDecoration(
@@ -157,7 +157,7 @@ Widget _constructeurBouttons() {
                 child: Padding(
                   padding: EdgeInsets.all(10.0),
                   child: Text(
-                    "MESSAGE",
+                    "THEME",
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -165,6 +165,29 @@ Widget _constructeurBouttons() {
             ),
           ),
         ),
+        SizedBox(width: 14.0),
+
+        Expanded(
+          child: InkWell(
+            onTap: () => print("EXAMEN"),
+            child: Container(
+              height: 40.0,
+              decoration: BoxDecoration(
+                border: Border.all(),
+              ),
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text(
+                    "EXAMEN",
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+
       ],
     ),
   );
