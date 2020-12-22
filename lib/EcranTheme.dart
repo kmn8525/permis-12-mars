@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'BouttonProfil.dart';
 import 'ButonThemes.dart';
 import 'package:permis/ImageText_theme.dart';
 import 'Constantes.dart';
@@ -7,9 +8,13 @@ import 'package:permis/EcranConducteur.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:permis/TableIthemes.dart';
 import 'package:permis/BasBarNavigation.dart';
+import 'EcranProfil.dart';
 import 'EcranQuestions.dart';
+import 'package:permis/BouttonProfil.dart';
 
 final String titrePage='EcranThemes' ;
+final String _nomPrenom = "MATIAL MONKAM";
+
 
 class EcranThemes extends StatefulWidget {
   static  const String id = 'EcranThemes' ;
@@ -56,29 +61,39 @@ class _EcranThemeState extends State<EcranThemes> {
     //Theme('ecologie', 'ECOLOGIE'),
     Theme('ampoule', 'DIVERS'),
   ];
+
+  String chemin = 'assets/profil/martial.jpg' ;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-          preferredSize: Size.fromHeight(50.0),
-          child: AppBar(
-            automaticallyImplyLeading: false, // hides leading widget
-          )
-      ),
-      /*appBar: AppBar(
-        actions: <Widget>[
-          RaisedButton(
-            onPressed: () {
-              print('kmn');
-            },
-            child: Text('kmm'),
-            color: Colors.white,
-            elevation: 1,
-          )
+
+
+    appBar: AppBar(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children:<Widget> [
+          Container(
+            child: BouttonProfil (
+              CheminImage : chemin,
+              onPressed: ()  {
+                Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
+                    builder: (BuildContext context  ) =>
+                        EcranProfil()));
+
+              },
+
+            ) ,
+          ) ,
         ],
-      ),*/
+
+      ),
+        backgroundColor: kCouleurBody ,
+      ),
+
 
       body: Center(
+
         child: GridView.builder(
             shrinkWrap: true,
 
@@ -159,117 +174,3 @@ class _EcranThemeState extends State<EcranThemes> {
     );
   }
 }
-
-/*Expanded(
-child: Row(
-mainAxisAlignment: MainAxisAlignment.center,
-children: <Widget> [
-Expanded(
-child: Bouton_Acceuil(
-couleur: Colors.black38,
-boutonEnfant: Column (
-mainAxisAlignment: MainAxisAlignment.center,
-children: <Widget> [
-BouttonImageText(imageSVG:'boite_manuel' , nomTheme: 'TECHNIQUE DE CONDUITE',),
-
-],
-)
-
-),
-),
-SizedBox(
-width: 20,
-) ,
-],
-
-),
-) ,*/
-
-/*
-bottomNavigationBar: BottomNavigationBar(
-
-
-backgroundColor: kCouleurAppBar,
-selectedItemColor: Colors.red ,
-type: BottomNavigationBarType.fixed,
-iconSize: 20,
-
-items: const <BottomNavigationBarItem>[
-
-BottomNavigationBarItem(
-icon: Icon(
-Icons.border_all,
-color: Colors.black,
-
-),
-title: Text(
-'Thèmes',
-style: TextStyle(
-color: Colors.black),
-),
-activeIcon: Icon(
-Icons.border_all,
-color: kCouleurAppBar,
-size: 36,
-),
-),
-
-BottomNavigationBarItem(
-icon: Icon(
-Icons.library_books,
-color: Colors.black,
-),
-title: Text(
-'Cours',
-style: TextStyle(
-color: Colors.black),
-),
-),
-BottomNavigationBarItem(
-icon: Icon(
-Icons.access_alarms,
-//size: 5,
-color: Colors.black,
-
-),
-title: Text(
-'Examens',
-style: TextStyle(
-color: Colors.black),
-),
-),
-BottomNavigationBarItem(
-icon: Icon(
-Icons.videogame_asset,
-//size: 5,
-color: Colors.black,
-
-),
-title: Text(
-'Jeux',
-style: TextStyle(
-color: Colors.black),
-),
-),
-
-BottomNavigationBarItem(
-
-icon: Icon(
-const IconData(0xe900 , fontFamily: 'reglages' ) ,
-color: Colors.black,
-
-),
-title: Text(
-'Réglages',
-style: TextStyle(
-color: Colors.black),
-),
-),
-
-
-],
-
-// onTap: _onItemTapped,
-),*/
-
-

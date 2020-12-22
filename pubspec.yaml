@@ -23,6 +23,7 @@ dependencies:
   frino_icons: ^1.0.1+4
   sleek_circular_slider: ^1.2.0+web
   liquid_progress_indicator: ^0.3.2
+  image_picker: ^0.6.4
 
 
 
@@ -38,6 +39,7 @@ flutter:
   assets:
     - assets/iconTheme/
     - assets/imageQuestion/
+    - assets/profil/
 
   fonts:
     - family: reglages
