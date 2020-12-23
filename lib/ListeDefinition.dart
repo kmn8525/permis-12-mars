@@ -3,9 +3,9 @@ import 'Question.dart';
 
 class Definition {
   int _nombreDeQuestion = 0;
-  int _nombreOption = 0;
+  int _nombreDeChoix = 0;
 
-  List<Reponse> _listeOption= [
+  List<Reponse> _listeDeChoix= [
     Reponse( 'Je dois lui céder le passage' , 'Je peux lui céder le passage /R ' , 'Lui céder le passage est une infraction' ) ,
     Reponse( 'chute de pierre a 150 metres ' , 'projection de gravillons a 200 metre  /R' , 'null' ) ,
     Reponse( 'Oui/R' , 'Non , ce vehicule doit se rabattre et me ceder le passage ' , 'Chute de pierres a 200 mettre ' ) ,
@@ -46,13 +46,13 @@ class Definition {
 
 
   String getOptionA() {
-    return _listeOption[_nombreOption].option_A;
+    return _listeDeChoix[_nombreDeChoix].option_A;
   }
   String getOptionB() {
-    return _listeOption[_nombreOption].option_B;
+    return _listeDeChoix[_nombreDeChoix].option_B;
   }
   String getOptionC() {
-    return _listeOption[_nombreOption].option_C;
+    return _listeDeChoix[_nombreDeChoix].option_C;
   }
 
 
@@ -97,8 +97,8 @@ class Definition {
   }
 
   void optionSuivante() {
-    if (_nombreOption <= _listeOption.length - 1) {
-      _nombreOption++;
+    if (_nombreDeChoix <= _listeDeChoix.length - 1) {
+      _nombreDeChoix++;
     }
   }
 
@@ -115,7 +115,7 @@ class Definition {
 
   void reset() {
     _nombreDeQuestion = 0;
-    _nombreOption = 0 ;
+    _nombreDeChoix = 0 ;
   }
 
 

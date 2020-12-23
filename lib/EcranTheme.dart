@@ -36,7 +36,7 @@ class Theme {
 class _EcranThemeState extends State<EcranThemes> {
   List<Theme> _themes = [
     Theme('informations', 'Definition'),
-    Theme('conducteur', 'CONDUCTEUR ET PASSAGER '),
+    Theme('conducteur', 'Conducteur '),
     Theme('policiere', 'INJONCTIONS'),
     Theme('feuxControl', 'LES FEUX'),
     Theme('danger', 'SIGNAUX ROUTIERS'),

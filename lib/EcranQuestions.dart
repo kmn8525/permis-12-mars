@@ -8,7 +8,10 @@ import 'ConstructeurBasBarDeNavigation.dart';
 import 'IconContent.dart';
 import 'ListeDefinition.dart';
 import 'package:permis/BouttonProfil.dart';
-Definition definition = Definition();
+import 'package:permis/ListeConducteurPassager.dart';
+
+var tampon = null ;
+String vois ;
 
 class EcranQuestion extends StatefulWidget {
   final String titrePage;
@@ -20,6 +23,12 @@ class EcranQuestion extends StatefulWidget {
 }
 
 class _EcranQuestionState extends State<EcranQuestion> {
+
+  @override
+  void initState() {
+    super.initState();
+    _charge();
+  }
   Color couleurPardefault_A = Color(0xffffffff) ;
   Color couleurPardefault_B =  Color(0xffffffff) ;
   Color couleurPardefault_C =  Color(0xffffffff) ;
@@ -55,8 +64,8 @@ class _EcranQuestionState extends State<EcranQuestion> {
     String faute;
 
     setState(() {
-      if (definition.estFini() == true) {
-        definition.reset();
+      if (tampon.estFini() == true) {
+        tampon.reset();
         numeroImage = 1;
       }
 
@@ -68,9 +77,9 @@ class _EcranQuestionState extends State<EcranQuestion> {
 
         if ((a == null) & (b == null) & (c == null))
         {
-          verif_a = definition.getBonneReponseA();
-          verif_b = definition.getBonneReponseB();
-          verif_c = definition.getBonneReponseC();
+          verif_a = tampon.getBonneReponseA();
+          verif_b = tampon.getBonneReponseB();
+          verif_c = tampon.getBonneReponseC();
 
           if ((verif_a == true) & (verif_b == true)) {
             couleurPardefault_A = Colors.green;
@@ -96,9 +105,9 @@ class _EcranQuestionState extends State<EcranQuestion> {
 
         else if ((a != null) & (b != null) & (c != null))
         {
-          verif_a = definition.getBonneReponseA();
-          verif_b = definition.getBonneReponseB();
-          verif_c = definition.getBonneReponseC();
+          verif_a = tampon.getBonneReponseA();
+          verif_b = tampon.getBonneReponseB();
+          verif_c = tampon.getBonneReponseC();
 
           if ((verif_a == a) & (verif_b == b)) {
             couleurApresSelection_A = Colors.green;
@@ -140,9 +149,9 @@ class _EcranQuestionState extends State<EcranQuestion> {
         // --------------------------------------//
         else if ((a != null) & (b != null) )
         {
-          verif_a = definition.getBonneReponseA();
-          verif_b = definition.getBonneReponseB();
-          verif_c = definition.getBonneReponseC();
+          verif_a = tampon.getBonneReponseA();
+          verif_b = tampon.getBonneReponseB();
+          verif_c = tampon.getBonneReponseC();
 
           if ((verif_a == a) & (verif_b == b)) {
             couleurApresSelection_A = Colors.green;
@@ -182,9 +191,9 @@ class _EcranQuestionState extends State<EcranQuestion> {
 
         else if ((a != null) & (c != null) )
         {
-          verif_a = definition.getBonneReponseA();
-          verif_b = definition.getBonneReponseB();
-          verif_c = definition.getBonneReponseC();
+          verif_a = tampon.getBonneReponseA();
+          verif_b = tampon.getBonneReponseB();
+          verif_c = tampon.getBonneReponseC();
 
           if ((verif_a == a) & (verif_c == c)) {
             couleurApresSelection_A = Colors.green;
@@ -222,9 +231,9 @@ class _EcranQuestionState extends State<EcranQuestion> {
         else if ((b != null) & (c != null) )
         {
 
-          verif_a = definition.getBonneReponseA();
-          verif_b = definition.getBonneReponseB();
-          verif_c = definition.getBonneReponseC();
+          verif_a = tampon.getBonneReponseA();
+          verif_b = tampon.getBonneReponseB();
+          verif_c = tampon.getBonneReponseC();
 
           if ((verif_b == b) & (verif_c == c)) {
             couleurApresSelection_B = Colors.green;
@@ -257,17 +266,15 @@ class _EcranQuestionState extends State<EcranQuestion> {
 
         }
 
-
-
         // --------------------------------------//
 // ----- ON SELECTIONNE A  ET   B , C SONT NULL---- //
         // --------------------------------------//
 
         else if ((a != null) & (b == null) & (c == null))
         {
-          verif_a = definition.getBonneReponseA();
-          verif_b = definition.getBonneReponseB();
-          verif_c = definition.getBonneReponseC();
+          verif_a = tampon.getBonneReponseA();
+          verif_b = tampon.getBonneReponseB();
+          verif_c = tampon.getBonneReponseC();
 
           if ((verif_a == a) & (verif_b == true)) {
             couleurApresSelection_A = Colors.green;
@@ -307,9 +314,9 @@ class _EcranQuestionState extends State<EcranQuestion> {
 
         else if ((b != null) & (a == null) & (c == null))
         {
-          verif_a = definition.getBonneReponseA();
-          verif_b = definition.getBonneReponseB();
-          verif_c = definition.getBonneReponseC();
+          verif_a = tampon.getBonneReponseA();
+          verif_b = tampon.getBonneReponseB();
+          verif_c = tampon.getBonneReponseC();
 
           if ((verif_b == b) & (verif_a == true)) {
             couleurApresSelection_B = Colors.green;
@@ -346,9 +353,9 @@ class _EcranQuestionState extends State<EcranQuestion> {
 
         else if ((c != null) & (a == null) & (b == null))
         {
-          verif_a = definition.getBonneReponseA();
-          verif_b = definition.getBonneReponseB();
-          verif_c = definition.getBonneReponseC();
+          verif_a = tampon.getBonneReponseA();
+          verif_b = tampon.getBonneReponseB();
+          verif_c = tampon.getBonneReponseC();
 
           if ((verif_c == c) & (verif_a == true)) {
             couleurApresSelection_C = Colors.green;
@@ -403,6 +410,26 @@ class _EcranQuestionState extends State<EcranQuestion> {
     });
   }
 
+  void  _charge () {
+    if (  widget.titrePage == 'INJONCTIONS' ) {
+      var  c = () =>  ConducteurPassager();
+      tampon = c() ;
+      vois = 'imageConducteurPassager';
+      print('tampon  CONDUCTEUR: $tampon') ;
+
+    }
+
+    else  {
+      if (  widget.titrePage == 'Definition' )  {
+        var  d = () =>  Definition();
+        tampon = d() ;
+        vois = 'imageDefinition';
+
+        print('tampon DEFINITION : $tampon') ;
+
+      }
+    }
+  }
   void BoutonSuivant() {
     setState(() {
       visibilite_bouton_Valider = !visibilite_bouton_Valider; // le bouton valider est desactiver
@@ -416,8 +443,8 @@ class _EcranQuestionState extends State<EcranQuestion> {
       clic_bouton_C = false;
     });
 
-    definition.questionSuivante();
-    definition.optionSuivante();
+    tampon.questionSuivante();
+    tampon.optionSuivante();
     numeroImage++;
 
 
@@ -473,24 +500,25 @@ class _EcranQuestionState extends State<EcranQuestion> {
 
 
 
+
   Widget build(BuildContext context) {
-    double hauteur = MediaQuery
-        .of(context)
-        .size
-        .height;
-
-    //  Incrementation du numeros de L'image
-    setState(() {
-      if (  definition.getOptionC()   == 'null' ) {
+    double hauteur = MediaQuery.of(context).size.height;
 
 
-        visibilite_bouton_C = false ;
+setState(() {
 
-      }
-      else {
-        visibilite_bouton_C = true ;
-      }
-    });
+  if (  tampon.getOptionC()   == 'null' ) {
+
+
+    visibilite_bouton_C = false ;
+
+  }
+  else {
+    visibilite_bouton_C = true ;
+  }
+});
+
+
 
     return Scaffold(
       appBar: AppBar(
@@ -509,7 +537,7 @@ class _EcranQuestionState extends State<EcranQuestion> {
                   children: <Widget>[
                     Expanded(
                       child: Image.asset(
-                        'assets/imageQuestion/$numeroImage.png',
+                        'assets/$vois/$numeroImage.png',
                         height: 300,
                       ),
                     ),
@@ -519,7 +547,7 @@ class _EcranQuestionState extends State<EcranQuestion> {
               Container(
                   margin: EdgeInsets.all(2),
                   child: Text(
-                    definition.getQuestionText(),
+                    tampon.getQuestionText(),
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   )),
@@ -546,7 +574,7 @@ class _EcranQuestionState extends State<EcranQuestion> {
                               elevation: 3,
                               textColor: Colors.black,
                               child: Text(
-                                definition.getOptionA(),
+                                tampon.getOptionA(),
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 20.0,
@@ -646,7 +674,7 @@ class _EcranQuestionState extends State<EcranQuestion> {
                               elevation: 3,
                               textColor: Colors.black,
                               child: Text(
-                                definition.getOptionB(),
+                                tampon.getOptionB(),
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 20.0,
@@ -703,7 +731,6 @@ class _EcranQuestionState extends State<EcranQuestion> {
                   ),
 
 
-
                   /////////////////////////////////////////////////////////////////////
                   ///// ---------------   BOUTON  3  -------------- /////////
                   /////////////////////////////////////////////////////////////////////
@@ -724,7 +751,7 @@ class _EcranQuestionState extends State<EcranQuestion> {
                               elevation: 3,
                               textColor: Colors.black,
                               child: Text(
-                                definition.getOptionC() ,
+                                tampon.getOptionC() ,
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 20.0,

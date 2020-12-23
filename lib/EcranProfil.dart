@@ -1,8 +1,13 @@
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:permis/Constantes.dart';
 final String _NomPrenom = "Kameni Monkam Martial";
 
+  File _imageFile;
+dynamic _pickImageError;
 
 class EcranProfil extends StatefulWidget {
   @override
@@ -10,6 +15,10 @@ class EcranProfil extends StatefulWidget {
 }
 
 class _EcranProfilState extends State<EcranProfil> {
+
+
+
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -41,7 +50,9 @@ class _EcranProfilState extends State<EcranProfil> {
                 Navigator.pop(context);
               },
             ),
-          )
+          ) ,
+
+          _visualiserImage(),
         ],
       ),
     );
@@ -78,7 +89,7 @@ Widget _constructeurImageProfil() {
               child: Icon(Icons.folder_shared ,
               size: 50, ) ,
             onTap: (){
-                print('kmn') ;
+              _onImageButtonPressed(ImageSource.gallery);
             },
 
           ),
@@ -193,5 +204,29 @@ Widget _constructeurBouttons() {
   );
 }
 
+void _onImageButtonPressed(ImageSource source) async {
+  try {
+    _imageFile = await ImagePicker.pickImage(
+      source: source,
+    );
+  } catch (e) {
+    _pickImageError = e;
+  }
+}
+Widget _visualiserImage() {
+  if (_imageFile != null) {
+    return Image.file(_imageFile);
+  } else if (_pickImageError != null) {
+    return Text(
+      'Erreur de récupération d\'image: $_pickImageError',
+      textAlign: TextAlign.center,
+    );
+  } else {
+    return const Text(
+      'Aucune image',
+      textAlign: TextAlign.center,
+    );
+  }
+}
 
 
