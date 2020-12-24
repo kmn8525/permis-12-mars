@@ -1,13 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'BouttonProfil.dart';
-import 'ButonThemes.dart';
-import 'package:permis/ImageText_theme.dart';
+
 import 'Constantes.dart';
-import 'package:permis/EcranConducteur.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:permis/TableIthemes.dart';
-import 'package:permis/BasBarNavigation.dart';
+
 import 'EcranProfil.dart';
 import 'EcranQuestions.dart';
 import 'package:permis/BouttonProfil.dart';
@@ -35,29 +32,29 @@ class Theme {
 
 class _EcranThemeState extends State<EcranThemes> {
   List<Theme> _themes = [
-    Theme('informations', 'Definition'),
-    Theme('conducteur', 'Conducteur '),
+    Theme('informations', 'DEFINITION'),
+    Theme('conducteur', 'CONDUCTEUR'),
     Theme('policiere', 'INJONCTIONS'),
-    Theme('feuxControl', 'LES FEUX'),
-    Theme('danger', 'SIGNAUX ROUTIERS'),
-    Theme('paint', 'MARQUES ROUTIERES'),
-    Theme('chantier', 'LA VOIE PUBLIC'),
-    Theme('priorites', 'LES PRIORITÉS'),
-    Theme('pieton', 'LES USAGERS FAIBLES'),
-    Theme('train4', 'LES AUTRES USAGERS'),
-    Theme('vitesse', 'LA VITESSE'),
-    Theme('depacement', 'CROISEMENT ET DEPACEMENT'),
-    Theme('direction', 'PARTAGER LA ROUTE'),
-    Theme('escargot', 'ZONE LENTE'),
-    Theme('lieu', 'OÙ CIRCULER'),
-    Theme('autoroute', 'ROUTES ET AUTOROUTES'),
+    Theme('feuxControl', 'FEUX'),
+    Theme('danger', 'SIGNAUX'),
+    Theme('paint', 'MARQUES_ROUTIERES'),
+    Theme('chantier', 'VOIE_PUBLIC'),
+    Theme('priorites', 'PRIORITES'),
+    Theme('pieton', 'USAGERS_FAIBLES'),
+    Theme('train4', 'AUTRES_USAGERS'),
+    Theme('vitesse', 'VITESSE'),
+    Theme('depacement', 'CROISEMENT_DEPACEMENT'),
+    Theme('direction', 'PARTAGER_ROUTE'),
+    Theme('escargot', 'ZONE_LENTE'),
+    Theme('lieu', 'OU_CIRCULER'),
+    Theme('autoroute', 'ROUTES_AUTOROUTES'),
     Theme('stopss', 'INTERDICTION'),
-    Theme('accident', 'PANNE ET ACCIDENT'),
-    Theme('pas_alcool', 'ALCOOL ET IMPREGNATION'),
-    Theme('vest', 'EQUIPEMENTS GENERAL'),
-    Theme('mainvolant', 'TECHNIQUE DE CONDUITE'),
-    Theme('battery', 'MECANIQUE DE VEHICULE'),
-    Theme('parkingss', 'ARRET ET STATIONEMENT'),
+    Theme('accident', 'PANNE_ACCIDENT'),
+    Theme('pas_alcool', 'ALCOOL_IMPREGNATION'),
+    Theme('vest', 'EQUIPEMENTS_GENERAL'),
+    Theme('mainvolant', 'TECHNIQUE_CONDUITE'),
+    Theme('battery', 'MECANIQUE_VEHICULE'),
+    Theme('parkingss', 'ARRET_STATIONEMENT'),
     //Theme('ecologie', 'ECOLOGIE'),
     Theme('ampoule', 'DIVERS'),
   ];
@@ -70,6 +67,8 @@ class _EcranThemeState extends State<EcranThemes> {
 
 
     appBar: AppBar(
+      automaticallyImplyLeading: false,
+
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children:<Widget> [

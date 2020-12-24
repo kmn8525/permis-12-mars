@@ -7,13 +7,11 @@ class Definition {
 
   List<Reponse> _listeDeChoix= [
     Reponse( 'Je dois lui céder le passage' , 'Je peux lui céder le passage /R ' , 'Lui céder le passage est une infraction' ) ,
-    Reponse( 'chute de pierre a 150 metres ' , 'projection de gravillons a 200 metre  /R' , 'null' ) ,
     Reponse( 'Oui/R' , 'Non , ce vehicule doit se rabattre et me ceder le passage ' , 'Chute de pierres a 200 mettre ' ) ,
+    Reponse( 'chute de pierre a 150 metres ' , 'projection de gravillons a 200 metre  /R' , 'null' ) ,
     Reponse( 'Oui/R' , ' Oui si mon vehicule mesure moins de 1 , 65 metres ', 'Non'    ) ,
     Reponse( 'Oui' , ' Oui si  je m ecarte d un metre au moins   ' , 'Non /R' ) ,
     Reponse( 'Oui' , ' Oui si le airbag est désactivé /R ' , 'Non' ) ,
-
-
 
 
   ] ;
@@ -42,9 +40,13 @@ class Definition {
     Question(' Je peux placer un siège dos à la route à lavant '
   , false , true , false , 'oui' , ' Le déploiement de l airbag risque d écraser l enfant entre le siège et le dossier.'),
 
+
   ] ;
 
 
+  int getTaille(){
+    return _listeDefinition.length ;
+  }
   String getOptionA() {
     return _listeDeChoix[_nombreDeChoix].option_A;
   }
@@ -88,8 +90,6 @@ class Definition {
   }
 
 
-
-
   void questionSuivante() {
     if (_nombreDeQuestion <= _listeDefinition.length - 1) {
       _nombreDeQuestion++;
@@ -103,9 +103,15 @@ class Definition {
   }
 
   bool estFini() {
+
     if (_nombreDeQuestion >= _listeDefinition.length - 1) {
 
       print('Now returning true');
+      int i = _listeDefinition.length - 1 ;
+      int j = _listeDefinition.length ;
+      print('_listeDefinition.length - 1 : $i  _listeDefinition.length : $j') ;
+      print('_nombreDeQuestion  : $_nombreDeQuestion ') ;
+
       return true;
 
     } else {

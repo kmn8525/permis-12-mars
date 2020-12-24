@@ -66,7 +66,7 @@ class CupertinoHomeScaffold extends StatelessWidget {
   }
 
   Color _modifiColorItem({TableItems item}) {
-    return tableActuel == item ? Colors.blue : Colors.black;
+    return tableActuel == item ? Colors.lightBlueAccent : Colors.black;
   }
 
 }

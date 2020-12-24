@@ -21,6 +21,7 @@ class ModifierBottomAppBar extends StatefulWidget {
   _ModifierBottomAppBarState createState() => _ModifierBottomAppBarState();
 }
 
+
 class _ModifierBottomAppBarState extends State<ModifierBottomAppBar> {
   int _indexSelectioner = 0;
 
@@ -83,7 +84,11 @@ class _ModifierBottomAppBarState extends State<ModifierBottomAppBar> {
         child: Material(
           type: MaterialType.transparency,
           child: InkWell(
-            onTap: () => onPressed(index),
+            onTap: () {
+              onPressed(index) ;
+              setState(() {
+              });
+            },
             child : Icon(
               item.icon,
               color: _indexSelectioner == index ? Colors.blue : Colors.grey,
