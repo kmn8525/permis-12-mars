@@ -5,13 +5,13 @@ class ConducteurPassager {
   int _nombreDeQuestion = 0;
   int _nombreDeChoix = 0;
 
-  List<Reponse> _listeDeChoix= [
-   Reponse( 'Oui' , ' Non, je dois être titulaire d un permis de conduire catégorie C	 /R ' , 'Non, je dois être titulaire d un permis de conduire catégorie C ou D' ) ,
-    Reponse( '5 places passagers' , ' 8 places passagers / R ' , ' 18 places passagers' ) ,
-    Reponse( '40 cm / R' , ' 45 cm' , ' 60 cm	' ) ,
-    Reponse( 'La hauteur de mon véhicule' , ' 2 mètres /R' , ' 5 mètres	' ) ,
-    Reponse( 'Je le fais dépasser de 2 mètres vers l arrière /R	' , ' Je le fais dépasser d un mètre vers l avant et d un mètre vers l arrière' , ' Je ne peux pas le transporter	' ) ,
-    Reponse( 'Oui' , 'Non' , 'null' ) ,
+  List<Option> _listeDeChoix= [
+   Option( 'Oui' , ' Non, je dois être titulaire d un permis de conduire catégorie C	 /R ' , 'Non, je dois être titulaire d un permis de conduire catégorie C ou D' ) ,
+    Option( '5 places passagers' , ' 8 places passagers / R ' , ' 18 places passagers' ) ,
+    Option( '40 cm / R' , ' 45 cm' , ' 60 cm	' ) ,
+    Option( 'La hauteur de mon véhicule' , ' 2 mètres /R' , ' 5 mètres	' ) ,
+    Option( 'Je le fais dépasser de 2 mètres vers l arrière /R	' , ' Je le fais dépasser d un mètre vers l avant et d un mètre vers l arrière' , ' Je ne peux pas le transporter	' ) ,
+    Option( 'Oui' , 'Non' , 'null' ) ,
 
 
 

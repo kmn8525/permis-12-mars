@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'Constantes.dart';
-
-final String _nomPrenom = "MATIAL MONKAM";
-
+import 'NomProfil.dart';
+import 'package:provider/provider.dart';
 
 class BouttonProfil extends StatelessWidget {
-  BouttonProfil({ @required this.CheminImage , @required this.onPressed });
+  BouttonProfil({@required this.CheminImage, @required this.onPressed});
 
-  final String CheminImage ;
+  final String CheminImage;
 
   final Function onPressed;
-
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +15,6 @@ class BouttonProfil extends StatelessWidget {
       elevation: 1.0,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-
         children: <Widget>[
           Container(
             width: 50.0,
@@ -31,51 +27,26 @@ class BouttonProfil extends StatelessWidget {
               borderRadius: BorderRadius.circular(17.0),
               border: Border.all(
                 color: Colors.white,
-                width: 2.0,
+                width: 1.0,
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: kBoutonDegrade,
-                  offset: Offset(0, 1),
-                  blurRadius: 2,
-                ),
-              ],
             ),
           ),
-
-          _nomProfil(),
-
+          Container(
+            margin: EdgeInsets.only(left: 0, right: 0, bottom: 1, top: 5),
+            child: Text(
+              '${context.watch<NomProfil>().NomPersonne}',
+            ),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.black,
+                width: 0.3,
+              ),
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+          ),
         ],
       ),
       onPressed: onPressed,
-
     );
   }
-}
-
-Widget _nomProfil() {
-  TextStyle _nameTextStyle = TextStyle(
-    fontFamily: 'Roboto',
-    color: Colors.black,
-    fontSize: 14.0,
-    fontWeight: FontWeight.w700,
-
-
-  );
-
-  return Container(
-    padding: EdgeInsets.all(10),
-    child: Text(
-
-      _nomPrenom,
-      style: _nameTextStyle,
-    ),
-    decoration: BoxDecoration(
-      border:  Border.all(
-        color: Colors.white,
-        width: 2.0,
-      ),
-      borderRadius: BorderRadius.circular(10.0),
-    ),
-  );
 }

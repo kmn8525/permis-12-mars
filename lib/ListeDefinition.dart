@@ -1,18 +1,19 @@
+import 'package:flutter/cupertino.dart';
+
 import 'Option.dart';
 import 'Question.dart';
 
-class Definition {
+class Definition extends ChangeNotifier {
   int _nombreDeQuestion = 0;
   int _nombreDeChoix = 0;
 
-  List<Reponse> _listeDeChoix= [
-    Reponse( 'Je dois lui céder le passage' , 'Je peux lui céder le passage /R ' , 'Lui céder le passage est une infraction' ) ,
-    Reponse( 'Oui/R' , 'Non , ce vehicule doit se rabattre et me ceder le passage ' , 'Chute de pierres a 200 mettre ' ) ,
-    Reponse( 'chute de pierre a 150 metres ' , 'projection de gravillons a 200 metre  /R' , 'null' ) ,
-    Reponse( 'Oui/R' , ' Oui si mon vehicule mesure moins de 1 , 65 metres ', 'Non'    ) ,
-    Reponse( 'Oui' , ' Oui si  je m ecarte d un metre au moins   ' , 'Non /R' ) ,
-    Reponse( 'Oui' , ' Oui si le airbag est désactivé /R ' , 'Non' ) ,
-
+  List<Option> _listeDeChoix= [
+    Option( 'Je dois lui céder le passage' , 'Je peux lui céder le passage /R ' , 'Lui céder le passage est une infraction' ) ,
+    Option( 'Oui/R' , 'Non , ce vehicule doit se rabattre et me ceder le passage ' , 'Chute de pierres a 200 mettre ' ) ,
+    Option( 'chute de pierre a 150 metres ' , 'projection de gravillons a 200 metre  /R' , 'null' ) ,
+    Option( 'Oui/R' , ' Oui si mon vehicule mesure moins de 1 , 65 metres ', 'Non'    ) ,
+    Option( 'Oui' , ' Oui si  je m ecarte d un metre au moins   ' , 'Non /R' ) ,
+    Option( 'Oui' , ' Oui si le airbag est désactivé /R ' , 'Non' ) ,
 
   ] ;
   List<Question> _listeDefinition = [
@@ -43,6 +44,16 @@ class Definition {
 
   ] ;
 
+
+  List listeQuestionDefinition (){
+
+    return  _listeDefinition;
+  }
+
+  List listeOptionDefinition (){
+
+    return  _listeDeChoix;
+  }
 
   int getTaille(){
     return _listeDefinition.length ;

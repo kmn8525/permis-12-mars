@@ -41,10 +41,57 @@ const List<Widget> _widgetOptions = <Widget>[
 
 const kCouleurAppBar =  Color(0xffffffff) ;
 const kBoutonDegrade = Color(0x29000000) ;
-const kCouleurScaffold =  Color(0xffE5EDF3) ;
+const kCouleurScaffold =  Color(0xffffffff) ;
 const kCouleurBody = Color(0xffE5EDF3)  ;
+
+//Color(0xffE5EDF3)  ;
+//f9f7f7
+//fbfbfb
+//f3f8ff
+//ecfcff
+//fef6fb
+//e2eff1
+//fffdfb
+//fafafa
+//faf9f9
+//ebf7fd
+//f9f9f9
+//edf7fa
 
 const kCouleurBodyTheme = Color(0xffEFF2F4)  ;
 const Color black54 = Color(0x8A000000);
 
 const couleur_bouton = Colors.black38;
+
+/*
+Future < void > DelaiReponse() async {
+  await Future.delayed(Duration(seconds:  1), () {
+
+
+    _animationController.addStatusListener((status) {
+
+      setState(() {
+
+        if ( status == AnimationStatus.completed) {
+          print('object') ;
+          Provider.of<EcranQuestionsState>(context , listen: false).checkAnswer(null, null, null);
+          Provider.of<EcranQuestionsState>(context , listen: false).BoutonSuivant();
+
+          //_animationController.repeat();
+        }
+      });
+
+
+    }) ;
+    _animationController.addListener( () {
+      setState(() { });
+    });
+    _animationController.forward();
+    // _animationController.repeat();
+
+  });
+
+
+
+}
+*/

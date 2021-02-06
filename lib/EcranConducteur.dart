@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
-import 'package:permis/EcranTheme.dart';
+import 'package:permis/EcranThemes.dart';
 
 import 'package:permis/ImageText_theme.dart';
 import 'Constantes.dart';

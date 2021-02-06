@@ -12,9 +12,9 @@ class Feux {
 
 
   ] ;
-  List<Reponse> _listeDeChoix= [
-    Reponse( 'Je roule trop vite' , 'J en suis trop proche' , 'Je suis surpris' ) ,
-    Reponse( 'A hauteur du feu' , 'A la ligne transversale' , 'null' ) ,
+  List<Option> _listeDeChoix= [
+    Option( 'Je roule trop vite' , 'J en suis trop proche' , 'Je suis surpris' ) ,
+    Option( 'A hauteur du feu' , 'A la ligne transversale' , 'null' ) ,
 
 
   ] ;

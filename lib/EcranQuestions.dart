@@ -1,40 +1,151 @@
+import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:permis/Constantes.dart';
+import 'package:permis/Acceuil.dart';
+import 'Constantes.dart';
+import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-import 'AnimationBouttonPlay.dart';
-import 'BoutonReponse.dart';
-import 'BouttonQuestion.dart';
-import 'ConstructeurBasBarDeNavigation.dart';
-import 'IconContent.dart';
+import 'EcranSolutions.dart';
 import 'ListeDefinition.dart';
-import 'package:permis/ListeConducteurPassager.dart';
-import 'EcranTheme.dart';
+import 'ListeConducteurPassager.dart';
 import 'ListeFeux.dart';
 import 'ListeInjonction.dart';
+import 'ListeResultats.dart';
+
+var listRep = [] ;
+
+
 
 var tampon = null ;
 String chemin ;
+String TitreTheme ;
+int MoyennePoint = 0 ;
 
-class EcranQuestion extends StatefulWidget {
+class EcranQuestions extends StatefulWidget  {
+
   final String titrePage;
 
-  const EcranQuestion({this.titrePage});
+
+    EcranQuestions({Key key , this.titrePage}) : super(key: key);
+
 
   @override
-  _EcranQuestionState createState() => _EcranQuestionState();
+  EcranQuestionsState createState() => EcranQuestionsState();
+
+
+  Object chargementListesDeQuestion() {
+
+    if (titrePage == 'DEFINITION') {
+      var d = () => Definition();
+      tampon = d();
+      chemin = 'imageDefinition';
+
+
+
+    }
+
+    else if (titrePage == 'CONDUCTEUR') {
+      {
+        var c = () => ConducteurPassager();
+        tampon = c();
+        chemin = 'imageConducteurPassager';
+      }
+    }
+    else if (titrePage == 'INJONCTIONS') {
+      {
+        var i = () => Incjontion();
+        tampon = i();
+        chemin = 'ImageInjonction';
+      }
+    }
+    else if (titrePage == 'FEUX') {
+      {
+        var f = () => Feux();
+        tampon = f();
+        chemin = 'ImageSignaux';
+      }
+    }
+    return tampon ;
+
+  }
+  Object chargementTitreTheme() {
+
+    if (titrePage == 'DEFINITION') {
+      TitreTheme = 'DEFINITION' ;
+    }
+
+    else if (titrePage == 'CONDUCTEUR') {
+      {
+        TitreTheme = 'CONDUCTEUR' ;
+
+
+      }
+    }
+    else if (titrePage == 'INJONCTIONS') {
+      {
+        TitreTheme = 'INJONCTIONS' ;
+
+
+      }
+    }
+    else if (titrePage == 'FEUX') {
+      {
+        TitreTheme = 'FEUX' ;
+
+      }
+    }
+    return TitreTheme ;
+
+  }
+
+
+
 }
 
-class _EcranQuestionState extends State<EcranQuestion> {
+class EcranQuestionsState extends State<EcranQuestions>  with ChangeNotifier , SingleTickerProviderStateMixin {
+
+
+
+
+  String liensImage (){
+
+    return chemin ;
+  }
+
+  String TitreQuestion (){
+
+    return widget.titrePage ;
+  }
 
   @override
   void initState() {
-    super.initState();
-    _chargementListesDeQuestion();
+
+
+    widget.chargementListesDeQuestion();
+    widget.chargementTitreTheme();
+    TitreQuestion () ;
     resetColor();
 
+
+    super.initState();
+
+
   }
+
+  @override
+  void dispose() {
+
+    super.dispose();
+
+  }
+
+
+  bool verifi = false ;
+
+
+
   Color couleurPardefault_A = Color(0xffffffff) ;
   Color couleurPardefault_B =  Color(0xffffffff) ;
   Color couleurPardefault_C =  Color(0xffffffff) ;
@@ -42,6 +153,17 @@ class _EcranQuestionState extends State<EcranQuestion> {
   Color couleurApresSelection_A = Colors.orange;
   Color couleurApresSelection_B = Colors.orange;
   Color couleurApresSelection_C = Colors.orange;
+  Color couleurAnimation = Colors.white ;
+
+   AnimationController _animationController;
+   bool animer = false ;
+   int t = 2 ;
+   Timer _timer;
+   int _start = 4;
+   bool val = false ;
+   String f ;
+
+
   bool choix_1;
   bool choix_2;
   bool choix_3;
@@ -62,8 +184,9 @@ class _EcranQuestionState extends State<EcranQuestion> {
 
   int numeroImage = 1;
 
+  Color couleurChoix = Colors.red;
 
-  void checkAnswer(bool a, bool b, bool c) {
+  Color checkAnswer(bool a, bool b, bool c) {
     bool verif_a;
     bool verif_b;
     bool verif_c;
@@ -71,325 +194,486 @@ class _EcranQuestionState extends State<EcranQuestion> {
     String tmp;
 
     setState(() {
-        // --------------------------------------//
-        // ----- ON TESTE SI TOUTES LES VALEUR NE SONT SELECTIONNER  ---- //
-        // --------------------------------------//
+      // --------------------------------------//
+      // ----- ON TESTE SI TOUTES LES VALEUR NE SONT SELECTIONNER  ---- //
+      // --------------------------------------//
 
-        if ((a == null) & (b == null) & (c == null))
-        {
-          verif_a = tampon.getBonneReponseA();
-          verif_b = tampon.getBonneReponseB();
-          verif_c = tampon.getBonneReponseC();
+      if ((a == null) & (b == null) & (c == null))
+      {
+        verif_a = tampon.getBonneReponseA();
+        verif_b = tampon.getBonneReponseB();
+        verif_c = tampon.getBonneReponseC();
 
-          if ((verif_a == true) & (verif_b == true)) {
-            couleurPardefault_A = Colors.green;
-            couleurPardefault_B = Colors.green;
-          } else if ((verif_a == true) & (verif_c == true)) {
-            couleurPardefault_A = Colors.green;
-            couleurPardefault_C = Colors.green;
-          } else if ((verif_b == true) & (verif_c == true)) {
-            couleurPardefault_B = Colors.green;
-            couleurPardefault_C = Colors.green;
-          } else if (verif_a == true) {
-            couleurPardefault_A = Colors.green;
-          } else if (verif_b == true) {
-            couleurPardefault_B = Colors.green;
-          } else {
-            couleurPardefault_C = Colors.green;
-          }
+        couleurChoix = Colors.red ;
+
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionA(couleurPardefault_A);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionB(couleurPardefault_B);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionC(couleurPardefault_C);
+
+
+        if ((verif_a == true) & (verif_b == true)) {
+          couleurPardefault_A = Colors.green;
+          couleurPardefault_B = Colors.green;
+        } else if ((verif_a == true) & (verif_c == true)) {
+          couleurPardefault_A = Colors.green;
+          couleurPardefault_C = Colors.green;
+        } else if ((verif_b == true) & (verif_c == true)) {
+          couleurPardefault_B = Colors.green;
+          couleurPardefault_C = Colors.green;
+        } else if (verif_a == true) {
+          couleurPardefault_A = Colors.green;
+        } else if (verif_b == true) {
+          couleurPardefault_B = Colors.green;
+        } else {
+          couleurPardefault_C = Colors.green;
         }
 
-        // --------------------------------------//
+
+
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonA(couleurPardefault_A);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonB(couleurPardefault_B);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonC(couleurPardefault_C);
+
+
+
+        Provider.of<Resultats>(context , listen: false).afficheListe();
+
+
+      }
+
+      // --------------------------------------//
 // ----- ON TESTE SI TOUTE LES VALEURS  SONT SELECTIONNER ---- //
-        // --------------------------------------//
+      // --------------------------------------//
 
-        else if ((a != null) & (b != null) & (c != null))
-        {
-          verif_a = tampon.getBonneReponseA();
-          verif_b = tampon.getBonneReponseB();
-          verif_c = tampon.getBonneReponseC();
+      else if ((a != null) & (b != null) & (c != null))
+      {
 
-          if ((verif_a == a) & (verif_b == b)) {
-            couleurApresSelection_A = Colors.green;
-            couleurApresSelection_B = Colors.green;
-            couleurApresSelection_C = Colors.red;
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionA (couleurApresSelection_A);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionB (couleurApresSelection_B);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionC (couleurApresSelection_C);
 
-          } else if ((verif_a == a) & (verif_c == c)) {
-            couleurApresSelection_A = Colors.green;
-            couleurApresSelection_C = Colors.green;
-            couleurApresSelection_B = Colors.red;
+        couleurChoix = Colors.red ;
+        verif_a = tampon.getBonneReponseA();
+        verif_b = tampon.getBonneReponseB();
+        verif_c = tampon.getBonneReponseC();
+        MoyennePoint = MoyennePoint - 1 ;
+        if ((verif_a == a) & (verif_b == b)) {
+          couleurApresSelection_A = Colors.green;
+          couleurApresSelection_B = Colors.green;
+          couleurApresSelection_C = Colors.red;
 
-          } else if ((verif_b == b) & (verif_c == c)) {
-            couleurApresSelection_B = Colors.green;
-            couleurApresSelection_C = Colors.green;
-            couleurApresSelection_A = Colors.red;
+        } else if ((verif_a == a) & (verif_c == c)) {
+          couleurApresSelection_A = Colors.green;
+          couleurApresSelection_C = Colors.green;
+          couleurApresSelection_B = Colors.red;
 
-          } else if (verif_a == a) {
-            couleurApresSelection_A = Colors.green;
-            couleurApresSelection_B = Colors.red;
-            couleurApresSelection_C = Colors.red;
+        } else if ((verif_b == b) & (verif_c == c)) {
+          couleurApresSelection_B = Colors.green;
+          couleurApresSelection_C = Colors.green;
+          couleurApresSelection_A = Colors.red;
+
+        } else if (verif_a == a) {
+          couleurApresSelection_A = Colors.green;
+          couleurApresSelection_B = Colors.red;
+          couleurApresSelection_C = Colors.red;
 
 
-          } else if (verif_b == b) {
-            couleurApresSelection_B = Colors.green;
-            couleurApresSelection_C = Colors.red;
-            couleurApresSelection_A = Colors.red;
+        } else if (verif_b == b) {
+          couleurApresSelection_B = Colors.green;
+          couleurApresSelection_C = Colors.red;
+          couleurApresSelection_A = Colors.red;
 
 
-          } else {
-            couleurApresSelection_C = Colors.green;
-            couleurApresSelection_B = Colors.red;
-            couleurApresSelection_A = Colors.red;
+        } else {
+          couleurApresSelection_C = Colors.green;
+          couleurApresSelection_B = Colors.red;
+          couleurApresSelection_A = Colors.red;
 
-          }
         }
 
-        // --------------------------------------//
+
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonA(couleurApresSelection_A);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonB(couleurApresSelection_B);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonC(couleurApresSelection_C);
+
+
+      }
+
+      // --------------------------------------//
 // ----- ON TESTE SI   A ET B  SONT SELECTIONNER ---- //
-        // --------------------------------------//
-        else if ((a != null) & (b != null) )
-        {
-          verif_a = tampon.getBonneReponseA();
-          verif_b = tampon.getBonneReponseB();
-          verif_c = tampon.getBonneReponseC();
+      // --------------------------------------//
+      else if ((a != null) & (b != null) )
+      {
+        verif_a = tampon.getBonneReponseA();
+        verif_b = tampon.getBonneReponseB();
+        verif_c = tampon.getBonneReponseC();
 
-          if ((verif_a == a) & (verif_b == b)) {
-            couleurApresSelection_A = Colors.green;
-            couleurApresSelection_B = Colors.green;
-            couleurApresSelection_C = Colors.white;
+        couleurChoix = Colors.red ;
 
-          }
 
-          else if (verif_a == a)
-          {
-            couleurApresSelection_A = Colors.green;
-            couleurApresSelection_B = Colors.red;
-            couleurPardefault_C = Colors.white;
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionA (couleurApresSelection_A);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionB (couleurApresSelection_B);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionC (Colors.white);
 
-          }
-          else if (verif_b == b )
-          {
-            couleurApresSelection_B = Colors.green;
-            couleurApresSelection_A = Colors.red;
-            couleurPardefault_C = Colors.white;
+        if ((verif_a == a) & (verif_b == b)) {
+          couleurApresSelection_A = Colors.green;
+          couleurApresSelection_B = Colors.green;
+          couleurApresSelection_C = Colors.white;
+          MoyennePoint = MoyennePoint + 1 ;
 
-          }
-          else
-          {
-            couleurApresSelection_B = Colors.red;
-            couleurApresSelection_A = Colors.red;
+          couleurChoix = Colors.green ;
 
-            couleurPardefault_C = Colors.green;
 
-          }
 
         }
 
-        // --------------------------------------//
+        else if (verif_a == a)
+        {
+          couleurApresSelection_A = Colors.green;
+          couleurApresSelection_B = Colors.red;
+          couleurPardefault_C = Colors.white;
+
+        }
+        else if (verif_b == b )
+        {
+          couleurApresSelection_B = Colors.green;
+          couleurApresSelection_A = Colors.red;
+          couleurPardefault_C = Colors.white;
+
+        }
+        else
+        {
+          couleurApresSelection_B = Colors.red;
+          couleurApresSelection_A = Colors.red;
+
+          couleurPardefault_C = Colors.green;
+
+        }
+
+
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonA(couleurApresSelection_A);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonB(couleurApresSelection_B);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonC(couleurPardefault_C);
+
+
+      }
+
+      // --------------------------------------//
 // ----- ON TESTE SI   A ET C  SONT SELECTIONNER ---- //
-        // --------------------------------------//
+      // --------------------------------------//
 
-        else if ((a != null) & (c != null) )
-        {
-          verif_a = tampon.getBonneReponseA();
-          verif_b = tampon.getBonneReponseB();
-          verif_c = tampon.getBonneReponseC();
+      else if ((a != null) & (c != null) )
+      {
 
-          if ((verif_a == a) & (verif_c == c)) {
-            couleurApresSelection_A = Colors.green;
-            couleurApresSelection_C = Colors.green;
-            couleurPardefault_B = Colors.white;
-          }
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionA (couleurApresSelection_A);
 
-          else if (verif_a == a)
-          {
-            couleurApresSelection_A = Colors.green;
-            couleurApresSelection_C = Colors.red;
-            couleurPardefault_B = Colors.white;
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionC (couleurApresSelection_C);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionB (Colors.white);
+
+        verif_a = tampon.getBonneReponseA();
+        verif_b = tampon.getBonneReponseB();
+        verif_c = tampon.getBonneReponseC();
+        couleurChoix = Colors.red ;
 
 
-          }
-          else if (verif_c == c)
-          {
-            couleurApresSelection_C = Colors.green;
-            couleurApresSelection_A = Colors.red;
-            couleurPardefault_B = Colors.white;
+        if ((verif_a == a) & (verif_c == c)) {
+          couleurApresSelection_A = Colors.green;
+          couleurApresSelection_C = Colors.green;
+          couleurPardefault_B = Colors.white;
 
-          }
-          else {
-            couleurPardefault_B = Colors.green;
-            couleurApresSelection_C = Colors.red;
-            couleurApresSelection_A = Colors.red;
 
-          }
+          couleurChoix = Colors.green ;
 
         }
 
-        // --------------------------------------//
+        else if (verif_a == a)
+        {
+          couleurApresSelection_A = Colors.green;
+          couleurApresSelection_C = Colors.red;
+          couleurPardefault_B = Colors.white;
+
+
+        }
+        else if (verif_c == c)
+        {
+          couleurApresSelection_C = Colors.green;
+          couleurApresSelection_A = Colors.red;
+          couleurPardefault_B = Colors.white;
+
+        }
+        else {
+          couleurPardefault_B = Colors.green;
+          couleurApresSelection_C = Colors.red;
+          couleurApresSelection_A = Colors.red;
+
+        }
+
+
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonA(couleurApresSelection_A);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonB(couleurPardefault_B);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonC(couleurApresSelection_C);
+
+      }
+
+      // --------------------------------------//
 // ----- ON TESTE SI   B ET C  SONT SELECTIONNER ---- //
-        // --------------------------------------//
-        else if ((b != null) & (c != null) )
-        {
+      // --------------------------------------//
+      else if ((b != null) & (c != null) )
+      {
 
-          verif_a = tampon.getBonneReponseA();
-          verif_b = tampon.getBonneReponseB();
-          verif_c = tampon.getBonneReponseC();
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionB (couleurApresSelection_B);
 
-          if ((verif_b == b) & (verif_c == c)) {
-            couleurApresSelection_B = Colors.green;
-            couleurApresSelection_C = Colors.green;
-            couleurPardefault_C = Colors.white;
-          }
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionC (couleurApresSelection_C);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionA (Colors.white);
 
-          else if (verif_b == b)
-          {
-            couleurApresSelection_B = Colors.green;
-            couleurApresSelection_C = Colors.red;
-            couleurPardefault_A = Colors.white;
+        verif_a = tampon.getBonneReponseA();
+        verif_b = tampon.getBonneReponseB();
+        verif_c = tampon.getBonneReponseC();
+        couleurChoix = Colors.red ;
 
 
-          }
-          else if (verif_c == c)
-          {
-            couleurApresSelection_C = Colors.green;
-            couleurApresSelection_B = Colors.red;
-            couleurPardefault_A = Colors.white;
+        if ((verif_b == b) & (verif_c == c)) {
+          couleurApresSelection_B = Colors.green;
+          couleurApresSelection_C = Colors.green;
+          couleurPardefault_C = Colors.white;
 
 
-          }
-          else {
-            couleurPardefault_A = Colors.green;
-            couleurApresSelection_B = Colors.red;
-            couleurApresSelection_C = Colors.red;
-
-          }
+          couleurChoix = Colors.green ;
 
         }
 
-        // --------------------------------------//
+        else if (verif_b == b)
+        {
+          couleurApresSelection_B = Colors.green;
+          couleurApresSelection_C = Colors.red;
+          couleurPardefault_A = Colors.white;
+
+
+        }
+        else if (verif_c == c)
+        {
+          couleurApresSelection_C = Colors.green;
+          couleurApresSelection_B = Colors.red;
+          couleurPardefault_A = Colors.white;
+
+
+        }
+        else {
+          couleurPardefault_A = Colors.green;
+          couleurApresSelection_B = Colors.red;
+          couleurApresSelection_C = Colors.red;
+
+        }
+
+
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonA(couleurPardefault_A);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonB(couleurApresSelection_B);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonC(couleurApresSelection_C);
+
+
+      }
+
+      // --------------------------------------//
 // ----- ON SELECTIONNE A  ET   B , C SONT NULL---- //
-        // --------------------------------------//
+      // --------------------------------------//
 
-        else if ((a != null) & (b == null) & (c == null))
-        {
-          verif_a = tampon.getBonneReponseA();
-          verif_b = tampon.getBonneReponseB();
-          verif_c = tampon.getBonneReponseC();
+      else if ((a != null) & (b == null) & (c == null))
+      {
+        verif_a = tampon.getBonneReponseA();
+        verif_b = tampon.getBonneReponseB();
+        verif_c = tampon.getBonneReponseC();
+        couleurChoix = Colors.red ;
 
-          if ((verif_a == a) & (verif_b == true)) {
-            couleurApresSelection_A = Colors.green;
-            couleurPardefault_B = Colors.green;
-            couleurPardefault_C = Colors.white;
-          } else if ((verif_b == true) & (verif_c == true)) {
-            couleurApresSelection_A = Colors.red;
-            couleurPardefault_B = Colors.green;
-            couleurPardefault_C = Colors.green;
-          } else if ((verif_a == a) & (verif_c == true)) {
-            couleurApresSelection_A = Colors.green;
-            couleurPardefault_B = Colors.white;
-            couleurPardefault_C = Colors.green;
-          } else  if (verif_a == a)  {
-            couleurApresSelection_A = Colors.green;
-            couleurPardefault_B = Colors.white;
-            couleurPardefault_C = Colors.white;
-          }
-          else  if (verif_b == true)  {
-            couleurApresSelection_A = Colors.red;
-            couleurPardefault_B = Colors.green;
-            couleurPardefault_C = Colors.white;
-          }
-          else {
-            couleurApresSelection_A = Colors.red;
-            couleurPardefault_B = Colors.white;
-            couleurPardefault_C = Colors.green;
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionA (couleurApresSelection_A);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionB (Colors.white);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionC (Colors.white);
 
-          }
 
+        if ((verif_a == a) & (verif_b == true)) {
+          couleurApresSelection_A = Colors.green;
+          couleurPardefault_B = Colors.green;
+          couleurPardefault_C = Colors.white;
+
+          couleurChoix = Colors.green ;
+
+        } else if ((verif_b == true) & (verif_c == true)) {
+          couleurApresSelection_A = Colors.red;
+          couleurPardefault_B = Colors.green;
+          couleurPardefault_C = Colors.green;
+        } else if ((verif_a == a) & (verif_c == true)) {
+          couleurApresSelection_A = Colors.green;
+          couleurPardefault_B = Colors.white;
+          couleurPardefault_C = Colors.green;
+
+
+          couleurChoix = Colors.green ;
+
+
+        } else  if (verif_a == a)  {
+          couleurApresSelection_A = Colors.green;
+          couleurPardefault_B = Colors.white;
+          couleurPardefault_C = Colors.white;
+          couleurChoix = Colors.green ;
+
+
+          couleurChoix = Colors.green ;
+
+        }
+        else  if (verif_b == true)  {
+          couleurApresSelection_A = Colors.red;
+          couleurPardefault_B = Colors.green;
+          couleurPardefault_C = Colors.white;
+        }
+        else {
+          couleurApresSelection_A = Colors.red;
+          couleurPardefault_B = Colors.white;
+          couleurPardefault_C = Colors.green;
 
         }
 
-        // --------------------------------------//
+
+
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonA(couleurApresSelection_A);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonB(couleurPardefault_B);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonC(couleurPardefault_C);
+
+      }
+
+      // --------------------------------------//
 // ----- ON  SELECTIONNE B  ET   A , C SONT NULL ---- //
-        // --------------------------------------//
+      // --------------------------------------//
 
-        else if ((b != null) & (a == null) & (c == null))
-        {
-          verif_a = tampon.getBonneReponseA();
-          verif_b = tampon.getBonneReponseB();
-          verif_c = tampon.getBonneReponseC();
+      else if ((b != null) & (a == null) & (c == null))
+      {
 
-          if ((verif_b == b) & (verif_a == true)) {
-            couleurApresSelection_B = Colors.green;
-            couleurPardefault_A = Colors.green;
-            couleurPardefault_C = Colors.white;
-          } else if ((verif_b == true) & (verif_c == true)) {
-            couleurApresSelection_B = Colors.red;
-            couleurPardefault_A = Colors.green;
-            couleurPardefault_C = Colors.green;
-          } else if ((verif_b == b) & (verif_c == true)) {
-            couleurApresSelection_B = Colors.green;
-            couleurPardefault_A = Colors.white;
-            couleurPardefault_C = Colors.green;
-          }  else  if (verif_b == b)  {
-            couleurApresSelection_B = Colors.green;
-            couleurPardefault_B = Colors.green;
-            couleurPardefault_C = Colors.white;
-          }
-          else  if (verif_a == true)  {
-            couleurApresSelection_B = Colors.red;
-            couleurPardefault_A = Colors.green;
-            couleurPardefault_C = Colors.white;
-          }
-          else {
-            couleurApresSelection_B = Colors.red;
-            couleurPardefault_A = Colors.white;
-            couleurPardefault_C = Colors.green;
 
-          }
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionB (couleurApresSelection_B);
+
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionC (Colors.white);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionA (Colors.white);
+
+        verif_a = tampon.getBonneReponseA();
+        verif_b = tampon.getBonneReponseB();
+        verif_c = tampon.getBonneReponseC();
+
+        couleurChoix = Colors.red ;
+
+
+        if ((verif_b == b) & (verif_a == true)) {
+          couleurApresSelection_B = Colors.green;
+          couleurPardefault_A = Colors.green;
+          couleurPardefault_C = Colors.white;
+
+          couleurChoix = Colors.green ;
+
+        } else if ((verif_b == true) & (verif_c == true)) {
+          couleurApresSelection_B = Colors.red;
+          couleurPardefault_A = Colors.green;
+          couleurPardefault_C = Colors.green;
+        } else if ((verif_b == b) & (verif_c == true)) {
+          couleurApresSelection_B = Colors.green;
+          couleurPardefault_A = Colors.white;
+          couleurPardefault_C = Colors.green;
+
+          couleurChoix = Colors.green ;
+
+        }  else  if (verif_b == b)  {
+          couleurApresSelection_B = Colors.green;
+          couleurPardefault_B = Colors.green;
+          couleurPardefault_C = Colors.white;
+
+
+          couleurChoix = Colors.green ;
+
         }
-        // --------------------------------------//
+        else  if (verif_a == true)  {
+          couleurApresSelection_B = Colors.red;
+          couleurPardefault_A = Colors.green;
+          couleurPardefault_C = Colors.white;
+        }
+        else {
+          couleurApresSelection_B = Colors.red;
+          couleurPardefault_A = Colors.white;
+          couleurPardefault_C = Colors.green;
+
+        }
+
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonA(couleurPardefault_A);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonB(couleurApresSelection_B);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonC(couleurPardefault_C);
+
+
+      }
+      // --------------------------------------//
 // ----- ON  SELECTIONNE C  ET   A , B SONT NULL---- //
-        // --------------------------------------//
+      // --------------------------------------//
 
-        else if ((c != null) & (a == null) & (b == null))
-        {
-          verif_a = tampon.getBonneReponseA();
-          verif_b = tampon.getBonneReponseB();
-          verif_c = tampon.getBonneReponseC();
+      else if ((c != null) & (a == null) & (b == null))
+      {
+        verif_a = tampon.getBonneReponseA();
+        verif_b = tampon.getBonneReponseB();
+        verif_c = tampon.getBonneReponseC();
 
-          if ((verif_c == c) & (verif_a == true)) {
-            couleurApresSelection_C = Colors.green;
-            couleurPardefault_A = Colors.green;
-            couleurPardefault_B = Colors.white;
-          } else if ((verif_b == true) & (verif_a == true)) {
-            couleurApresSelection_C = Colors.red;
-            couleurPardefault_A = Colors.green;
-            couleurPardefault_B = Colors.green;
-          } else if ((verif_c == c) & (verif_a == true)) {
-            couleurApresSelection_C = Colors.green;
-            couleurPardefault_B = Colors.white;
-            couleurPardefault_A = Colors.green;
-          }  else  if (verif_c == c)  {
-            couleurApresSelection_C = Colors.green;
-            couleurPardefault_B = Colors.white;
-            couleurPardefault_A = Colors.white;
-          }
-          else  if (verif_a == true)  {
-            couleurApresSelection_C = Colors.red;
-            couleurPardefault_A = Colors.green;
-            couleurPardefault_B = Colors.white;
-          }
-          else {
-            couleurApresSelection_C = Colors.red;
-            couleurPardefault_A = Colors.white;
-            couleurPardefault_B = Colors.green;
+        couleurChoix = Colors.red ;
 
-          }
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionC (couleurApresSelection_C);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionB (Colors.white);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurSelectionA (Colors.white);
+
+
+
+        if ((verif_c == c) & (verif_a == true)) {
+          couleurApresSelection_C = Colors.green;
+          couleurPardefault_A = Colors.green;
+          couleurPardefault_B = Colors.white;
+
+          couleurChoix = Colors.green ;
+
+        } else if ((verif_b == true) & (verif_a == true)) {
+          couleurApresSelection_C = Colors.red;
+          couleurPardefault_A = Colors.green;
+          couleurPardefault_B = Colors.green;
+        } else if ((verif_c == c) & (verif_a == true)) {
+          couleurApresSelection_C = Colors.green;
+          couleurPardefault_B = Colors.white;
+          couleurPardefault_A = Colors.green;
+
+          couleurChoix = Colors.green ;
+
+        }  else  if (verif_c == c)  {
+          couleurApresSelection_C = Colors.green;
+          couleurPardefault_B = Colors.white;
+          couleurPardefault_A = Colors.white;
+
+          couleurChoix = Colors.green ;
+
         }
+        else  if (verif_a == true)  {
+          couleurApresSelection_C = Colors.red;
+          couleurPardefault_A = Colors.green;
+          couleurPardefault_B = Colors.white;
+        }
+        else {
+          couleurApresSelection_C = Colors.red;
+          couleurPardefault_A = Colors.white;
+          couleurPardefault_B = Colors.green;
+
+        }
+
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonA(couleurPardefault_A);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonB(couleurPardefault_B);
+        Provider.of<Resultats>(context , listen: false).ajouterColoueurBoutonC(couleurApresSelection_C);
+
+
+      }
 
     });
 
 
+
+
+
+    return couleurChoix ;
   }
 
 // ----- REINITIALISATION DES COULEUR APRES LA PROCHAINE QUESTION ---- //
@@ -406,585 +690,707 @@ class _EcranQuestionState extends State<EcranQuestion> {
     });
   }
 
-  void _checkFin() {
-
-  }
-
-
-  void  _chargementListesDeQuestion () {
-    if (widget.titrePage == 'DEFINITION') {
-      var d = () => Definition();
-      tampon = d();
-      chemin = 'imageDefinition';
-    }
-
-    else if (widget.titrePage == 'CONDUCTEUR') {
-      {
-        var c = () => ConducteurPassager();
-        tampon = c();
-        chemin = 'imageConducteurPassager';
-        print('tampon  CONDUCTEUR: $tampon');
-      }
-    }
-    else if (widget.titrePage == 'INJONCTIONS') {
-      {
-        var i = () => Incjontion();
-        tampon = i();
-        chemin = 'ImageInjonction';
-      }
-    }
-    else if (widget.titrePage == 'FEUX') {
-      {
-        var f = () => Feux();
-        tampon = f();
-        chemin = 'ImageSignaux';
-      }
-    }
-  }
 
 
 
-    void BoutonSuivant() {
-      resetColor();
-      setState(() {
-
-        if (tampon.estFini() == true) {
 
 
 
-          var alertStyle = AlertStyle(
-            animationType: AnimationType.fromTop,
-            isCloseButton: false,
-            isOverlayTapDismiss: false,
-            descStyle: TextStyle(fontWeight: FontWeight.bold),
-            descTextAlign: TextAlign.start,
-            animationDuration: Duration(milliseconds: 500),
-            alertBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              side: BorderSide(
-                color: Colors.grey,
-              ),
+
+
+  void BoutonSuivant() {
+
+
+    resetColor();
+    setState(() {
+
+      if (tampon.estFini() == true) {
+
+
+        var alertStyle = AlertStyle(
+          animationType: AnimationType.fromTop,
+          isCloseButton: false,
+          isOverlayTapDismiss: false,
+          descStyle: TextStyle(fontWeight: FontWeight.bold),
+          descTextAlign: TextAlign.start,
+          animationDuration: Duration(milliseconds: 500),
+          alertBorder: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            side: BorderSide(
+              color: Colors.grey,
             ),
-            titleStyle: TextStyle(
-              color: Colors.green,
-            ),
-            alertAlignment: Alignment.center,
-          );
-          Alert(
-            context: context,
-            style: alertStyle,
-            image: SvgPicture.asset(
-              'assets/emoji/happy.svg',
-              height: 43.0,
-              width: 43.0,
-              allowDrawingOutsideViewBox: true,
-            ),
-            // type: AlertType.info,
-            title: "FIN DE LA SERIE",
-
-            desc: "Voulez-vous continuez ?.",
-            buttons: [
-              DialogButton(
-                  child: Text(
-                    "OUI",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                  color: Color.fromRGBO(0, 179, 134, 1.0),
-
-                  onPressed: ()
-                  {
-                    Navigator.pop(context);
-                    resetColor();
-
-                    tampon.reset();
-                    visibilite_bouton_Valider = !visibilite_bouton_Valider; // le bouton valider est desactiver
-                    visibilite_bouton_Suivant = !visibilite_bouton_Suivant; // le bouton suivant est afficher
-                    desactive_boutonA = !desactive_boutonA;
-                    desactive_boutonB = !desactive_boutonB;
-                    desactive_boutonC = !desactive_boutonC;
-
-                    clic_bouton_A = false;
-                    clic_bouton_B = false;
-                    clic_bouton_C = false;
-
-
-                  }
-              ),
-
-              DialogButton(
-                child: Text(
-                  "NON",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                ),
-                onPressed: () =>
-                    Navigator.of(context  , rootNavigator: false).push(MaterialPageRoute(
-                        builder: (BuildContext context  )  => EcranThemes())),
-
-
-                gradient: LinearGradient(colors: [
-                  Color.fromRGBO(116, 116, 191, 1.0),
-                  Color.fromRGBO(52, 138, 199, 1.0)
-                ]),
-              )
-            ],
-          ).show();
-
-          numeroImage = 1;
-        }
-        else {
-
-          visibilite_bouton_Valider = !visibilite_bouton_Valider; // le bouton valider est desactiver
-          visibilite_bouton_Suivant = !visibilite_bouton_Suivant; // le bouton suivant est afficher
-          desactive_boutonA = !desactive_boutonA;
-          desactive_boutonB = !desactive_boutonB;
-          desactive_boutonC = !desactive_boutonC;
-
-          clic_bouton_A = false;
-          clic_bouton_B = false;
-          clic_bouton_C = false;
-
-          tampon.questionSuivante();
-          tampon.optionSuivante();
-          numeroImage++;
-          resetColor();
-
-
-
-        }
-
-      });
-
-
-    }
-
-    void BoutonValider() {
-      setState(() {
-        choix_1 = null;
-        choix_2 = null;
-        choix_3 = null;
-
-        visibilite_bouton_Valider = !visibilite_bouton_Valider;
-        visibilite_bouton_Suivant = !visibilite_bouton_Suivant;
-
-        print('choix_1  choix_2 choix_3  $choix_1  $choix_2 $choix_3   ') ;
-        //visibilite_bouton_C = ! visibilite_bouton_C ;
-      });
-
-
-    }
-
-    void _aChoisi(int value) {
-      print('kmnn');
-    }
-    bool valeurChoisiA() {
-      if (clic_bouton_A == true) {
-        valeur_choisi = true;
-      } else {
-        valeur_choisi = null;
-      }
-
-      return valeur_choisi;
-    }
-
-    bool valeurChoisiB() {
-      if (clic_bouton_B == true) {
-        valeur_choisi = true;
-      } else {
-        valeur_choisi = null;
-      }
-
-      return valeur_choisi;
-    }
-
-    bool valeurChoisiC() {
-      if (clic_bouton_C == true) {
-        valeur_choisi = true;
-      } else {
-        valeur_choisi = null;
-      }
-
-      return valeur_choisi;
-    }
-
-
-
-
-
-    Widget build(BuildContext context) {
-      double hauteur = MediaQuery.of(context).size.height;
-
-
-      setState(() {
-
-        if (  tampon.getOptionC()   == 'null' ) {
-
-
-          visibilite_bouton_C = false ;
-
-        }
-        else {
-          visibilite_bouton_C = true ;
-        }
-      });
-
-
-
-      return Scaffold(
-        appBar: AppBar(
-          title: Row(
-            children: <Widget> [
-              Text(widget.titrePage),
-            ],
           ),
+          titleStyle: TextStyle(
+            color: Colors.green,
+          ),
+          alertAlignment: Alignment.center,
+        );
+        Alert(
+          context: context,
+          style: alertStyle,
+          image: SvgPicture.asset(
+            'assets/emoji/happy.svg',
+            height: 43.0,
+            width: 43.0,
+            allowDrawingOutsideViewBox: true,
+          ),
+          // type: AlertType.info,
+          title: "FIN DE LA SERIE",
+
+          // desc: "Voulez-vous continuez ?.",
+
+          buttons: [
+            DialogButton(
+              //  margin: EdgeInsets.all(15),
+
+                child: Text(
+                  "RECOMMENCER",
+                  style: TextStyle(color: Colors.white, fontSize: 8),
+                ),
+                color: Color.fromRGBO(0, 179, 134, 1.0),
+
+                onPressed: ()
+                {
+                  Provider.of<Resultats>(context , listen: false).reset();
+
+                  Navigator.pop(context);
+                  resetColor();
+
+                  // REINITIALISATION DE LA LISTE
+
+                  tampon.reset();
+
+
+                  visibilite_bouton_Valider = !visibilite_bouton_Valider; // le bouton valider est desactiver
+                  visibilite_bouton_Suivant = !visibilite_bouton_Suivant; // le bouton suivant est afficher
+                  desactive_boutonA = !desactive_boutonA;
+                  desactive_boutonB = !desactive_boutonB;
+                  desactive_boutonC = !desactive_boutonC;
+
+                  clic_bouton_A = false;
+                  clic_bouton_B = false;
+                  clic_bouton_C = false;
+
+
+                }
+            ),
+
+            DialogButton(
+              margin: EdgeInsets.all(15),
+
+              child: Text(
+
+                "ACCEUIL",
+                style: TextStyle(color: Colors.white, fontSize: 8),
+              ),
+
+
+              onPressed:  () {
+
+                Provider.of<Resultats>(context , listen: false).reset();
+
+                Navigator.of(context, rootNavigator: false ).push(MaterialPageRoute(
+                    builder: (BuildContext context  ) => Accueil( )));
+
+
+
+              },
+
+
+              color: Colors.deepOrangeAccent,
+
+            ) ,
+
+            DialogButton(
+            //  padding: EdgeInsets.all(15),
+
+              child: Text(
+                "CORRECTION",
+                style: TextStyle(color: Colors.white, fontSize: 8),
+              ),
+
+
+              onPressed:  () {
+                Navigator.of(context, rootNavigator: false ).push(MaterialPageRoute(
+                    builder: (BuildContext context  ) =>
+                        EcranSolutions(TitreTheme: '${TitreTheme}' )));
+
+
+
+              },
+
+              gradient: LinearGradient(colors: [
+                Color.fromRGBO(116, 116, 191, 1.0),
+                Color.fromRGBO(52, 138, 199, 1.0)
+              ]),
+            )
+
+          ],
+
+
+
+        ).show();
+        numeroImage = 1;
+
+      }
+      else {
+
+        visibilite_bouton_Valider = !visibilite_bouton_Valider; // le bouton valider est desactiver
+        visibilite_bouton_Suivant = !visibilite_bouton_Suivant; // le bouton suivant est afficher
+        desactive_boutonA = !desactive_boutonA;
+        desactive_boutonB = !desactive_boutonB;
+        desactive_boutonC = !desactive_boutonC;
+
+        clic_bouton_A = false;
+        clic_bouton_B = false;
+        clic_bouton_C = false;
+
+        tampon.questionSuivante();
+        tampon.optionSuivante();
+        numeroImage++;
+
+        resetColor();
+
+
+
+      }
+
+    });
+
+
+  }
+
+  void BoutonValider() {
+    setState(() {
+      choix_1 = null;
+      choix_2 = null;
+      choix_3 = null;
+
+
+      visibilite_bouton_Valider = !visibilite_bouton_Valider;
+      visibilite_bouton_Suivant = !visibilite_bouton_Suivant;
+
+
+    });
+
+
+  }
+
+  void _aChoisi(int value) {
+  }
+
+  bool valeurChoisiA() {
+    if (clic_bouton_A == true) {
+      valeur_choisi = true;
+    } else {
+      valeur_choisi = null;
+    }
+
+    return valeur_choisi;
+  }
+
+  bool valeurChoisiB() {
+    if (clic_bouton_B == true) {
+      valeur_choisi = true;
+    } else {
+      valeur_choisi = null;
+    }
+
+    return valeur_choisi;
+  }
+
+  bool valeurChoisiC() {
+    if (clic_bouton_C == true) {
+      valeur_choisi = true;
+    } else {
+      valeur_choisi = null;
+    }
+
+    return valeur_choisi;
+  }
+  Widget BoutonPlayStop(BuildContext context) {
+
+    return  GestureDetector(
+      child: SizedBox(
+        width: 85,
+        height: 85 ,
+
+        child: Row(
+          children: [
+            Visibility(
+              visible: visibilite_bouton_Valider,
+
+              child: Expanded(
+                child: FlatButton(
+                  padding: EdgeInsets.fromLTRB(0, 0, 1, 0),
+
+                  child: Icon(
+                    Icons.play_arrow,
+                    color: Colors.black,
+                    size: 50.0,
+                  ),
+                  onPressed: () {
+
+                    Color CouleurAchoisi =  checkAnswer(choix_1, choix_2, choix_3);
+
+                    Provider.of<Resultats>(context , listen: false).ajouterCouleurResultats(CouleurAchoisi);
+
+                    BoutonValider();
+
+                    String q = tampon.getQuestionText();
+                    String g = tampon.getFauteGrave() ;
+                    String e = tampon.getExplication();
+
+                    String optionA = tampon.getOptionA() ;
+                    String optionB = tampon.getOptionB();
+                    String optionC = tampon.getOptionC();
+
+                    Provider.of<Resultats>(context , listen: false).ajouterQuestion(q , choix_1 , choix_2, choix_3, g , e);
+                    Provider.of<Resultats>(context , listen: false).ajouterReponse(optionA, optionB, optionC);
+
+                    setState(() {
+                      desactive_boutonA = !desactive_boutonA;
+                      desactive_boutonB = !desactive_boutonB;
+                      desactive_boutonC = !desactive_boutonC;
+                    });
+                  },
+                ),
+
+
+              ),
+
+            ),
+            Visibility(
+              visible: visibilite_bouton_Suivant,
+              child: Expanded(
+                child: FlatButton(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  child: Icon(
+                    Icons.skip_next,
+                    color: Colors.black,
+                    size: 50.0,
+
+                  ),
+                  onPressed: () {
+
+                    BoutonSuivant();
+
+                  },
+                  // color: Colors.blueAccent,
+                ),
+
+              ),
+            ),
+          ],
         ),
-        body: Container(
-          height: hauteur,
-          color: kCouleurBody,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(3.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  child: Row(
+
+
+      ),
+
+
+    );
+
+  }
+
+
+
+
+
+
+  Widget build(BuildContext context) {
+    double hauteur = MediaQuery.of(context).size.height;
+
+    setState(() {
+
+      if (  tampon.getOptionC()   == 'null' ) {
+
+
+        visibilite_bouton_C = false ;
+
+      }
+      else {
+        visibilite_bouton_C = true ;
+      }
+    });
+
+
+
+    return Scaffold(
+      appBar: AppBar(
+        leading:   IconButton(
+  padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                  icon:   Icon(
+              Icons.arrow_back,
+              color: Colors.blueAccent ,
+            size: 30,
+          ),
+          onPressed: () { Navigator.of(context).pop() ;
+            }
+        ),
+        title: Row(
+          children: <Widget> [
+
+            Container(
+              padding: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                child: Text(widget.titrePage)
+
+
+            ),
+
+          ],
+        ),
+      ),
+      body: Container(
+        height: hauteur,
+        color: kCouleurBody,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(3.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                          child: Image.asset(
+                            'assets/$chemin/$numeroImage.png',
+                            height: 270,
+                          ),
+                        ),
+                    ),
+
+                  ],
+                ),
+              ),
+              Container(
+                  margin: EdgeInsets.all(2),
+                  child: Text(
+                    tampon.getQuestionText(),
+
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )),
+              Wrap(
+                // spacing: 2,
+                runSpacing: -35,
+                children: <Widget>[
+
+                  /////////////////////////////////////////////////////////////////////
+                  ///// ---------------   BOUTON  1  -------------- /////////
+                  /////////////////////////////////////////////////////////////////////
+                  Row(
                     children: <Widget>[
-                      Expanded(
-                        child: Image.asset(
-                          'assets/$chemin/$numeroImage.png',
-                          height: 300,
+                      Container(
+                        child: Container(
+                          margin: EdgeInsets.all(30),
+                          child: AbsorbPointer(
+                            absorbing: desactive_boutonA,
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                // side: BorderSide(color: Colors.red)
+                              ),
+                              elevation: 3,
+                              textColor: Colors.black,
+                              child: Text(
+                                tampon.getOptionA(),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
+                                ),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  clic_bouton_A = !clic_bouton_A;
+                                });
+
+                                choix_1 = valeurChoisiA();
+
+
+                              },
+                              color: clic_bouton_A
+                                  ? couleurApresSelection_A
+                                  : couleurPardefault_A,
+                            ),
+                          ),
+                          height: 50.0,
+                          width: 250,
+                        ),
+                      ),
+                      Container(
+                        child: Container(
+                          child: AbsorbPointer(
+                            absorbing: desactive_boutonA,
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                // side: BorderSide(color: Colors.red)
+                              ),
+                              elevation: 3,
+                              textColor: Colors.black,
+                              child: Text(
+                                'A',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
+                                ),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  clic_bouton_A = !clic_bouton_A;
+                                });
+
+
+                                choix_1 = valeurChoisiA();
+
+                              },
+                              color: clic_bouton_A
+                                  ? couleurApresSelection_A
+                                  : couleurPardefault_A,
+
+                            ),
+                          ),
+                          height: 50.0,
+                          width: 50,
                         ),
                       ),
                     ],
                   ),
-                ),
-                Container(
-                    margin: EdgeInsets.all(2),
-                    child: Text(
-                      tampon.getQuestionText(),
-
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    )),
-                Wrap(
-                  // spacing: 2,
-                  runSpacing: -35,
-                  children: <Widget>[
-
-                    /////////////////////////////////////////////////////////////////////
-                    ///// ---------------   BOUTON  1  -------------- /////////
-                    /////////////////////////////////////////////////////////////////////
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          child: Container(
-                            margin: EdgeInsets.all(30),
-                            child: AbsorbPointer(
-                              absorbing: desactive_boutonA,
-                              child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  // side: BorderSide(color: Colors.red)
-                                ),
-                                elevation: 3,
-                                textColor: Colors.black,
-                                child: Text(
-                                  tampon.getOptionA(),
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20.0,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    clic_bouton_A = !clic_bouton_A;
-                                  });
-
-                                  choix_1 = valeurChoisiA();
 
 
-                                },
-                                color: clic_bouton_A
-                                    ? couleurApresSelection_A
-                                    : couleurPardefault_A,
+                  /////////////////////////////////////////////////////////////////////
+                  ///// ---------------   BOUTON  2  -------------- /////////
+                  /////////////////////////////////////////////////////////////////////
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        child: Container(
+                          margin: EdgeInsets.all(30),
+                          child: AbsorbPointer(
+                            absorbing: desactive_boutonB,
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                // side: BorderSide(color: Colors.red)
                               ),
-                            ),
-                            height: 50.0,
-                            width: 250,
-                          ),
-                        ),
-                        Container(
-                          child: Container(
-                            child: AbsorbPointer(
-                              absorbing: desactive_boutonA,
-                              child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  // side: BorderSide(color: Colors.red)
+                              elevation: 3,
+                              textColor: Colors.black,
+                              child: Text(
+                                tampon.getOptionB(),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
                                 ),
-                                elevation: 3,
-                                textColor: Colors.black,
-                                child: Text(
-                                  'A',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20.0,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    clic_bouton_A = !clic_bouton_A;
-                                  });
-                                  print('--------- 6 ------------');
-                                  print(
-                                      'choix_1  : $choix_1 -  clic_bouton_A : $clic_bouton_A');
-
-                                  choix_1 = valeurChoisiA();
-                                  print('---------  6.1  ------------');
-                                  print(
-                                      'choix_1   :$choix_1  - clic_bouton_A : $clic_bouton_A');
-
-                                  print(
-                                      'choix_2   :$choix_2 - clic_bouton_B : $clic_bouton_B');
-                                  print(
-                                      'couleurApresSelection_A   :$couleurApresSelection_A - couleurPardefault_A : $clic_bouton_B');
-                                },
-                                color: clic_bouton_A
-                                    ? couleurApresSelection_A
-                                    : couleurPardefault_A,
                               ),
+                              onPressed: () {
+                                setState(() {
+                                  clic_bouton_B = !clic_bouton_B;
+                                });
+
+                                choix_2 = valeurChoisiB();
+                              },
+                              color: clic_bouton_B ? couleurApresSelection_B : couleurPardefault_B,
                             ),
-                            height: 50.0,
-                            width: 50,
                           ),
+                          height: 50.0,
+                          width: 250,
                         ),
-                      ],
-                    ),
-
-
-                    /////////////////////////////////////////////////////////////////////
-                    ///// ---------------   BOUTON  2  -------------- /////////
-                    /////////////////////////////////////////////////////////////////////
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          child: Container(
-                            margin: EdgeInsets.all(30),
-                            child: AbsorbPointer(
-                              absorbing: desactive_boutonB,
-                              child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  // side: BorderSide(color: Colors.red)
-                                ),
-                                elevation: 3,
-                                textColor: Colors.black,
-                                child: Text(
-                                  tampon.getOptionB(),
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20.0,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    clic_bouton_B = !clic_bouton_B;
-                                  });
-                                  print('--------- 6 ------------');
-
-                                  choix_2 = valeurChoisiB();
-                                },
-                                color: clic_bouton_B ? couleurApresSelection_B : couleurPardefault_B,
+                      ),
+                      Container(
+                        child: Container(
+                          child: AbsorbPointer(
+                            absorbing: desactive_boutonB,
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                // side: BorderSide(color: Colors.red)
                               ),
-                            ),
-                            height: 50.0,
-                            width: 250,
-                          ),
-                        ),
-                        Container(
-                          child: Container(
-                            child: AbsorbPointer(
-                              absorbing: desactive_boutonB,
-                              child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  // side: BorderSide(color: Colors.red)
+                              elevation: 3,
+                              textColor: Colors.black,
+                              child: Text(
+                                'B',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
                                 ),
-                                elevation: 3,
-                                textColor: Colors.black,
-                                child: Text(
-                                  'B',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20.0,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    clic_bouton_B = !clic_bouton_B;
-                                  });
-
-                                  choix_2 = valeurChoisiB();
-                                },
-                                color: clic_bouton_B ? couleurApresSelection_B : couleurPardefault_B,
                               ),
+                              onPressed: () {
+                                setState(() {
+                                  clic_bouton_B = !clic_bouton_B;
+                                });
+
+                                choix_2 = valeurChoisiB();
+                              },
+                              color: clic_bouton_B ? couleurApresSelection_B : couleurPardefault_B,
                             ),
-                            height: 50.0,
-                            width: 50,
                           ),
+                          height: 50.0,
+                          width: 50,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
+                  ),
 
 
-                    /////////////////////////////////////////////////////////////////////
-                    ///// ---------------   BOUTON  3  -------------- /////////
-                    /////////////////////////////////////////////////////////////////////
+                  /////////////////////////////////////////////////////////////////////
+                  ///// ---------------   BOUTON  3  -------------- /////////
+                  /////////////////////////////////////////////////////////////////////
 
-                    Row(
-                      children: <Widget>[
-                        Visibility(
-                          visible: visibilite_bouton_C,
-                          child: Container(
-                            margin: EdgeInsets.all(30),
-                            child: AbsorbPointer(
-                              absorbing: desactive_boutonC,
-                              child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  // side: BorderSide(color: Colors.red)
-                                ),
-                                elevation: 3,
-                                textColor: Colors.black,
-                                child: Text(
-                                  tampon.getOptionC() ,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20.0,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-
-                                    clic_bouton_C = !clic_bouton_C;
-                                  });
-                                  choix_3 = valeurChoisiC();
-
-                                },
-                                color: clic_bouton_C ? couleurApresSelection_C : couleurPardefault_C,
+                  Row(
+                    children: <Widget>[
+                      Visibility(
+                        visible: visibilite_bouton_C,
+                        child: Container(
+                          margin: EdgeInsets.all(30),
+                          child: AbsorbPointer(
+                            absorbing: desactive_boutonC,
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                // side: BorderSide(color: Colors.red)
                               ),
-                            ),
-                            height: 50,
-                            width: 250,
-                          ),
-                        ),
-
-                        Visibility(
-                          visible: visibilite_bouton_C,
-                          child: Container(
-                            child: AbsorbPointer(
-                              absorbing: desactive_boutonC,
-                              child: RaisedButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  // side: BorderSide(color: Colors.red)
+                              elevation: 3,
+                              textColor: Colors.black,
+                              child: Text(
+                                tampon.getOptionC() ,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
                                 ),
-                                elevation: 3,
-                                textColor: Colors.black,
-                                child: Text(
-                                  'C',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20.0,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-
-                                    clic_bouton_C = !clic_bouton_C;
-                                  });
-                                  choix_3 = valeurChoisiC();
-
-                                },
-                                color: clic_bouton_C
-                                    ? couleurApresSelection_C
-                                    : couleurPardefault_C,
                               ),
+                              onPressed: () {
+                                setState(() {
+
+                                  clic_bouton_C = !clic_bouton_C;
+                                });
+                                choix_3 = valeurChoisiC();
+
+                              },
+                              color: clic_bouton_C ? couleurApresSelection_C : couleurPardefault_C,
                             ),
-                            height: 50.0,
-                            width: 50,
                           ),
+                          height: 50,
+                          width: 250,
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                      ),
+
+                      Visibility(
+                        visible: visibilite_bouton_C,
+                        child: Container(
+                          child: AbsorbPointer(
+                            absorbing: desactive_boutonC,
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                // side: BorderSide(color: Colors.red)
+                              ),
+                              elevation: 3,
+                              textColor: Colors.black,
+                              child: Text(
+                                'C',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
+                                ),
+                              ),
+                              onPressed: () {
+                                setState(() {
+
+                                  clic_bouton_C = !clic_bouton_C;
+                                });
+                                choix_3 = valeurChoisiC();
+
+                              },
+                              color: clic_bouton_C
+                                  ? couleurApresSelection_C
+                                  : couleurPardefault_C,
+                            ),
+                          ),
+                          height: 50.0,
+                          width: 50,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
-        backgroundColor: kCouleurBodyTheme,
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: InkWell(
-          child: AnimationBouttonPlay(
-            boutonEnfant: Row(
-              children: [
-                Visibility(
-                  visible: visibilite_bouton_Valider,
-                  child: Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: FlatButton(
-                        child: IconContent(
-                          icon: Icons.play_circle_outline,
-                        ),
-                        onPressed: () {
-                          print('choix_1  choix_2 choix_3  $choix_1  $choix_2 $choix_3   ') ;
+      ),
+      backgroundColor: null,
+      floatingActionButton: SizedBox(
+        width: 90,
+        height: 90 ,
+        child: FloatingActionButton(
+          backgroundColor: Colors.white,
+          child: Container(
 
-                          checkAnswer(choix_1, choix_2, choix_3);
-                          BoutonValider();
-                          setState(() {
-                            desactive_boutonA = !desactive_boutonA;
-                            desactive_boutonB = !desactive_boutonB;
-                            desactive_boutonC = !desactive_boutonC;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
+              child: BoutonPlayStop(context)
+          ),
+          elevation: 1,
+          onPressed: () {
+
+
+          },
+
+
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        notchMargin : 6 ,
+        elevation: 5 ,
+        color: Colors.white,
+        child: Container(
+          height: 50,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              IconButton(
+                iconSize : 40 ,
+                padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
+                icon: Icon(
+                  Icons.info,
+                  color: Colors.black,
                 ),
-                Visibility(
-                  visible: visibilite_bouton_Suivant,
-                  child: Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: FlatButton(
-                        child: IconContent(
-                          icon: Icons.skip_next,
-                        ),
-                        onPressed: () {
-
-                          BoutonSuivant();
-
-                        },
-                        // color: Colors.blueAccent,
-                      ),
-                    ),
-                  ),
+                onPressed: (){
+                  print(' Ecran info solution ') ;
+                },
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.share,
+                  color: Colors.black,
                 ),
-              ],
-            ),
+                onPressed: null,
+              ),
+            ],
           ),
         ),
-        bottomNavigationBar: ModifierBottomAppBar(
-          iconSelectionner: _aChoisi,
-          items: [
-            ModifierAppBarItem(icon: Icons.info_outline),
-            ModifierAppBarItem(icon: Icons.folder_shared),
-          ],
-        ),
-      );
-    }
+        shape: CircularNotchedRectangle(),
+      ),
+
+
+    );
   }
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

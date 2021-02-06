@@ -16,10 +16,10 @@ class AlcoolImpregnation {
   ] ;
 
 
-  List<Reponse> _listeDeChoix= [
+  List<Option> _listeDeChoix= [
 
-    Reponse( '0,22 mg par litre' , ' 	0,35 mg par litre' , '0,50 mg par litre	' ) ,
-    Reponse( 'oui  ' ,' non' , 'null' ) ,
+    Option( '0,22 mg par litre' , ' 	0,35 mg par litre' , '0,50 mg par litre	' ) ,
+    Option( 'oui  ' ,' non' , 'null' ) ,
 
   ] ;
 

@@ -1,83 +1,49 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:permis/EcranTheme.dart';
+import 'package:permis/EcranProfil.dart';
+import 'package:provider/provider.dart';
 import 'Constantes.dart';
 import 'Acceuil.dart';
+import 'EcranResultats.dart';
+import 'EcranQuestions.dart';
 
-void main() => runApp(PAGE_Accueil());
+import 'EcranThemes.dart';
+import 'ListeResultats.dart';
+import 'NomProfil.dart';
 
-class PAGE_Accueil extends StatelessWidget {
+// cleEcranQuestions = GlobalKey<EcranQuestionsState>();
 
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-       primaryColor: kCouleurAppBar ,
+
+
+
+void main() =>
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => NomProfil()),
+          ChangeNotifierProvider(create: (_) => EcranResultatState()),
+          ChangeNotifierProvider(create: (_) => Resultats()),
+          ChangeNotifierProvider(create: (_) => EcranQuestionsState()),
+          ChangeNotifierProvider(create: (_) => EcranThemeState()),
+
+        ],
+        child:  MaterialApp(
+
+          theme: ThemeData(
+            primaryColor: kCouleurAppBar,
             scaffoldBackgroundColor: kCouleurBody,
-        accentColor: Colors.blue ,
-    ),
-      home: Accueil (),
-      initialRoute: 'Accueil',
+            accentColor: Colors.blue,
+          ),
 
+          home: Accueil(),
+
+          ) ,
+
+
+      ),
     );
-  }
-}
 
 
 
-
-/*Expanded(
-child: Text(
-
-'Croisement Dépassement' ,
-style: StyleTextLong,
-
-),*/
-
-/*
-Expanded(
-child: Padding(
-padding: EdgeInsets.all(15.0),
-child: FlatButton(
-color: Colors.red,
-child: Text(
-'False',
-style: TextStyle(
-fontSize: 20.0,
-color: Colors.white,
-),
-),
-onPressed: () {
-//The user picked false.
-checkAnswer(false);
-},
-),
-),
-),*/
-
-/*Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                   children: <Widget> [
-                     //Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0)),
-
-                     Row(
-                         children:<Widget> [
-                           SvgPicture.asset('assets/images/depacement.svg' ,
-                             height: 60.0,
-                             width: 60.0,
-
-                           ) ,
-                         ],
-
-                     ),
-                     Expanded(
-                       child: Text(
-
-                          'Croisement Dépassement' ,
-                            style: StyleTextLong,
-
-                   ),
-                     ) ,
-
-                    ],
-                  ),*/

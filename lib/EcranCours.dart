@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class EcranCours extends StatefulWidget {
   @override
@@ -25,6 +26,12 @@ class _EcranCoursState extends State<EcranCours> {
             ),
           ),
         ],
+      ),
+      body: SvgPicture.asset(
+        'assets/iconTheme/test.svg',
+        height: 700.0,
+        width: 700.0,
+        allowDrawingOutsideViewBox: true,
       ),
     );
   }

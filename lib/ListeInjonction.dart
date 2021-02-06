@@ -5,9 +5,9 @@ class Incjontion {
   int _nombreDeQuestion = 0;
   int _nombreDeChoix = 0;
 
-  List<Reponse> _listeDeChoix= [
-    Reponse( 'Oui' , 'Non' , 'null' ) ,
-    Reponse( 'Je peux passer' , 'Je dois m arrêter' , 'null' ) ,
+  List<Option> _listeDeChoix= [
+    Option( 'Oui' , 'Non' , 'null' ) ,
+    Option( 'Je peux passer' , 'Je dois m arrêter' , 'null' ) ,
 
 
 
