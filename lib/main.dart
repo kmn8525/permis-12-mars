@@ -27,6 +27,8 @@ void main() =>
           ChangeNotifierProvider(create: (_) => Resultats()),
           ChangeNotifierProvider(create: (_) => EcranQuestionsState()),
           ChangeNotifierProvider(create: (_) => EcranThemeState()),
+          ChangeNotifierProvider(create: (_) => EcranProfilState()),
+
 
         ],
         child:  MaterialApp(

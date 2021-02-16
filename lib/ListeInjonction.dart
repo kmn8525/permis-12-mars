@@ -7,13 +7,14 @@ class Incjontion {
 
   List<Option> _listeDeChoix= [
     Option( 'Oui' , 'Non' , 'null' ) ,
-    Option( 'Je peux passer' , 'Je dois m arrêter' , 'null' ) ,
+    Option( 'Je peux passer' , 'Je dois m'
+        'arrêter' , 'null' ) ,
 
 
 
   ] ;
   List<Question> _listeInjonction = [
-    Question('Je peux continuer tout droit' , true , false , null , 'non', 'Cette injonction est équivalente au feu vert l agent ouvre le carrefour') ,
+    Question('Je peux continuer tout droit' , true , false , null , 'non', 'Cette injonction est équivalente au feu vert l''agent ouvre le carrefour') ,
     Question('Je désire continuer tout droit' , true , false , null , 'non', 'Cette injonction est équivalente au feu rouge' ),
 
 

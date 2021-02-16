@@ -58,14 +58,12 @@ class HorizontalItem extends StatelessWidget {
       child: Container(
         height: double.infinity,
 
-
-
         child: Card(
           //semanticContainer: false,
 
           color: kCouleurAppBar,
           elevation: 4.0,
-          shadowColor : Colors.black38 ,
+          shadowColor : Colors.black ,
           margin: EdgeInsets.symmetric(vertical : 8 ,horizontal: 8),
 
 
@@ -153,7 +151,7 @@ class HorizontalItemExamen extends StatelessWidget {
           //semanticContainer: false,
 
           color: kCouleurAppBar,
-          elevation: 4.0,
+          elevation: 6.0,
           shadowColor : Colors.black38 ,
           margin: EdgeInsets.symmetric(vertical : 8 ,horizontal: 8),
 

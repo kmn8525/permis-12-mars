@@ -4,6 +4,7 @@ import 'package:permis/Acceuil.dart';
 import 'package:permis/ListeResultats.dart';
 import 'package:provider/provider.dart';
 import 'Constantes.dart';
+import 'Dessiner.dart';
 import 'EcranQuestions.dart';
 import 'EcranResultats.dart';
 import 'EcranThemes.dart';
@@ -74,9 +75,11 @@ void BoutonSuivant() {
   @override
   Widget build(BuildContext context) {
 
+    final Size size = MediaQuery.of(context).size;
 
 
     return Scaffold(
+      extendBody: true,
 
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -84,101 +87,193 @@ void BoutonSuivant() {
       ),
 
       body:  Container(
-        decoration: BoxDecoration(
-          gradient: RadialGradient(
-              colors: [Colors.white, kCouleurBody]
-          ),
-        ),
+        child: Stack(
 
-        /*decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                stops: [0.1, 0.3, 0.7, 1],
-                colors: [Colors.green, Colors.blue, Colors.orange, Colors.pink])
-        ),*/
-        child: Column(
-          children: <Widget> [
+          children:<Widget> [
+            Container(
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  radius: 3,
+                    colors: [Colors.white, Colors.blueAccent]
+                ),
+              ),
 
+              /*decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                 BoutonPlayStop(context)
 
-            _BilanResultat(),
-            Center(
-
-              child: GridView.builder(
-                  shrinkWrap: true,
-
-                  gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
-                  itemCount: tampon.length,
-                  itemBuilder: (context, index) {
-                    Color item = tampon[index];
-
-                    return GestureDetector(
-
-                      onTap: ()  {
-
-                        print( 'index $index') ;
-                        Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
-                            builder: (BuildContext context  ) =>
-                                EcranResultat(indexCourant: index )));
+                      stops: [0.1, 0.3, 0.7, 1],
+                      colors: [Colors.green, Colors.blue, Colors.orange, Colors.pink])
+              ),*/
+              child: Column(
+                children: <Widget> [
 
 
-                      },
+                  _BilanResultat(),
+                  Center(
 
-                      child: Container(
-                        height: double.infinity,
+                    child: GridView.builder(
+                        shrinkWrap: true,
+
+                        gridDelegate:
+                        SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+                        itemCount: tampon.length,
+                        itemBuilder: (context, index) {
+                          Color item = tampon[index];
+
+                          return GestureDetector(
+
+                            onTap: ()  {
+
+                              print( 'index $index') ;
+                              Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
+                                  builder: (BuildContext context  ) =>
+                                      EcranResultat(indexCourant: index )));
+
+
+                            },
+
+                            child: Container(
+                              height: double.infinity,
 
 
 
-                        child: Card(
-                          //semanticContainer: false,
-                          // color : Colors.black ,
+                              child: Card(
+                                //semanticContainer: false,
+                                // color : Colors.black ,
 
-                          color: item,
-                          elevation: 5.0,
-                          shadowColor : Colors.black26 ,
-                          margin: EdgeInsets.symmetric(vertical : 8 ,horizontal: 8),
-
-
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(13),)) ,
+                                color: item,
+                                elevation: 5.0,
+                                shadowColor : Colors.black26 ,
+                                margin: EdgeInsets.symmetric(vertical : 8 ,horizontal: 8),
 
 
-                          child: Container(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(13),)) ,
 
-                            alignment: Alignment.center ,
-                            padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
 
-                                Expanded(
-                                  child: Center(
-                                    child: Text(
-                                      '${index}',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 30),
-                                    ),
+                                child: Container(
+
+                                  alignment: Alignment.center ,
+                                  padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+
+                                      Expanded(
+                                        child: Center(
+                                          child: Text(
+                                            '${index}',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 30),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
+                          );
+                        }),
 
+                  ),
+
+
+
+                ],
+              ),
             ),
+
+
+            Container(
+              child: Positioned(
+
+                bottom: 0,
+                child: Stack(
+                  alignment :  AlignmentDirectional.topCenter,
+                  overflow: Overflow.visible,
+
+                  children:<Widget> [
+                    Container(
+
+                      child: CustomPaint(
+                        size: Size(size.width, 80),
+                        painter:  DessinBasBarNavigation(),
+                      ),
+                    ),
+                    Center(
+                      heightFactor: 0.6,
+                      child: FloatingActionButton(
+                          backgroundColor: Colors.orange,
+                          child: Icon(Icons.shopping_basket),
+                          elevation: 0.1,
+                          onPressed: () {_likeThis();
+                          }),
+                    ),
+                    Container(
+                      width: size.width,
+                      height: 80,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              Icons.home,
+                              color:   Colors.orange  ,
+                            ),
+                            onPressed: () {
+                             },
+                            splashColor: Colors.white,
+                          ),
+                          IconButton(
+                              icon: Icon(
+                                Icons.restaurant_menu,
+                               // color: currentIndex == 1 ? Colors.orange : Colors.grey.shade400,
+                              ),
+                              onPressed: () {
+                               }),
+                          Container(
+                            width: size.width * 0.20,
+                          ),
+                          IconButton(
+                              icon: Icon(
+                                Icons.bookmark,
+                              //  color: currentIndex == 2 ? Colors.orange : Colors.grey.shade400,
+                              ),
+                              onPressed: () {
+                              }),
+                          IconButton(
+                              icon: Icon(
+                                Icons.notifications,
+                                //color: currentIndex == 3 ? Colors.orange : Colors.grey.shade400,
+                              ),
+                              onPressed: () {
+                               }),
+                        ],
+                      ),
+                    )
+
+
+                  ],
+                ),
+              ),
+            ),
+
           ],
+
         ),
       ),
 
-      backgroundColor: null,
 
+
+      backgroundColor: null,
+/*
       floatingActionButton: SizedBox(
         width: 80,
         height: 80 ,
@@ -190,43 +285,11 @@ void BoutonSuivant() {
 
 
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        notchMargin : 6 ,
-        elevation: 5 ,
-        color: Colors.white,
-        child: Container(
-          height: 50,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              IconButton(
-          iconSize : 40 ,
-                padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
-                icon: Icon(
-                  Icons.info,
-                  color: Colors.black,
-                ),
-                onPressed: (){
-            print(' Ecran info solution ') ;
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.share,
-                  color: Colors.black,
-                ),
-                onPressed: null,
-              ),
-            ],
-          ),
-        ),
-        shape: CircularNotchedRectangle(),
-      ),
+      ),*/
 
 
 
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
 
 
     );

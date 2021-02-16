@@ -1020,6 +1020,8 @@ class EcranQuestionsExamenState extends State<EcranQuestionsExamen>  with Change
 
 
     return Scaffold(
+      extendBody: true,
+
       appBar: AppBar(
         title: Row(
           children: <Widget> [

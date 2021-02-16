@@ -8,8 +8,8 @@ class Definition extends ChangeNotifier {
   int _nombreDeChoix = 0;
 
   List<Option> _listeDeChoix= [
-    Option( 'Je dois lui céder le passage' , 'Je peux lui céder le passage /R ' , 'Lui céder le passage est une infraction' ) ,
-    Option( 'Oui/R' , 'Non , ce vehicule doit se rabattre et me ceder le passage ' , 'Chute de pierres a 200 mettre ' ) ,
+    Option( 'Je dois lui céder le passage' , 'Je peux lui céder le passage ' , 'Lui céder le passage est une infraction' ) ,
+    Option( 'Oui' , 'Non , ce vehicule doit se rabattre et me ceder le passage ' , 'Chute de pierres a 200 mettre ' ) ,
     Option( 'chute de pierre a 150 metres ' , 'projection de gravillons a 200 metre  /R' , 'null' ) ,
     Option( 'Oui/R' , ' Oui si mon vehicule mesure moins de 1 , 65 metres ', 'Non'    ) ,
     Option( 'Oui' , ' Oui si  je m ecarte d un metre au moins   ' , 'Non /R' ) ,
@@ -19,27 +19,27 @@ class Definition extends ChangeNotifier {
   List<Question> _listeDefinition = [
     Question(' Ce camion désire changer de bande ', false , true , false , 'non' ,
         ' Changer de bande est une manoeuvre '
-        'Vous pouvez le laisser passer mais évitez de freiner brusquement'),
+        'Vous pouvez le laisser passer mais ,  évitez de freiner brusquement'),
 
 
     Question('Les vehicules de gauche sont stationnes . '
         'je dois ceder le passage au vehicule de police venant en sens inverse '
   , false , true  , null , 'oui' , 'Sans sirène, ce '
-            'véhicule n a pas priorité. Comme les'
+            'véhicule n''a pas la priorité. Comme les'
             ' obstacles se trouvent de son côté, il doit vous céder le passage.'   ),
 
 
-    Question(' ce signal routier signifie  ', true , false , false , 'non' , ' Chute de pierres à 150 mètres, sur une distance de 200 mètres.'),
+    Question(' ce signal routier signifie : ', true , false , false , 'non' , ' Chute de pierres à 150 mètres, sur une distance de 200 mètres.'),
 
     Question('je peux circuler a 120 km/h' , true ,  false , null , 'non' ,
         'Le muret qui sépare les deux sens de circulation '
             'vous autorise à circuler à 120 km/h.' ) ,
 
-  Question(' puis-je stationner a droite devant la voiture bleue '
+  Question(' puis-je stationner a droite devant la voiture blue '
   , false , false , true , 'oui' , '  tous depassement sont interdits sur un dispositif sureleve'),
 
     Question(' Je peux placer un siège dos à la route à lavant '
-  , false , true , false , 'oui' , ' Le déploiement de l airbag risque d écraser l enfant entre le siège et le dossier.'),
+  , false , true , false , 'oui' , ' Le déploiement du airbag risque d''écraser l''enfant entre le siège et le dossier.'),
 
 
   ] ;

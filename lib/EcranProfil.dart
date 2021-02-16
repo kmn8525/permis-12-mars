@@ -1,5 +1,6 @@
 
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permis/Constantes.dart';
@@ -9,39 +10,61 @@ import 'dart:io';
 
 import 'dart:async';
 
+import 'Acceuil.dart';
+import 'Dessiner.dart';
 import 'EcranModifierNomProfil.dart';
 import 'NomProfil.dart';
 import 'Utility.dart';
 
 
-class EcranProfil extends StatefulWidget  with ChangeNotifier{
+class EcranProfil extends StatefulWidget  {
   @override
-  _EcranProfilState createState() => _EcranProfilState();
+  EcranProfilState createState() => EcranProfilState();
 
 }
 
-class _EcranProfilState extends State<EcranProfil>  {
+class EcranProfilState extends State<EcranProfil>  with ChangeNotifier , DiagnosticableTreeMixin  {
 
 
   Future<File> imageFile;
   Image imageFromPreferences;
+  String cleNom = "n";
+  String cleImage = "i";
+  String newTaskTitle= 'Entrez Votre Nom';
+
 
   @override
   void initState() {
     super.initState();
+
+    Utility.instance.getStringValue(cleNom)
+        .then((value) => setState(() {
+      newTaskTitle = value;
+
+
+    }));
+
+
     chargerImageDisque();
 
   }
 
-  chargerImageDisque() {
-    Utility.getImageFromPreferences().then((img) {
-      if (null == img) {
+  String getcleImage(){
+return cleImage ;
+  }
+  String getcleNom(){
+return cleNom ;
+  }
+   chargerImageDisque() {
+    Utility.getImageFromPreferences(cleImage).then((value) {
+      if (null == value) {
         return;
       }
       setState(() {
-        imageFromPreferences = Utility.imageFromBase64String(img);
+       imageFromPreferences = Utility.imageFromBase64String(value);
       });
     });
+
   }
 
   pickImageFromGallery(ImageSource source) {
@@ -111,48 +134,130 @@ class _EcranProfilState extends State<EcranProfil>  {
 
 
 
+
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
+
       backgroundColor: kCouleurBody ,
-      body: Column(
+      body: Stack(
+        alignment: Alignment.center,
+
         children: <Widget>[
-
-          SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Container(
-
-                    // height: 100,
-                    child: IconButton(
-                      icon: Icon(Icons.arrow_back),
-                      onPressed: (){
-                        Navigator.pop(context);
-                      },
-                    ),
-                    padding: EdgeInsets.fromLTRB(0, 0, 300, 0),
-                  ) ,
-                 // SizedBox(height: screenSize.height / 6.4),
-                  _constructeurImageProfil(),
-                  _constructeurNom(context),
-                  _ConstructeurSeparateur(screenSize),
-                  SizedBox(height: 13.0),
-                  SizedBox(height: 10.0),
-                  _constructeurBouttons(),
-
-
-                ],
-              ),
+          CustomPaint(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
             ),
+            painter: DessinIncurveProfil( ),
           ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+
+            children: <Widget>[
+                    Container(
+
+                      // height: 100,
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back
+                        ),
+                        onPressed: (){
+                          Navigator.of(context, rootNavigator: false ).push(MaterialPageRoute(
+                              builder: (BuildContext context  ) => Accueil( )));
+
+                         // Navigator.pop(context);
+
+                        },
+                      ),
+                      padding: EdgeInsets.fromLTRB(0, 30, 300, 0),
+                    ) ,
+
+
+
+              Container(
+                width: MediaQuery.of(context).size.width / 4,
+                height: MediaQuery.of(context).size.width / 4,
+                 decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  // image: DecorationImage(
+                  //   image: AssetImage(null),
+                  //   fit: BoxFit.cover,
+                  // ),
+                ),
+                child:  _constructeurImageProfil(),
+
+
+
+              ),
+
+
+              // SizedBox(height: screenSize.height / 6.4),
+              SafeArea(
+                child: SingleChildScrollView(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+
+                      children: <Widget>[
+
+                        _constructeurNom(context),
+                        _ConstructeurSeparateur(screenSize),
+                        SizedBox(height: 13.0),
+                        SizedBox(height: 10.0),
+                        _constructeurBouttons(),
+
+                      ]
+                  ),
+                ),
+              ),
+                  ],
+                ),
+
 
 
         ],
+
       ),
     );
   }
+
+
+
+Widget _editionPhotoProfil(){
+
+    return Container(
+
+        padding: EdgeInsets.fromLTRB(100, 0, 0, 80),
+        child: ClipOval(
+          child: Material(
+            color: Colors.white, // button color
+            child: InkWell(
+              splashColor: Colors.blue, // inkwell color
+              child: SizedBox(width: 50, height: 50,
+                  child: Container(
+                    width: 500,
+                    height: 500,
+                    //padding:EdgeInsets.symmetric(horizontal: 200) ,
+                    child: Icon(
+
+
+                        Icons.edit),
+                  )
+              ),
+              onTap: (){
+
+              },
+            ),
+          ),
+        ),
+
+
+    );
+
+
+}
 
 
 
@@ -161,86 +266,70 @@ class _EcranProfilState extends State<EcranProfil>  {
       children: <Widget>[
 
 
-    GestureDetector(
-          child:  Center(
-            child: Container(
-              width: 100.0,
-              height: 100.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100.0),
-                border: Border.all(
-                  color: Colors.white,
-                  width: 2.0,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: kBoutonDegrade,
-                    offset: Offset(0, 1),
-                    blurRadius: 2,
+    Container(
+      child: GestureDetector(
+            child:  Center(
+              child: Container(
+                width: 100.0,
+                height: 100.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100.0),
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 2.0,
                   ),
-                ],
+                  boxShadow: [
+                    BoxShadow(
+                      color: kBoutonDegrade,
+                      offset: Offset(0, 1),
+                      blurRadius: 2,
+                    ),
+                  ],
 
-              ) ,
+                ) ,
 
-              child: imageFromPreferences != null
-                  ?
-              ClipOval(
-                child: Container(
+                child: imageFromPreferences != null
+                    ?
+                ClipOval(
+                  child: Container(
+                    width: 95,
+                    height: 95,
+                    child: imageFromPreferences,
+
+                  ),
+                )
+
+                    : Container(
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(50)),
                   width: 95,
                   height: 95,
-                  child: imageFromPreferences,
-
+                  child: Icon(
+                    Icons.camera_alt,
+                    color: Colors.grey[800],
+                  ),
                 ),
-              )
 
-                  : Container(
-                decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(50)),
-                width: 95,
-                height: 95,
-                child: Icon(
-                  Icons.camera_alt,
-                  color: Colors.grey[800],
-                ),
+
               ),
-
-
             ),
-          ),
 
-        ),
+        onTap: () {
+          _optionsDialogBox();
+
+        },
+          ),
+    ),
           ClipOval(
           child: Container(
-          margin: EdgeInsets.fromLTRB(151, 1, 151, 0),
+         // margin: EdgeInsets.fromLTRB(151, 1, 151, 0),
           width: 97,
           height: 97,
           child: imageEnregistre(),
 
           ),
           ) ,
-        Expanded(
-          child: Container(
-
-            padding: EdgeInsets.fromLTRB(220, 10, 10, 0),
-            child: ClipOval(
-              child: Material(
-                color: Colors.white, // button color
-                child: InkWell(
-                  splashColor: Colors.blue, // inkwell color
-                  child: SizedBox(width: 30, height: 30, child: Icon(Icons.edit)),
-                  onTap: (){
-                    _optionsDialogBox();
-
-                  },
-                ),
-              ),
-            ),
-
-          ),
-        ),
-
-
 
 
       ],
@@ -248,12 +337,13 @@ class _EcranProfilState extends State<EcranProfil>  {
   }
 
   Widget imageEnregistre() {
+
     return FutureBuilder<File>(
       future: imageFile,
       builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
         if (snapshot.connectionState == ConnectionState.done && snapshot.data != null  ) {
 
-          Utility.saveImageToPreferences(
+          Utility.saveImageToPreferences( cleImage ,
               Utility.base64String(snapshot.data.readAsBytesSync()));
 
           return ClipOval(
@@ -294,7 +384,7 @@ class _EcranProfilState extends State<EcranProfil>  {
                 borderRadius: BorderRadius.circular(6.0),
               ),
               child: Text(
-                '${context.watch<NomProfil>().NomPersonne}',
+                '$newTaskTitle',
 
                 style: TextStyle(
                   fontFamily: 'Spectral',
@@ -318,7 +408,7 @@ class _EcranProfilState extends State<EcranProfil>  {
                     splashColor: Colors.blue, // inkwell color
                     child: SizedBox(width: 30, height: 30, child: Icon(Icons.edit)),
                     onTap: (){
-                      EcranModifierNomProfil();
+                      EcranModifierNomProfil(context);
                      showModalBottomSheet(
 
                          context: context,
@@ -326,7 +416,7 @@ class _EcranProfilState extends State<EcranProfil>  {
                          builder: (context) => SingleChildScrollView(
                          child:Container(
                            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                           child: EcranModifierNomProfil(),
+                           child: EcranModifierNomProfil(context ),
                          ),
                        ) ,
                      );
@@ -342,6 +432,59 @@ class _EcranProfilState extends State<EcranProfil>  {
       ),
     );
   }
+  Widget EcranModifierNomProfil(BuildContext context) {
+
+    return Container(
+      color: Color(0xff757575),
+      child: Container(
+        padding: EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20.0),
+            topRight: Radius.circular(20.0),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Text(
+              'Entren Votre Nom',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 30.0,
+                color: Colors.lightBlueAccent,
+              ),
+            ),
+            TextField(
+              autofocus: true,
+              textAlign: TextAlign.center,
+              onChanged: (newText) {
+                newTaskTitle = newText;
+              },
+            ),
+            FlatButton(
+              child: Text(
+                'Add',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              color: Colors.lightBlueAccent,
+              onPressed: () {
+                Utility.instance
+                    .setStringValue(cleNom, newTaskTitle);
+                Navigator.pop(context);
+                notifyListeners();
+              },
+
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _ConstructeurSeparateur(Size screenSize) {
     return Container(
       width: screenSize.width / 1.6,
@@ -350,6 +493,7 @@ class _EcranProfilState extends State<EcranProfil>  {
       margin: EdgeInsets.only(top: 4.0),
     );
   }
+
   Widget _constructeurBouttons() {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),

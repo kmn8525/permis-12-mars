@@ -5,23 +5,34 @@ import 'dart:async';
 import 'dart:convert';
 
 class Utility {
-  //
-  static const String KEY = "IMAGE_KEY";
 
-  static Future<String> getImageFromPreferences() async {
+  Utility._privateConstructor();
+
+  static final Utility instance =
+  Utility._privateConstructor();
+
+   static const String CleString = "STRING_KEY";
+  static const String CleSInt = "INT_KEY";
+
+
+
+  static Future<String> getImageFromPreferences(String key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(KEY) ?? null;
+    return prefs.getString(key) ?? null;
+
   }
 
-  static Future<bool> saveImageToPreferences(String value) async {
+
+
+  static Future<bool> saveImageToPreferences(String key,  String value) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.setString(KEY, value);
+    return prefs.setString(key, value);
   }
 
   static Image imageFromBase64String(String base64String) {
     return Image.memory(
       base64Decode(base64String),
-      fit: BoxFit.fill,
+      fit: BoxFit.cover  ,
     );
   }
 
@@ -33,4 +44,62 @@ class Utility {
   static String base64String(Uint8List data) {
     return base64Encode(data);
   }
+
+
+
+  setStringValue(String key, String value) async {
+    SharedPreferences myPrefs = await SharedPreferences.getInstance();
+    myPrefs.setString(key, value);
+  }
+
+  Future<String> getStringValue(String key) async {
+    SharedPreferences myPrefs = await SharedPreferences.getInstance();
+    return myPrefs.getString(key) ?? "Entrez Votre Nom";
+  }
+
+  setIntegerValue(String key, int value) async {
+    SharedPreferences myPrefs = await SharedPreferences.getInstance();
+    myPrefs.setInt(key, value);
+  }
+
+  Future<int> getIntegerValue(String key) async {
+    SharedPreferences myPrefs = await SharedPreferences.getInstance();
+    return myPrefs.getInt(key) ?? 0;
+  }
+
+  setBooleanValue(String key, bool value) async {
+    SharedPreferences myPrefs = await SharedPreferences.getInstance();
+    myPrefs.setBool(key, value);
+  }
+
+  Future<bool> getBooleanValue(String key) async {
+    SharedPreferences myPrefs = await SharedPreferences.getInstance();
+    return myPrefs.getBool(key) ?? false;
+  }
+
+  Future<bool> containsKey(String key) async {
+    SharedPreferences myPrefs = await SharedPreferences.getInstance();
+    return myPrefs.containsKey(key);
+  }
+
+  removeValue(String key) async {
+    SharedPreferences myPrefs = await SharedPreferences.getInstance();
+    return myPrefs.remove(key);
+  }
+
+  removeAll() async{
+    SharedPreferences myPrefs = await SharedPreferences.getInstance();
+    return myPrefs.clear();
+  }
+
+
+
+
+
+
+
+
 }
+
+
+//Incrementing counter after click

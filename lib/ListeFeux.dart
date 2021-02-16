@@ -6,14 +6,14 @@ class Feux {
   int _nombreDeChoix = 0;
 
   List<Question> _listeFeux = [
-    Question('Je peux franchir le feu jaune-orange fixe si, au moment où il s allume' , false , true , false , 'non', ' Vous ne pouvez pas rouler trop vite., et vous devez prévoir la succession des feux. Le feu jaune-orange fixe ne peut être franchi que, si au moment où il s allume, vous en êtes trop proche pour vous arrêter dans des conditions de sécurité suffisantes. Abordez un feu vert avec MEFIANCE, non avec confiance') ,
-    Question('Le feu est rouge. Je m immobilise' , false , true , null , 'non', 'La ligne transversale est une ligne d '
-        'arrêt. Elle vous indique l endroit où vous devez vous immobiliser pour un feu ou un « Stop ».' ),
+    Question('Je peux franchir le feu jaune-orange fixe si, au moment où il s''allume' , false , true , false , 'non', ' Vous ne pouvez pas rouler trop vite., et vous devez prévoir la succession des feux. Le feu jaune-orange fixe ne peut être franchi que, si au moment où il s allume, vous en êtes trop proche pour vous arrêter dans des conditions de sécurité suffisantes. Abordez un feu vert avec MEFIANCE, non avec confiance') ,
+    Question('Le feu est rouge. Je m''immobilise' , false , true , null , 'non', 'La ligne transversale est une ligne d '
+        'arrêt. Elle vous indique l''endroit où vous devez vous immobiliser pour un feu ou un « Stop ».' ),
 
 
   ] ;
   List<Option> _listeDeChoix= [
-    Option( 'Je roule trop vite' , 'J en suis trop proche' , 'Je suis surpris' ) ,
+    Option( 'Je roule trop vite' , 'J''en suis trop proche' , 'Je suis surpris' ) ,
     Option( 'A hauteur du feu' , 'A la ligne transversale' , 'null' ) ,
 
 

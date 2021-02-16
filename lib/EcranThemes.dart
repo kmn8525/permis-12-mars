@@ -13,6 +13,7 @@ import 'EcranQuestions.dart';
 import 'package:permis/BouttonProfil.dart';
 
 import 'ListeResultats.dart';
+import 'Utility.dart';
 import 'VerticalItem.dart';
 
 
@@ -39,9 +40,35 @@ class Theme {
 }
 
 class EcranThemeState extends State<EcranTheme>  with ChangeNotifier , SingleTickerProviderStateMixin{
+   Image img;
+   String Nom ;
+   String cleNom  ;
+   String cleImage  ;
 
   @override
   void initState() {
+
+    cleNom = Provider.of<EcranProfilState>(context , listen: false).getcleNom();
+    cleImage = Provider.of<EcranProfilState>(context , listen: false).getcleImage();
+
+
+    Utility.instance.getStringValue(cleNom)
+        .then((value) => setState(() {
+      Nom = value;
+
+
+    }));
+
+
+    Utility.getImageFromPreferences(cleImage).then((value) {
+      if (null == value) {
+        return;
+      }
+      setState(() {
+        img = Utility.imageFromBase64String(value);
+      });
+    });
+
     Future.delayed(Duration(milliseconds: 500) * 5, () {
       if (!mounted) {
         return;
@@ -50,6 +77,8 @@ class EcranThemeState extends State<EcranTheme>  with ChangeNotifier , SingleTic
         //_themes.length += 10;
       });
     });
+
+
     super.initState();
   }
   List<Theme> _themes = [
@@ -91,6 +120,7 @@ class EcranThemeState extends State<EcranTheme>  with ChangeNotifier , SingleTic
   String chemin = 'assets/profil/martial.jpg' ;
   String themeChoisi ;
 
+
   String  utilisateurTheme( String tmp) {
 
     themeChoisi = tmp ;
@@ -101,16 +131,13 @@ class EcranThemeState extends State<EcranTheme>  with ChangeNotifier , SingleTic
   }
 
 
-  @override
-  void dispose() {
-    super.dispose();
-
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
 
+      //imageFromPreferences = Utility.imageFromBase64String(img);
 
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -120,7 +147,8 @@ class EcranThemeState extends State<EcranTheme>  with ChangeNotifier , SingleTic
           children:<Widget> [
             Container(
               child: BouttonProfil (
-                CheminImage : chemin,
+             imageFromPreferences: img ,
+            nom  : Nom ,
                 onPressed: ()  {
                   Provider.of<Resultats>(context , listen: false).afficheListe();
 
@@ -140,7 +168,9 @@ class EcranThemeState extends State<EcranTheme>  with ChangeNotifier , SingleTic
 
 
       body:  SafeArea(
-        child: Center(
+
+        child: Container(
+          color: kCouleurBody,
 
           child: LiveGrid(
             padding: EdgeInsets.fromLTRB(0 , 6 , 0 , 6),

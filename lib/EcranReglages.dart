@@ -9,6 +9,8 @@ class _EcranReglagesState extends State<EcranReglages> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
+
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text('Reglages'),

@@ -117,8 +117,7 @@ class EcranExamenState extends State<EcranExamen>  with ChangeNotifier , SingleT
           children:<Widget> [
             Container(
               child: BouttonProfil (
-                CheminImage : chemin,
-                onPressed: ()  {
+                 onPressed: ()  {
                   Provider.of<Resultats>(context , listen: false).afficheListe();
 
                   Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
