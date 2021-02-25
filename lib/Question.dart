@@ -3,14 +3,15 @@ class Question {
   bool reponse_A;
   bool reponse_B;
   bool reponse_C;
-  String fauteGrave;
+  bool fauteGrave;
   String explication;
+  int point ;
 
 
 
 
 
-  Question(String q, bool x , bool y ,bool z , String g , String e ) {
+  Question(String q, bool x , bool y ,bool z , bool g , String e , int p ) {
 
     questionText = q;
     reponse_A = x;
@@ -18,6 +19,8 @@ class Question {
     reponse_C = z ;
     fauteGrave = g ;
     explication = e ;
+    point = p ;
+
 
 
   }

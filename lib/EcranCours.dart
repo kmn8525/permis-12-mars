@@ -7,6 +7,14 @@ class EcranCours extends StatefulWidget {
 }
 
 class _EcranCoursState extends State<EcranCours> {
+
+
+
+  @override
+  void dispose() {
+     super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
 

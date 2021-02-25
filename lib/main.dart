@@ -1,14 +1,12 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:permis/EcranProfil.dart';
 import 'package:provider/provider.dart';
-import 'Constantes.dart';
-import 'Acceuil.dart';
-import 'EcranResultats.dart';
-import 'EcranQuestions.dart';
 
-import 'EcranThemes.dart';
+import 'Acceuil.dart';
+import 'Constantes.dart';
+import 'EcranQuestions.dart';
+import 'EcranResultats.dart';
+import 'ListeDefinition.dart';
 import 'ListeResultats.dart';
 import 'NomProfil.dart';
 
@@ -25,9 +23,9 @@ void main() =>
           ChangeNotifierProvider(create: (_) => NomProfil()),
           ChangeNotifierProvider(create: (_) => EcranResultatState()),
           ChangeNotifierProvider(create: (_) => Resultats()),
+          ChangeNotifierProvider(create: (_) => Definition()),
           ChangeNotifierProvider(create: (_) => EcranQuestionsState()),
-          ChangeNotifierProvider(create: (_) => EcranThemeState()),
-          ChangeNotifierProvider(create: (_) => EcranProfilState()),
+           ChangeNotifierProvider(create: (_) => EcranProfilState()),
 
 
         ],

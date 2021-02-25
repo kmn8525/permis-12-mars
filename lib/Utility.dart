@@ -1,8 +1,9 @@
-import 'dart:typed_data';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Utility {
 
@@ -64,7 +65,7 @@ class Utility {
 
   Future<int> getIntegerValue(String key) async {
     SharedPreferences myPrefs = await SharedPreferences.getInstance();
-    return myPrefs.getInt(key) ?? 0;
+    return myPrefs.getInt(key)  ?? 0;
   }
 
   setBooleanValue(String key, bool value) async {

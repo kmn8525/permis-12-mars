@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 import 'Constantes.dart';
 import 'EcranQuestionExamen.dart';
 import 'EcranQuestions.dart';
+import 'ListeDefinition.dart';
+import 'Utility.dart';
 
 class VerticalItem extends StatelessWidget {
   const VerticalItem({
@@ -25,99 +28,187 @@ class VerticalItem extends StatelessWidget {
   );
 }
 
-class HorizontalItem extends StatelessWidget {
 
+class HorizontalItem extends StatefulWidget {
   final String NomImageSVG;
   final String nomTheme;
 
   const HorizontalItem({Key key, this.NomImageSVG, this.nomTheme}) : super(key: key);
 
+  @override
+  HorizontalItemState createState() => HorizontalItemState();
+}
+
+
+class HorizontalItemState extends State<HorizontalItem> {
+  Color c ;
+  String etat ;
+
+  int numQD =0 ;
+  int nbCD  ;
+  int nbQCO  ;
+  int nbQCCO  ;
+
+  String RcleQD=""  ;
+  int i = 0 ;
+  String cleNumQD = "qDef";
+
+ void  StatuTheme() {
+
+   Utility.instance.getIntegerValue(RcleQD)
+       .then((value) => setState(() {
+     numQD = value ;
+
+   }));
+
+
+
+
+
+   if    ((widget.nomTheme == 'DEFINITION' )) {
+
+
+     if ( numQD == 0)
+     {
+
+       c = Colors.black ;
+     }
+
+     else if ( numQD > 0) {
+       c = Colors.red ;
+
+
+     }
+
+
+
+   }
+
+
+ }
 
   @override
-  Widget build(BuildContext context) =>  Container(
-    height: double.infinity,
+  void initState() {
+    RcleQD =  Provider.of<Definition>(context , listen: false).getCleNumQueDef ;
 
 
 
-    child:  GestureDetector(
 
-      onTap: () {
-
-
-        Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
-            builder: (BuildContext context  ) =>
-                EcranQuestions(titrePage: '${ nomTheme}' )));
-
-
-        // utilisateurTheme('${item.nomTheme}' ) ;
-
-      },
+super.initState();
 
 
 
-      child: Container(
-        height: double.infinity,
-
-        child: Card(
-          //semanticContainer: false,
-
-          color: kCouleurAppBar,
-          elevation: 4.0,
-          shadowColor : Colors.black ,
-          margin: EdgeInsets.symmetric(vertical : 8 ,horizontal: 8),
 
 
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(13),)) ,
+
+  }
 
 
-          child: Container(
+  @override
+  Widget build(BuildContext context) {
 
-            alignment: Alignment.center ,
-            padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(
-                  // margin: EdgeInsets.all(3),
-                  padding: EdgeInsets.all(4),
 
-                  child: SvgPicture.asset(
-                    'assets/iconTheme/${NomImageSVG}.svg',
-                    height: 43.0,
-                    width: 43.0,
-                    allowDrawingOutsideViewBox: true,
+    StatuTheme() ;
+
+
+
+
+   return Container(
+      height: double.infinity,
+
+
+
+      child:  GestureDetector(
+
+        onTap: () {
+
+
+
+
+            Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
+                builder: (BuildContext context  ) =>
+                    EcranQuestions(titrePage: '${ widget.nomTheme}' )));
+
+
+          // utilisateurTheme('${item.nomTheme}' ) ;
+
+        },
+
+
+
+        child: Container(
+          height: double.infinity,
+
+          child: Card(
+            //semanticContainer: false,
+
+            color: kCouleurAppBar,
+            elevation: 4.0,
+            shadowColor : Colors.black ,
+            margin: EdgeInsets.symmetric(vertical : 8 ,horizontal: 8),
+
+
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(13),)) ,
+
+
+            child: Container(
+
+              alignment: Alignment.center ,
+              padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    // margin: EdgeInsets.all(3),
+                    padding: EdgeInsets.all(4),
+
+                    child: SvgPicture.asset(
+                      'assets/iconTheme/${widget.NomImageSVG}.svg',
+                      height: 43.0,
+                      width: 43.0,
+                      allowDrawingOutsideViewBox: true,
+                    ),
                   ),
-                ),
-                Divider(
-                  color: Colors.black,
-                ),
-                Expanded(
-                  child: Text(
-                    '${nomTheme}',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 8),
+                  Divider(
+                    color: c,
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: Text(
+                      '${widget.nomTheme}',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 8),
+                    ),
+                  ),
+
+                ],
+              ),
             ),
           ),
         ),
       ),
-    ),
 
 
-  );
+    );
+  }
 }
+
+
+
+
+
 class HorizontalItemExamen extends StatelessWidget {
 
   final String NomImageSVG;
   final String nomTheme;
 
-  const HorizontalItemExamen({Key key, this.NomImageSVG, this.nomTheme}) : super(key: key);
+   const  HorizontalItemExamen({Key key, this.NomImageSVG, this.nomTheme}) : super(key: key);
+
+
+
 
 
   @override
@@ -133,7 +224,7 @@ class HorizontalItemExamen extends StatelessWidget {
 
         Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
             builder: (BuildContext context  ) =>
-                EcranQuestionsExamen(titrePage: '${ nomTheme}' )));
+               EcranQuestionsExamen(titrePage: '${ nomTheme}' )));
 
 
         // utilisateurTheme('${item.nomTheme}' ) ;

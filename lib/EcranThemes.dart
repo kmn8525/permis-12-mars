@@ -1,17 +1,14 @@
+import 'dart:async';
+
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'BouttonProfil.dart';
-import 'dart:async';
-
-import 'Constantes.dart';
-import 'package:flutter_svg/svg.dart';
-
-import 'EcranProfil.dart';
-import 'EcranQuestions.dart';
 import 'package:permis/BouttonProfil.dart';
+import 'package:provider/provider.dart';
 
+import 'BouttonProfil.dart';
+import 'Constantes.dart';
+import 'EcranProfil.dart';
 import 'ListeResultats.dart';
 import 'Utility.dart';
 import 'VerticalItem.dart';
@@ -20,7 +17,7 @@ import 'VerticalItem.dart';
 final String titrePage='EcranThemes' ;
 
 
-class EcranTheme extends StatefulWidget {
+class EcranTheme extends StatefulWidget   {
   static  const String id = 'EcranThemes' ;
 
 
@@ -39,17 +36,17 @@ class Theme {
 
 }
 
-class EcranThemeState extends State<EcranTheme>  with ChangeNotifier , SingleTickerProviderStateMixin{
+class EcranThemeState extends State<EcranTheme>  {
    Image img;
    String Nom ;
    String cleNom  ;
-   String cleImage  ;
+   String cleImageProfil  ;
 
   @override
   void initState() {
 
     cleNom = Provider.of<EcranProfilState>(context , listen: false).getcleNom();
-    cleImage = Provider.of<EcranProfilState>(context , listen: false).getcleImage();
+    cleImageProfil = Provider.of<EcranProfilState>(context , listen: false).getcleImage();
 
 
     Utility.instance.getStringValue(cleNom)
@@ -60,7 +57,7 @@ class EcranThemeState extends State<EcranTheme>  with ChangeNotifier , SingleTic
     }));
 
 
-    Utility.getImageFromPreferences(cleImage).then((value) {
+    Utility.getImageFromPreferences(cleImageProfil).then((value) {
       if (null == value) {
         return;
       }
@@ -74,21 +71,27 @@ class EcranThemeState extends State<EcranTheme>  with ChangeNotifier , SingleTic
         return;
       }
       setState(() {
-        //_themes.length += 10;
-      });
+       });
     });
 
 
     super.initState();
   }
-  List<Theme> _themes = [
+
+
+   @override
+   void dispose() {
+
+          super.dispose();
+   }
+
+   List<Theme> _themes = [
     Theme('informations', 'DEFINITION'),
     Theme('conducteur', 'CONDUCTEUR'),
     Theme('policiere', 'INJONCTIONS'),
     Theme('feuxControl', 'FEUX'),
     Theme('danger', 'SIGNAUX'),
-    Theme('SIGNAUX', 'SIGNAUX_DUREE'),
-    Theme('paint', 'MARQUES_ROUTIERES'),
+     Theme('paint', 'MARQUES_ROUTIERES'),
     Theme('chantier', 'VOIE_PUBLIC'),
     Theme('priorites', 'PRIORITES'),
     Theme('pieton', 'USAGERS_FAIBLES'),
@@ -125,7 +128,6 @@ class EcranThemeState extends State<EcranTheme>  with ChangeNotifier , SingleTic
 
     themeChoisi = tmp ;
 
-    notifyListeners() ;
 
     return themeChoisi ;
   }

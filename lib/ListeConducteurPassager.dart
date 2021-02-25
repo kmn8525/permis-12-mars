@@ -6,31 +6,31 @@ class ConducteurPassager {
   int _nombreDeChoix = 0;
 
   List<Option> _listeDeChoix= [
-   Option( 'Oui' , ' Non, je dois être titulaire d un permis de conduire catégorie C	 /R ' , 'Non, je dois être titulaire d un permis de conduire catégorie C ou D' ) ,
-    Option( '5 places passagers' , ' 8 places passagers / R ' , ' 18 places passagers' ) ,
-    Option( '40 cm / R' , ' 45 cm' , ' 60 cm	' ) ,
-    Option( 'La hauteur de mon véhicule' , ' 2 mètres /R' , ' 5 mètres	' ) ,
-    Option( 'Je le fais dépasser de 2 mètres vers l arrière /R	' , ' Je le fais dépasser d un mètre vers l avant et d un mètre vers l arrière' , ' Je ne peux pas le transporter	' ) ,
-    Option( 'Oui' , 'Non' , 'null' ) ,
+   Option( 'Oui' , ' Non, je dois être titulaire d’un permis de conduire catégorie C	 ' , 'Non, je dois être titulaire d’un permis de conduire catégorie C ou D' ) ,
+    Option( '5 places passagers' , ' 8 places passagers  ' , ' 18 places passagers' ) ,
+    Option( '40 cm  ' , ' 45 cm' , ' 60 cm	' ) ,
 
 
 
   ] ;
   List<Question> _listeConducteurPassager = [
-    Question('Je peux conduire un véhicule affecté au transport de choses d une MMA de 6 tonnes, avec '
-        'un permis de conduire catégorie B' , true , false , false , 'non', 'Pour conduire un véhicule affecté au transport de choses dont la MMA dépasse 3500 kg, vous devez être titulaire d un permis de conduire catégorie C. Ni le permis B ni le permis D ne sont valables.' ),
+    Question('Je peux conduire un véhicule affecté au transport de choses d’une MMA de 6 tonnes, avec un permis de conduire catégorie B '
+          , true , false , false , false ,
+        'Pour conduire un véhicule affecté au transport de choses dont la MMA '
+            'dépasse 3500 kg, vous devez être titulaire d’un permis de conduire catégorie C. Ni le permis B ni le permis D ne sont valables.' , 1 ),
 
 
-    Question('Un permis de conduire valable pour la catégorie B permet de conduire un véhicule affecté au transport de personnes comprenant maximum ' , false , true , false , 'non', 'Maximum 8 places non compris le siège du conducteur. Sinon, vous devez être titulaire d un permis de conduire catégorie D.' ),
+    Question('Un permis de conduire valable pour la catégorie B permet de conduire un véhicule affecté au transport de personnes comprenant maximum'
+        , false , true , false , false, 'Maximum 8 places non compris le siège du conducteur. Sinon , '
+            'vous devez être titulaire d’un permis de conduire catégorie D.' ,1),
 
 
-    Question('L espace latéral minimal pour le passager d une place avant d un véhicule automobile est de' , true , false , false , 'oui','Chaque passager prenant place à l avant d un véhicule doit disposer d une largeur minimale de 40 cm. Le chauffeur doit quant à lui, disposer de 55 cm minimum.'  ) ,
+    Question('L’espace latéral minimal pour le passager d’une place avant d’un véhicule automobile est de'
+        , true , false , false , true,'Chaque passager prenant place à l’avant d’un véhicule doit disposer d’une largeur minimale de 40 cm.'
+            ' Le chauffeur doit quant à lui, disposer de 55 cm minimum.' ,5 ) ,
 
-    Question('La hauteur de mon chargement ne peut excéder' , false , true , false , 'non' ,'Chiffre à retenir: A mètres. Ceci est valable tant pour les voitures que pour les camions ou les autocars.' ) ,
 
-    Question( 'Je désire transporter un tuyau dont la longueur excède de 2 mètres la longueur de véhicule	mon' , true , false , false , 'non' ,'Le chargement ne peut pas dépasser l avant du véhicule. Par contre, il peut dépasser l arrière de 3 mètres maximum.' ) ,
 
-    Question('Une roue de secours et un cric doivent se trouver à bord de mon véhicule' , false , true , null , 'non', 'Fortement conseille mais non obligatoire')
   ] ;
 
 
@@ -65,7 +65,7 @@ class ConducteurPassager {
   }
 
 
-  String getFauteGrave() {
+  bool getFauteGrave() {
 
 
     return _listeConducteurPassager[_nombreDeQuestion].fauteGrave;
@@ -75,6 +75,13 @@ class ConducteurPassager {
 
     return _listeConducteurPassager[_nombreDeQuestion].explication;
   }
+
+  int getPoint() {
+
+
+    return _listeConducteurPassager[_nombreDeQuestion].point;
+  }
+
 
 
 

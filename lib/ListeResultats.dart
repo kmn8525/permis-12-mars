@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'EcranResultats.dart';
 import 'Option.dart';
 import 'Question.dart';
 
@@ -24,6 +23,8 @@ class Resultats extends ChangeNotifier {
   List _listColoueurBoutonC = [ ] ;
 
   List _listChoixUtilisateur = [ ] ;
+  List _listTotalPoint = [ ] ;
+
 
 
 
@@ -127,10 +128,10 @@ void ajouterCouleurResultats(  Color couleur){
 
   }
 
-  void ajouterQuestion( String nouvelQuestion , bool choixA , bool choixB , bool choixC , String nouvelFaute ,  String nouvelExplication ){
+  void ajouterQuestion( String nouvelQuestion , bool choixA , bool choixB , bool choixC , bool nouvelFaute ,  String nouvelExplication , int nouveauPoint ){
 
 
-    final tampon =  Question( nouvelQuestion , choixA , choixB ,  choixC , nouvelFaute , nouvelExplication )  ;
+    final tampon =  Question( nouvelQuestion , choixA , choixB ,  choixC , nouvelFaute , nouvelExplication , nouveauPoint)  ;
     _listeQuestionsUtilisateurs.add(tampon) ;
     notifyListeners() ;
 
@@ -144,6 +145,17 @@ void ajouterCouleurResultats(  Color couleur){
   notifyListeners() ;
 
 }
+
+  void ajouterTotal(   int total ){
+
+
+    _listTotalPoint.add(total) ;
+    notifyListeners() ;
+
+  }
+
+
+
 
 
 List listeQuestionResultat (){
@@ -184,7 +196,7 @@ List listeQuestionResultat (){
 
 
 
-  String getFauteGrave(int indexCourant) {
+  bool getFauteGrave(int indexCourant) {
 
 
     return _listeQuestionsUtilisateurs[indexCourant].fauteGrave;
@@ -194,6 +206,11 @@ List listeQuestionResultat (){
   String getExplication(int indexCourant) {
 
     return _listeQuestionsUtilisateurs[indexCourant].explication;
+  }
+
+  int getPoint(int indexCourant) {
+
+    return _listeQuestionsUtilisateurs[indexCourant].point;
   }
 
 

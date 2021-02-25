@@ -1,17 +1,17 @@
+
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:permis/Acceuil.dart';
-import 'Constantes.dart';
-import 'EcranThemes.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
+import 'Constantes.dart';
 import 'EcranSolutions.dart';
-import 'IconContent.dart';
-import 'ListeDefinition.dart';
 import 'ListeConducteurPassager.dart';
+import 'ListeDefinition.dart';
 import 'ListeFeux.dart';
 import 'ListeInjonction.dart';
 import 'ListeResultats.dart';
@@ -195,6 +195,7 @@ class EcranQuestionsExamenState extends State<EcranQuestionsExamen>  with Change
   bool choix_2;
   bool choix_3;
   bool valeur_choisi;
+  int  point;
 
 
   bool clic_bouton_A = false;
@@ -1387,7 +1388,7 @@ class EcranQuestionsExamenState extends State<EcranQuestionsExamen>  with Change
                         String optionB = tampon.getOptionB();
                         String optionC = tampon.getOptionC();
 
-                        Provider.of<Resultats>(context , listen: false).ajouterQuestion(q , choix_1 , choix_2, choix_3, g , e);
+                       // Provider.of<Resultats>(context , listen: false).ajouterQuestion(q , choix_1 , choix_2, choix_3, g , e);
                         Provider.of<Resultats>(context , listen: false).ajouterReponse(optionA, optionB, optionC);
 
                         setState(() {
@@ -1438,6 +1439,7 @@ class EcranQuestionsExamenState extends State<EcranQuestionsExamen>  with Change
 
 
 }
+
 
 
 

@@ -3,12 +3,11 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'EcranCours.dart';
 import 'EcranExamen.dart';
 import 'EcranJeux.dart';
 import 'EcranReglages.dart';
-import 'BasBarNavigation.dart';
-import 'TableIthemes.dart';
 import 'EcranThemes.dart';
 
 
@@ -23,7 +22,14 @@ class Accueil extends StatefulWidget {
 class _AccueilState extends State<Accueil> {
 
   int _selectedIndex = 0;
+
+  void initState() {
+
+    super.initState();
+  }
+
   final List<Widget> _children = [
+
     EcranTheme(),
     EcranCours(),
     EcranExamen(),

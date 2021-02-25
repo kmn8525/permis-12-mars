@@ -1,18 +1,11 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:permis/Constantes.dart';
 import 'package:provider/provider.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'EcranQuestions.dart';
-
 import 'EcranSolutions.dart';
-
-import 'EcranThemes.dart';
-import 'IconContent.dart';
-import 'ListeDefinition.dart';
 import 'ListeResultats.dart';
 
 final  cleEcranResultat = new GlobalKey<EcranResultatState>();
@@ -192,7 +185,7 @@ class EcranResultatState extends State<EcranResultat>  with ChangeNotifier{
                     children: <Widget>[
                       Expanded(
                         child: Image.asset(
-                          'assets/$liensImage/${i + 1}.png',
+                          'assets/$liensImage/${i + 1}.jpg',
                           height: 300,
                         ),
                       ),

@@ -1,143 +1,226 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import 'Option.dart';
 import 'Question.dart';
 
-class Definition extends ChangeNotifier {
-  int _nombreDeQuestion = 0;
-  int _nombreDeChoix = 0;
-
-  List<Option> _listeDeChoix= [
-    Option( 'Je dois lui céder le passage' , 'Je peux lui céder le passage ' , 'Lui céder le passage est une infraction' ) ,
-    Option( 'Oui' , 'Non , ce vehicule doit se rabattre et me ceder le passage ' , 'Chute de pierres a 200 mettre ' ) ,
-    Option( 'chute de pierre a 150 metres ' , 'projection de gravillons a 200 metre  /R' , 'null' ) ,
-    Option( 'Oui/R' , ' Oui si mon vehicule mesure moins de 1 , 65 metres ', 'Non'    ) ,
-    Option( 'Oui' , ' Oui si  je m ecarte d un metre au moins   ' , 'Non /R' ) ,
-    Option( 'Oui' , ' Oui si le airbag est désactivé /R ' , 'Non' ) ,
-
-  ] ;
-  List<Question> _listeDefinition = [
-    Question(' Ce camion désire changer de bande ', false , true , false , 'non' ,
-        ' Changer de bande est une manoeuvre '
-        'Vous pouvez le laisser passer mais ,  évitez de freiner brusquement'),
+ class Definition    with  ChangeNotifier , DiagnosticableTreeMixin {
 
 
-    Question('Les vehicules de gauche sont stationnes . '
-        'je dois ceder le passage au vehicule de police venant en sens inverse '
-  , false , true  , null , 'oui' , 'Sans sirène, ce '
-            'véhicule n''a pas la priorité. Comme les'
-            ' obstacles se trouvent de son côté, il doit vous céder le passage.'   ),
+   int _numeroQuestion  = 0 ;
+
+   int _numeroChoix = 0  ;
+
+   String cleNumQD = "qDef";
+   String cleNumCD = "cDef";
+   String cleNumQCO = "qCon";
+   String cleNumCCO = "cCon";
+
+   bool serieFini = false;
+
+   int total = 15;
+
+   int NbBonneReponse = 0;
+
+   int NbMovaiseReponse = 0;
+
+   int NbQuestionReondue = 0;
+
+   Color commencer = Colors.black;
+
+   Color enCours = Colors.lightBlue;
 
 
-    Question(' ce signal routier signifie : ', true , false , false , 'non' , ' Chute de pierres à 150 mètres, sur une distance de 200 mètres.'),
-
-    Question('je peux circuler a 120 km/h' , true ,  false , null , 'non' ,
-        'Le muret qui sépare les deux sens de circulation '
-            'vous autorise à circuler à 120 km/h.' ) ,
-
-  Question(' puis-je stationner a droite devant la voiture blue '
-  , false , false , true , 'oui' , '  tous depassement sont interdits sur un dispositif sureleve'),
-
-    Question(' Je peux placer un siège dos à la route à lavant '
-  , false , true , false , 'oui' , ' Le déploiement du airbag risque d''écraser l''enfant entre le siège et le dossier.'),
+  void   sauvegarde( int value ) {
 
 
-  ] ;
+    print('dans sauvegarder value') ;
 
+    print(value) ;
 
-  List listeQuestionDefinition (){
+    _numeroQuestion = value ;
+    _numeroChoix = value ;
 
-    return  _listeDefinition;
+    print('    _numeroQuestion') ;
+
+    print(_numeroQuestion) ;
+
+    notifyListeners();
+
   }
 
-  List listeOptionDefinition (){
+   List<Option> _listeDeChoix = [
+     Option('Un accotement en saillie', ' Un accotement de plain pied',
+         'Une piste cyclable'),
+     Option('La voie publique', ' La chaussée', 'La bande de circulation'),
+     Option('Oui', ' Non', ' Non c’est une piste cyclable'),
 
-    return  _listeDeChoix;
-  }
+   ];
 
-  int getTaille(){
-    return _listeDefinition.length ;
-  }
-  String getOptionA() {
-    return _listeDeChoix[_nombreDeChoix].option_A;
-  }
-  String getOptionB() {
-    return _listeDeChoix[_nombreDeChoix].option_B;
-  }
-  String getOptionC() {
-    return _listeDeChoix[_nombreDeChoix].option_C;
-  }
+   List<Question> _listeDefinition = [
+     Question(
+         ' Cette partie est : ',
+         false,
+         false,
+         true,
+         false,
+         ' Une piste Cyclable ',
+         1),
 
+     Question(
+         'Cette partie est : ',
+         true,
+         false,
+         false,
+         false,
+         ' La voie publique',
+         1),
 
-  String getQuestionText() {
-    return _listeDefinition[_nombreDeQuestion].questionText;
-  }
-
-  bool getBonneReponseA() {
-
-    return _listeDefinition[_nombreDeQuestion].reponse_A;
-  }
-  bool getBonneReponseB() {
-
-
-    return _listeDefinition[_nombreDeQuestion].reponse_B;
-  }
-  bool getBonneReponseC() {
-
-
-    return _listeDefinition[_nombreDeQuestion].reponse_C;
-  }
+     Question(
+         'Cette bande rouge fait partie de la chaussée',
+         true,
+         false,
+         false,
+         false,
+         ' On parle parfois de piste cyclable suggérée',
+         1),
 
 
-  String getFauteGrave() {
+   ];
+
+   String get getCleNumQueDef =>  cleNumQD ;
+
+   int get getNumQueDef =>  _numeroQuestion ;
+   int get getNumChoDef =>  _numeroChoix ;
 
 
-    return _listeDefinition[_nombreDeQuestion].fauteGrave;
-  }
-
-  String getExplication() {
-
-    return _listeDefinition[_nombreDeQuestion].explication;
-  }
 
 
-  void questionSuivante() {
-    if (_nombreDeQuestion <= _listeDefinition.length - 1) {
-      _nombreDeQuestion++;
+
+
+   List listeQuestionDefinition() {
+     return _listeDefinition;
+   }
+
+   List listeOptionDefinition() {
+     return _listeDeChoix;
+   }
+
+   int getTaille() {
+     return _listeDefinition.length;
+   }
+
+   String getOptionA() {
+     return _listeDeChoix[_numeroChoix].option_A;
+   }
+
+   String getOptionB() {
+     return _listeDeChoix[_numeroChoix].option_B;
+   }
+
+   String getOptionC() {
+     return _listeDeChoix[_numeroChoix].option_C;
+   }
+
+
+   String getQuestionText() {
+     return _listeDefinition[_numeroQuestion].questionText;
+   }
+
+   bool getBonneReponseA() {
+     return _listeDefinition[_numeroQuestion].reponse_A;
+   }
+
+   bool getBonneReponseB() {
+     return _listeDefinition[_numeroQuestion].reponse_B;
+   }
+
+   bool getBonneReponseC() {
+     return _listeDefinition[_numeroQuestion].reponse_C;
+   }
+
+
+   bool getFauteGrave() {
+     return _listeDefinition[_numeroQuestion].fauteGrave;
+   }
+
+   String getExplication() {
+     return _listeDefinition[_numeroQuestion].explication;
+   }
+
+   int getPoint() {
+     return _listeDefinition[_numeroQuestion].point;
+   }
+
+   void questionSuivante() {
+     if (_numeroQuestion <= _listeDefinition.length - 1) {
+       _numeroQuestion++;
+     }
+   }
+
+     void optionSuivante() {
+       if (_numeroChoix <= _listeDeChoix.length - 1) {
+         _numeroChoix++;
+       }
+     }
+
+     bool FinTheme() {
+       if (_numeroQuestion >= _listeDefinition.length - 1) {
+         return true;
+       } else {
+         return false;
+       }
+     }
+
+
+     void reset() {
+       _numeroQuestion = 0;
+       _numeroChoix = 0;
+     }
+   }
+
+
+
+
+
+
+
+
+/*
+  String serireCommencer() {
+    Utility.instance.getIntegerValue(cleNumQ)
+        .then((value) =>
+        setState(() {
+          _numeroQuestion = value;
+        }));
+
+
+    Utility.instance.getIntegerValue(cleNumC)
+        .then((value) =>
+        setState(() {
+          _numeroChoix = value;
+        }));
+
+
+    if (_numeroQuestion == null) {
+      setState(() {
+        _numeroQuestion = 0;
+      });
+
+      Utility.instance
+          .setIntegerValue(cleNumQ, _numeroQuestion);
+
+      return 'oui';
+    } else if (_numeroQuestion > 0) {
+      return 'non';
+    }
+
+    else if (_numeroQuestion >= _listeDefinition.length - 1) {
+      return 'fin';
     }
   }
-
-  void optionSuivante() {
-    if (_nombreDeChoix <= _listeDeChoix.length - 1) {
-      _nombreDeChoix++;
-    }
-  }
-
-  bool estFini() {
-
-    if (_nombreDeQuestion >= _listeDefinition.length - 1) {
-
-      print('Now returning true');
-      int i = _listeDefinition.length - 1 ;
-      int j = _listeDefinition.length ;
-      print('_listeDefinition.length - 1 : $i  _listeDefinition.length : $j') ;
-      print('_nombreDeQuestion  : $_nombreDeQuestion ') ;
-
-      return true;
-
-    } else {
-      return false;
-    }
-  }
-
-  void reset() {
-    _nombreDeQuestion = 0;
-    _nombreDeChoix = 0 ;
-  }
+*/
 
 
-
-
-
-}
 

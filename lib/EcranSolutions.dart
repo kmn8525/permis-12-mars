@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:permis/Acceuil.dart';
 import 'package:permis/ListeResultats.dart';
 import 'package:provider/provider.dart';
-import 'Constantes.dart';
+
 import 'Dessiner.dart';
 import 'EcranQuestions.dart';
 import 'EcranResultats.dart';
-import 'EcranThemes.dart';
-import 'IconContent.dart';
 
 
 class EcranSolutions extends StatefulWidget {
@@ -31,14 +29,18 @@ class EcranSolutionsState extends State<EcranSolutions> {
 
 List tampon ;
 String nom ;
+int total ;
+int indice ;
 
   get _aChoisi => null;
 
   @override
   void initState() {
     super.initState();
+
     tampon =  Provider.of<Resultats>(context , listen: false).listeCouleur();
-    super.initState() ;
+
+     super.initState() ;
 
 
   }
@@ -174,6 +176,8 @@ void BoutonSuivant() {
                                           ),
                                         ),
                                       ),
+
+
                                     ],
                                   ),
                                 ),
@@ -211,7 +215,7 @@ void BoutonSuivant() {
                       heightFactor: 0.6,
                       child: FloatingActionButton(
                           backgroundColor: Colors.orange,
-                          child: Icon(Icons.shopping_basket),
+                          child: Icon(Icons.close),
                           elevation: 0.1,
                           onPressed: () {_likeThis();
                           }),
@@ -231,23 +235,11 @@ void BoutonSuivant() {
                              },
                             splashColor: Colors.white,
                           ),
-                          IconButton(
-                              icon: Icon(
-                                Icons.restaurant_menu,
-                               // color: currentIndex == 1 ? Colors.orange : Colors.grey.shade400,
-                              ),
-                              onPressed: () {
-                               }),
+
                           Container(
                             width: size.width * 0.20,
                           ),
-                          IconButton(
-                              icon: Icon(
-                                Icons.bookmark,
-                              //  color: currentIndex == 2 ? Colors.orange : Colors.grey.shade400,
-                              ),
-                              onPressed: () {
-                              }),
+
                           IconButton(
                               icon: Icon(
                                 Icons.notifications,
@@ -318,7 +310,10 @@ Widget _BilanResultat() {
           ),
 
 
+
         ),
+
+
         Container(
           margin: EdgeInsets.only(left: 0, right: 0, bottom: 1, top: 5),
 
@@ -342,9 +337,11 @@ Widget _BilanResultat() {
           ),
         ),
 
-        Container(
-          child: Text(
-              ' Section : ${TitreTheme}' ,
+        Column(
+          children:<Widget> [
+            Container(
+              child: Text(
+                  ' Section : ${TitreTheme}' ,
 
   style: TextStyle(
   fontFamily: 'Spectral',
@@ -352,12 +349,22 @@ Widget _BilanResultat() {
   fontSize: 20.0,
   fontWeight: FontWeight.w300,
   ),
-          ),
+              ),
 
-          /*decoration: BoxDecoration(
-            color: Colors.deepOrangeAccent,
+              /*decoration: BoxDecoration(
+                color: Colors.deepOrangeAccent,
 
-          ),*/
+              ),*/
+            ),
+            /*Text(
+              '${context.watch<EcranQuestionsState>().total}',
+
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30),
+            ),*/
+          ],
         ),
       ],
     ),

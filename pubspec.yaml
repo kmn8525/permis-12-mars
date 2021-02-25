@@ -30,6 +30,10 @@ dependencies:
   shared_preferences: ^0.5.12+4
   provider: ^4.3.2+3
   auto_animated: any
+  step_progress_indicator: ^0.2.5+8
+
+
+
 
 
 

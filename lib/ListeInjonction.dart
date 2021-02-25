@@ -14,8 +14,8 @@ class Incjontion {
 
   ] ;
   List<Question> _listeInjonction = [
-    Question('Je peux continuer tout droit' , true , false , null , 'non', 'Cette injonction est équivalente au feu vert l''agent ouvre le carrefour') ,
-    Question('Je désire continuer tout droit' , true , false , null , 'non', 'Cette injonction est équivalente au feu rouge' ),
+    Question('Je peux continuer tout droit' , true , false , null , false, 'Cette injonction est équivalente au feu vert l’agent ouvre le carrefour' , 1) ,
+    Question('Je désire continuer tout droit' , true , false , null , true, 'Cette injonction est équivalente au feu rouge' , 5  ),
 
 
   ] ;
@@ -52,10 +52,17 @@ class Incjontion {
   }
 
 
-  String getFauteGrave() {
+  bool getFauteGrave() {
 
 
     return _listeInjonction[_nombreDeQuestion].fauteGrave;
+  }
+
+
+  int getPoint() {
+
+
+    return _listeInjonction[_nombreDeQuestion].point;
   }
 
   String getExplication() {
