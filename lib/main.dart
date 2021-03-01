@@ -23,7 +23,7 @@ void main() =>
           ChangeNotifierProvider(create: (_) => NomProfil()),
           ChangeNotifierProvider(create: (_) => EcranResultatState()),
           ChangeNotifierProvider(create: (_) => Resultats()),
-          ChangeNotifierProvider(create: (_) => Definition()),
+          ChangeNotifierProvider(create: (_) => Definition.C2()),
           ChangeNotifierProvider(create: (_) => EcranQuestionsState()),
            ChangeNotifierProvider(create: (_) => EcranProfilState()),
 

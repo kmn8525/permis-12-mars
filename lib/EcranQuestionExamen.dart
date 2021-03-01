@@ -44,7 +44,7 @@ class EcranQuestionsExamen extends StatefulWidget  {
   Object chargementListesDeQuestion() {
 
     if (titrePage == 'DEFINITION') {
-      var d = () => Definition();
+      var d = () => Definition.C2();
       tampon = d();
       chemin = 'imageDefinition';
 
@@ -1388,7 +1388,7 @@ class EcranQuestionsExamenState extends State<EcranQuestionsExamen>  with Change
                         String optionB = tampon.getOptionB();
                         String optionC = tampon.getOptionC();
 
-                       // Provider.of<Resultats>(context , listen: false).ajouterQuestion(q , choix_1 , choix_2, choix_3, g , e);
+                       //  Provider.of<Resultats>(context , listen: false).ajouterQuestion(q , choix_1 , choix_2, choix_3, g , e);
                         Provider.of<Resultats>(context , listen: false).ajouterReponse(optionA, optionB, optionC);
 
                         setState(() {

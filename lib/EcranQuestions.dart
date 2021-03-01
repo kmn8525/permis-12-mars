@@ -32,10 +32,11 @@ int MoyennePoint = 0 ;
 class EcranQuestions extends StatefulWidget  {
 
   final String titrePage;
+  final int NumSauvegarder ;
 
 
 
-    EcranQuestions({Key key , this.titrePage}) : super(key: key);
+    EcranQuestions({Key key , this.titrePage, this.NumSauvegarder}) : super(key: key);
 
 
   @override
@@ -45,7 +46,7 @@ class EcranQuestions extends StatefulWidget  {
   Object chargementListesDeQuestion() {
 
     if (titrePage == 'DEFINITION') {
-      var d = () => Definition();
+      var d = () => Definition.C1(NumSauvegarder);
       tampon = d();
       chemin = 'imageDefinition';
 
@@ -120,6 +121,7 @@ class EcranQuestionsState extends State<EcranQuestions>  with ChangeNotifier , S
 
 
 
+
   String liensImage (){
 
     return chemin ;
@@ -128,6 +130,11 @@ class EcranQuestionsState extends State<EcranQuestions>  with ChangeNotifier , S
   String TitreQuestion (){
 
     return widget.titrePage ;
+  }
+
+  int NumImage (){
+
+    return widget.NumSauvegarder ;
   }
 
 
@@ -147,19 +154,35 @@ class EcranQuestionsState extends State<EcranQuestions>  with ChangeNotifier , S
   int nbQCO  ;
   int nbQCCO  ;
   int i ;
-
+  int numeroImage  = 0 ;
   String RcleQD=""  ;
+
+  void  StatusTheme() {
+
+    Utility.instance.getIntegerValue(RcleQD)
+        .then((value) => setState(() {
+      numQD = value ;
+
+    }));
+
+
+
+
+  }
+
+
 
   @override
   void initState() {
 
    // Provider.of<Definition>(context , listen: false).sauvegarQuestion() ;
 
-    RcleQD =  Provider.of<Definition>(context , listen: false).getCleNumQueDef ;
 
+    RcleQD =  Provider.of<Definition>(context , listen: false).getCleNumQueDef ;
 
      widget.chargementListesDeQuestion();
     widget.chargementTitreTheme();
+      numeroImage = widget.NumSauvegarder +1 ;
 
 
     Future.delayed(Duration(milliseconds: 500) * 5, () {
@@ -175,9 +198,6 @@ class EcranQuestionsState extends State<EcranQuestions>  with ChangeNotifier , S
     masqueBouton( ) ;
 
 
-
-
-
     TitreQuestion () ;
     resetColor();
     initTts();
@@ -188,9 +208,8 @@ class EcranQuestionsState extends State<EcranQuestions>  with ChangeNotifier , S
   }
 
 
-  int tu(){
-    return i ;
-  }
+
+
   Color couleurPardefault_A = Color(0xffffffff) ;
   Color couleurPardefault_B =  Color(0xffffffff) ;
   Color couleurPardefault_C =  Color(0xffffffff) ;
@@ -251,7 +270,6 @@ int indice  ;
   bool get isIOS => !kIsWeb && Platform.isIOS;
   bool get isAndroid => !kIsWeb && Platform.isAndroid;
 
-  int numeroImage = 1;
 
   void setNumImage (int value ) {
       numeroImage =  value ;
@@ -1141,6 +1159,11 @@ print(_text_parler);
                     Utility.instance
                         .setIntegerValue(RcleQD, tampon.getNumQueDef);
 
+
+
+
+
+
                     BoutonValider();
 
                     /*print(' 3 --- text parler dans le PLAY -----') ;
@@ -1217,10 +1240,8 @@ print(_text_parler);
   Widget build(BuildContext context) {
     double hauteur = MediaQuery.of(context).size.height;
     final Size size = MediaQuery.of(context).size;
-    print('tampon.getNumQueDef') ;
 
-    print(tampon.getNumQueDef) ;
-
+StatusTheme() ;
     return Scaffold(
       extendBody: true,
 
@@ -1237,6 +1258,7 @@ print(_text_parler);
             Navigator.of(context, rootNavigator: false ).push(MaterialPageRoute(
                 builder: (BuildContext context  ) => Accueil( )));
 
+            _stop() ;
           }
         ),
         title: Row(
@@ -1587,7 +1609,7 @@ print(_text_parler);
               children:<Widget> [
 
                 CustomPaint(
-                  size: Size(size.width, 80),
+                  size: Size(size.width, 90),
                   painter:  DessinBasBarNavigation(),
                 ),
                 Center(
@@ -1646,39 +1668,7 @@ print(_text_parler);
       backgroundColor: null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
-      /*bottomNavigationBar: BottomAppBar(
-        notchMargin : 6 ,
-        elevation: 5 ,
-        color: Colors.white,
-        child: Container(
-          height: 50,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              IconButton(
-                iconSize : 40 ,
-                padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
-                icon: Icon(
-                  Icons.info,
-                  color: Colors.black,
-                ),
-                onPressed: (){
-                  print(' Ecran info solution ') ;
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.share,
-                  color: Colors.black,
-                ),
-                onPressed: null,
-              ),
-            ],
-          ),
-        ),
-        shape: CircularNotchedRectangle(),
-      ),
-*/
+
 
     );
   }

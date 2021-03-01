@@ -186,7 +186,7 @@ class EcranThemeState extends State<EcranTheme>  {
               mainAxisSpacing: 1,
             ),
             itemBuilder: animationItemBuilder(
-                    (index) => HorizontalItem( NomImageSVG : _themes[index].NomImageSVG , nomTheme : _themes[index].nomTheme  )),
+                    (index) => HorizontalItemQuestion( NomImageSVG : _themes[index].NomImageSVG , nomTheme : _themes[index].nomTheme  )),
 
 
 

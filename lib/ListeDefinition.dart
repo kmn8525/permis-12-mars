@@ -31,8 +31,15 @@ import 'Question.dart';
 
    Color enCours = Colors.lightBlue;
 
+    // ignore: non_constant_identifier_names
+    Definition.C1(int a) {
+     _numeroQuestion = a ;
+     _numeroChoix = a ;
+    }
 
-  void   sauvegarde( int value ) {
+   Definition.C2( );
+
+   void   SetNumQueOpt( int value ) {
 
 
     print('dans sauvegarder value') ;
@@ -56,7 +63,7 @@ import 'Question.dart';
      Option('La voie publique', ' La chaussée', 'La bande de circulation'),
      Option('Oui', ' Non', ' Non c’est une piste cyclable'),
 
-   ];
+   ] ;
 
    List<Question> _listeDefinition = [
      Question(
@@ -178,7 +185,8 @@ import 'Question.dart';
        _numeroQuestion = 0;
        _numeroChoix = 0;
      }
-   }
+
+}
 
 
 

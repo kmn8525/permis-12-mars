@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Constantes.dart';
 import 'EcranQuestionExamen.dart';
 import 'EcranQuestions.dart';
+import 'ListeConducteurPassager.dart';
 import 'ListeDefinition.dart';
 import 'Utility.dart';
+
+var tampon = null ;
+String CleTheme ;
 
 class VerticalItem extends StatelessWidget {
   const VerticalItem({
@@ -29,22 +35,25 @@ class VerticalItem extends StatelessWidget {
 }
 
 
-class HorizontalItem extends StatefulWidget {
+class HorizontalItemQuestion extends StatefulWidget {
   final String NomImageSVG;
   final String nomTheme;
 
-  const HorizontalItem({Key key, this.NomImageSVG, this.nomTheme}) : super(key: key);
+  const HorizontalItemQuestion({Key key, this.NomImageSVG, this.nomTheme}) : super(key: key);
 
   @override
-  HorizontalItemState createState() => HorizontalItemState();
-}
+  HorizontalItemQuestionState createState() => HorizontalItemQuestionState();
 
 
-class HorizontalItemState extends State<HorizontalItem> {
+
+ }
+
+
+class HorizontalItemQuestionState extends State<HorizontalItemQuestion> {
   Color c ;
   String etat ;
 
-  int numQD =0 ;
+  int numQD = 0   ;
   int nbCD  ;
   int nbQCO  ;
   int nbQCCO  ;
@@ -52,54 +61,152 @@ class HorizontalItemState extends State<HorizontalItem> {
   String RcleQD=""  ;
   int i = 0 ;
   String cleNumQD = "qDef";
+  void  StatuTheme( BuildContext context  ) {
 
- void  StatuTheme() {
+    Utility.instance.getIntegerValue(RcleQD)
+        .then((value) => setState(() {
+      numQD = value ;
 
-   Utility.instance.getIntegerValue(RcleQD)
-       .then((value) => setState(() {
-     numQD = value ;
-
-   }));
-
+    }));
 
 
 
-
-   if    ((widget.nomTheme == 'DEFINITION' )) {
-
-
-     if ( numQD == 0)
-     {
-
-       c = Colors.black ;
-     }
-
-     else if ( numQD > 0) {
-       c = Colors.red ;
+    if    ((widget.nomTheme == 'DEFINITION' ) && ( numQD == 0) ) {
+      c = Colors.black ;
 
 
-     }
+    }
+
+    else {
+      c = Colors.red ;
+      var alertStyle = AlertStyle(
+        animationType: AnimationType.fromTop,
+        isCloseButton: false,
+        isOverlayTapDismiss: false,
+        descStyle: TextStyle(fontWeight: FontWeight.bold),
+        descTextAlign: TextAlign.start,
+        animationDuration: Duration(milliseconds: 500),
+        alertBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          side: BorderSide(
+            color: Colors.grey,
+          ),
+        ),
+        titleStyle: TextStyle(
+          color: Colors.green,
+        ),
+        alertAlignment: Alignment.center,
+      );
+      Alert(
+        context: context,
+        style: alertStyle,
+        image: SvgPicture.asset(
+          'assets/emoji/happy.svg',
+          height: 43.0,
+          width: 43.0,
+          allowDrawingOutsideViewBox: true,
+        ),
+        // type: AlertType.info,
+        title: "FIN DE LA SERIE",
+
+        // desc: "Voulez-vous continuez ?.",
+
+        buttons: [
+
+          DialogButton(
+            //  padding: EdgeInsets.all(15),
+
+            child: Text(
+              "CORRECTION",
+              style: TextStyle(color: Colors.white, fontSize: 8),
+            ),
+
+
+            onPressed:  () {
+
+              Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
+                  builder: (BuildContext context  ) =>
+                      EcranQuestions(titrePage: '${ widget.nomTheme}' , NumSauvegarder: 0)));
+
+            },
+
+
+            gradient: LinearGradient(colors: [
+              Color.fromRGBO(116, 116, 191, 1.0),
+              Color.fromRGBO(52, 138, 199, 1.0)
+            ]),
+          )
+
+        ],
 
 
 
-   }
+      ).show();
 
 
- }
+
+    }
+
+
+  }
+
+
+  Future<Null> getSharedPrefs() async {
+    Utility.instance.getIntegerValue(RcleQD)
+        .then((value) => setState(() {
+       numQD = value ;
+
+    }));
+  }
+
+  Widget  buildSharedPreferencesCounter() {
+    return FutureBuilder<int>(
+      future: Utility.instance.getIntegerValue(RcleQD),
+      builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+        if (snapshot.hasData) {
+          numQD = snapshot.data;
+
+          return Text(snapshot.data.toString()) ;
+        }
+
+        return Text("null");
+      },
+    );
+  }
 
   @override
   void initState() {
     RcleQD =  Provider.of<Definition>(context , listen: false).getCleNumQueDef ;
 
 
+    getSharedPrefs() ;
+       /*Utility.instance.getIntegerValue(RcleQD)
+        .then((value) => setState(() {
+       numQD = value ;
+
+    }));*/
+
 
 
 super.initState();
 
+  }
 
+  void chargeCouleur() {
+    if  ((widget.nomTheme == "DEFINITION" ) )
+      {
+        if ( numQD > 0) {
 
+          setState(() {
+            c = Colors.red ;
+          });
+        }
 
+        else {
+          c = Colors.black ;
 
+        }
+      }
 
   }
 
@@ -108,11 +215,7 @@ super.initState();
   Widget build(BuildContext context) {
 
 
-    StatuTheme() ;
-
-
-
-
+    chargeCouleur();
    return Container(
       height: double.infinity,
 
@@ -122,12 +225,112 @@ super.initState();
 
         onTap: () {
 
+print('numQD') ;
+print(numQD) ;
+
+            if  ((widget.nomTheme == "DEFINITION" ) )
+            {
+              if ( numQD > 0) {
+                var alertStyle = AlertStyle(
+                  animationType: AnimationType.fromTop,
+                  isCloseButton: false,
+                  isOverlayTapDismiss: true,
+                  descStyle: TextStyle(fontWeight: FontWeight.bold),
+                  descTextAlign: TextAlign.start,
+                  animationDuration: Duration(milliseconds: 500),
+                  alertBorder: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    side: BorderSide(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  titleStyle: TextStyle(
+                    color: Colors.green,
+                  ),
+                  alertAlignment: Alignment.center,
+                );
+                Alert(
+                  context: context,
+                  style: alertStyle,
+                  image: SvgPicture.asset(
+                    'assets/emoji/happy.svg',
+                    height: 43.0,
+                    width: 43.0,
+                    allowDrawingOutsideViewBox: true,
+                  ),
+                  // type: AlertType.info,
+                  title: "Ce Theme a deja ete Commencer voulez-vous reprendre",
+
+                  // desc: "Voulez-vous continuez ?.",
+
+                  buttons: [
+
+
+                    DialogButton(
+                      margin: EdgeInsets.all(15),
+
+                      child: Text(
+
+                        "OUI",
+                        style: TextStyle(color: Colors.white, fontSize: 8),
+                      ),
+
+
+                      onPressed:  () {
+
+                        Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
+                            builder: (BuildContext context  ) =>
+                                EcranQuestions(titrePage: '${ widget.nomTheme}' , NumSauvegarder: numQD)));
+
+                      },
+
+
+                      color: Colors.green,
+
+                    ) ,
+                    DialogButton(
+                      margin: EdgeInsets.all(15),
+
+                      child: Text(
+
+                        "NON",
+                        style: TextStyle(color: Colors.white, fontSize: 8),
+                      ),
+
+
+                      onPressed:  () {
+
+                        Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
+                            builder: (BuildContext context  ) =>
+                                EcranQuestions(titrePage: '${ widget.nomTheme}' , NumSauvegarder: 0)));
+
+                      },
+
+
+                      color: Colors.deepOrangeAccent,
+
+                    ) ,
+
+
+                  ],
 
 
 
-            Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
-                builder: (BuildContext context  ) =>
-                    EcranQuestions(titrePage: '${ widget.nomTheme}' )));
+                ).show();
+
+
+              }
+
+              else {
+
+                Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
+                    builder: (BuildContext context  ) =>
+                        EcranQuestions(titrePage: '${ widget.nomTheme}' , NumSauvegarder: numQD)));
+
+              }
+
+
+            }
 
 
           // utilisateurTheme('${item.nomTheme}' ) ;
@@ -224,7 +427,7 @@ class HorizontalItemExamen extends StatelessWidget {
 
         Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
             builder: (BuildContext context  ) =>
-               EcranQuestionsExamen(titrePage: '${ nomTheme}' )));
+                EcranQuestionsExamen(titrePage: '${ nomTheme}' )));
 
 
         // utilisateurTheme('${item.nomTheme}' ) ;
@@ -292,6 +495,9 @@ class HorizontalItemExamen extends StatelessWidget {
 
   );
 }
+
+
+
 
 
 /// Wrap Ui item with animation & padding
