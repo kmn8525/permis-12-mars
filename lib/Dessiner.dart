@@ -24,6 +24,7 @@ class DessinIncurveProfil extends CustomPainter {
 }
 
 class DessinBasBarNavigation extends CustomPainter {
+
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = new Paint()

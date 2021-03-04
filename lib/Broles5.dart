@@ -1,120 +1,85 @@
-/*
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-Widget imageEnregistre() {
+void main() => runApp(MyApp());
 
-  return FutureBuilder<File>(
-    future: imageFile,
-    builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
-      if (snapshot.connectionState == ConnectionState.done && snapshot.data != null  ) {
-
-        Utility.saveImageToPreferences( cleImage ,
-            Utility.base64String(snapshot.data.readAsBytesSync()));
-
-        return ClipOval(
-          child: Image.file(
-            snapshot.data,
-            width: 90,
-            height: 90,
-            fit: BoxFit.cover,
-
-          ),
-
-
-        ) ;
-      } else if ( snapshot.error  != null) {
-        return const Text(
-          'Erreur -> Reception image',
-          textAlign: TextAlign.center,
-        );
-      } else {
-        return Container(
-
-        ) ;
-      }
-    },
-  );
-}
-
-@override
-Widget build(BuildContext context) {
-  return FutureBuilder(
-    future: Utility.instance.getIntegerValue(RcleQD),
-    builder: (context, snapshot) {
-      if (snapshot.hasData) {
-        return YourFinalWidget();
-      }
-      return CircularProgressIndicator(); // or some other widget
-    },
-  );
-}
-
-
-
-
-class UserPro extends StatelessWidget{
-  final currentUser;
-
-  //String name;
-  UserPro({this.currentUser});
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(title: 'Flutter AlertDialog'),
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  MyHomePage({Key key, this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
       body: Center(
-        child: FutureBuilder<SharedPreferences>(
-          future: SharedPreferences.getInstance(),
-          builder: (context,snapshot){
-            if (!snapshot.hasData) {
-              return CircularProgressIndicator();
-            }
-            return Text(
-              snapshot.data.getString("name"),
-              style: TextStyle(
-                fontSize: 15,
-                fontFamily: 'Berlin Sans FB',
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            RaisedButton(
+                child: Text('Ouvrir une AlertDialog'),
+                textColor: Colors.white,
+                color: Colors.red,
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Information'),
+                          content: Text("Ceci est un message d'AlertDialog"),
+                          actions: <Widget>[
+                            FlatButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('Fermer'))
+                          ],
+                        );
+                      });
+                }),
+            RaisedButton(
+                child: Text('Ouvrir une CupertinoAlertDialog'),
+                textColor: Colors.white,
+                color: Colors.blue,
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return CupertinoAlertDialog(
+                          title: Text('Information'),
+                          content: Text(
+                              "Ceci est un message de CupertinoAlertDialog"),
+                          actions: <Widget>[
+                            CupertinoDialogAction(
+                              child: Text('Fermer'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        );
+                      });
+                }),
+          ],
         ),
       ),
     );
   }
 }
-
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

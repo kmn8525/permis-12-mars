@@ -110,11 +110,11 @@ class EcranThemeState extends State<EcranTheme>  {
     Theme('battery', 'MECANIQUE_VEHICULE'),
     Theme('parkingss', 'ARRET_STATIONEMENT'),
     Theme('ecologie', 'ECOLOGIE'),
+     Theme('ampoule', 'DIVERS'),
+     Theme('disk', 'FAVORIS'),
 
-    //Theme('ecologie', 'ECOLOGIE'),
-    Theme('ampoule', 'DIVERS'),
 
-  ];
+   ];
 
 
 

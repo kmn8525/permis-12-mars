@@ -410,8 +410,7 @@ Widget _editionPhotoProfil(){
                     splashColor: Colors.blue, // inkwell color
                     child: SizedBox(width: 30, height: 30, child: Icon(Icons.edit)),
                     onTap: (){
-                      EcranModifierNomProfil(context);
-                     showModalBottomSheet(
+                      showModalBottomSheet(
 
                          context: context,
                          isScrollControlled: true,

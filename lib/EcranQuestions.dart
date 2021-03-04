@@ -4,13 +4,13 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_intro/flutter_intro.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:permis/Acceuil.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-import 'Constantes.dart';
 import 'Dessiner.dart';
 import 'EcranSolutions.dart';
 import 'ListeConducteurPassager.dart';
@@ -177,7 +177,6 @@ class EcranQuestionsState extends State<EcranQuestions>  with ChangeNotifier , S
 
    // Provider.of<Definition>(context , listen: false).sauvegarQuestion() ;
 
-
     RcleQD =  Provider.of<Definition>(context , listen: false).getCleNumQueDef ;
 
      widget.chargementListesDeQuestion();
@@ -202,6 +201,7 @@ class EcranQuestionsState extends State<EcranQuestions>  with ChangeNotifier , S
     resetColor();
     initTts();
     _speak() ;
+
     super.initState();
 
 
@@ -269,6 +269,8 @@ int indice  ;
 
   bool get isIOS => !kIsWeb && Platform.isIOS;
   bool get isAndroid => !kIsWeb && Platform.isAndroid;
+
+  Intro intro;
 
 
   void setNumImage (int value ) {
@@ -342,8 +344,6 @@ int indice  ;
     var result = await flutterTts.pause();
     if (result == 1) setState(() => ttsState = TtsState.paused);
   }
-
-
 
   int currentIndex = 0;
 
@@ -874,9 +874,6 @@ int getIndiceTotal()
     });
   }
 
-
-
-
   void BoutonSuivant() {
 
 
@@ -1129,6 +1126,173 @@ print(_text_parler);
 
   }
 
+  EcranQuestionsState () {
+    intro = Intro(
+      stepCount: 2,
+
+      /// use defaultTheme, or you can implement widgetBuilder function yourself
+      widgetBuilder: StepWidgetBuilder.useDefaultTheme(
+        texts: [
+          '',
+          '',
+         ],
+        buttonTextBuilder: (currPage, totalPage) {
+           return currPage < totalPage - 1 ? 'suivant' : 'fin';
+        },
+      ),
+
+    );
+
+
+  }
+
+  String _tf = 'Aucun texte saisi';
+  String _tfS = 'Aucun texte soumis';
+  String _cTf = 'Aucun texte saisi';
+  String _cTfS = 'Aucun texte soumis';
+  String selectedCurrency = "Il y a une erreur dans le contenue";
+
+  String dropdownValue = 'One';
+
+  var currentSelectedValue;
+  static const deviceTypes = ["Mac", "Windows", "Mobile"];
+
+
+  static const List<String> currenciesList = <String>[
+    'Il y a une erreur dans le contenue',
+    'Autre',
+    'Probleme image',
+  ];
+  Widget materialTextField() {
+
+    return  Container(
+      padding: EdgeInsets.all(20.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0),
+        ),
+      ),
+      child: TextField(
+        decoration: InputDecoration(
+          hintText: 'Saisissez ce que vous voulez !',
+        ),
+        onChanged: (value) {
+          setState(() {
+            _tf = value;
+          });
+        },
+        onSubmitted: (value) {
+          setState(() {
+            _tfS = value;
+          });
+        },
+      ),
+    );
+
+  }
+
+  Widget cupertinoTextField() {
+
+    return   Container(
+      padding: EdgeInsets.all(20.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0),
+        ),
+      ),
+      child: CupertinoTextField(
+        placeholder: 'Saisissez ce que vous voulez !',
+        onChanged: (value) {
+          setState(() {
+            _cTf = value;
+          });
+        },
+        onSubmitted: (value) {
+          setState(() {
+            _cTfS = value;
+          });
+        },
+      ),
+    );
+
+  }
+
+
+  Widget EcranFormulaireTextField(BuildContext context) {
+
+          return Platform.isIOS ? cupertinoTextField() : materialTextField();
+
+  }
+
+
+  Widget EcranFormulairePicker(BuildContext context) {
+
+    return Platform.isIOS ? iOSPicker() : androidDropdown(context);
+
+  }
+
+
+    @override
+    Widget androidDropdown(BuildContext context) {
+      return Container(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: FormField<String>(
+          builder: (FormFieldState<String> state) {
+            return InputDecorator(
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0))),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  hint: Text("Select Device"),
+                  value: currentSelectedValue,
+                  isDense: true,
+                  onChanged: (newValue) {
+                    setState(() {
+                      currentSelectedValue = newValue;
+                    });
+                    print(currentSelectedValue);
+                  },
+                  items: deviceTypes.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ),
+            );
+          },
+        ),
+      );
+
+  }
+
+
+
+  CupertinoPicker iOSPicker() {
+    List<Text> pickerItems = [];
+    for (String currency in currenciesList) {
+      pickerItems.add(Text(currency));
+    }
+
+    return CupertinoPicker(
+      backgroundColor: Colors.lightBlue,
+      itemExtent: 32.0,
+      onSelectedItemChanged: (selectedIndex) {
+        setState(() {
+          selectedCurrency = currenciesList[selectedIndex];
+         });
+      },
+      children: pickerItems,
+    );
+  }
+
+
   Widget BoutonPlayStop(BuildContext context) {
 
     return  GestureDetector(
@@ -1281,16 +1445,56 @@ StatusTheme() ;
                   _stop();
                 }),
 
+            IconButton(
+                padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                icon: Icon(
+                  Icons.bug_report,
+                  // color: currentIndex == 1 ? Colors.orange : Colors.grey.shade400,
+                ),
+                onPressed: () {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Container(
+                          child: Center(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Container(
+                                  child:  EcranFormulaireTextField(context ),
+                                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+
+                                ),
+                                Container(
+
+                                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+
+                                    child: EcranFormulairePicker(context)
+                                ) ,
+
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+
+                 }),
+
           ],
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(
+
+       /* decoration: BoxDecoration(
           gradient: RadialGradient(
               radius: 1,
-              colors: [Colors.white, kCouleurBody]
+              color: [Colors.white, kCouleurBody]
           ),
-        ),
+        ),*/
         height: hauteur,
         child: Stack(
           children: <Widget>[
@@ -1628,13 +1832,50 @@ StatusTheme() ;
                   padding: EdgeInsets.fromLTRB(0, 10, 200, 0),
                   child: IconButton(
                     icon: Icon(
-                      Icons.clear,
+                      Icons.info_outline_rounded,
                       size : 30 ,
                         color: Colors.blue,
                       //color: currentIndex == 0 ? Colors.white : Colors.blue,
                     ),
                     onPressed: () {
-                       setBottomBarIndex(0);
+
+
+                      setBottomBarIndex(0);
+
+                      showDialog(
+                           context: context,
+                           barrierDismissible: true,
+                           builder: (BuildContext context) {
+                             return AlertDialog(
+                               title: Text(tampon.getExplication()),
+                                actions: <Widget>[
+                                 Container(
+                                     key: intro.keys[0],
+                                     child: Text(tampon.getExplication()  )
+                                 ),
+                                  Container(
+                                    key: intro.keys[1],
+
+                                    child: Image.asset(
+                                      'assets/$chemin/$numeroImage.jpg',
+                                      height: 270,
+                                    ),
+                                  ),
+
+                                  FlatButton(
+                                     onPressed: () {
+                                       intro.dispose();
+                                       intro.start(context);
+
+                                     },
+                                     child: Text('Animer') ,
+                                  ) ,
+
+                               ],
+                             );
+                           });
+
+
                     },
                     splashColor: Colors.white,
                   ),
@@ -1644,7 +1885,7 @@ StatusTheme() ;
                    child: IconButton(
                     icon: Icon(
 
-                      Icons.home,
+                      Icons.save_alt,
                       size : 30 ,
                       color: Colors.blue,
 
