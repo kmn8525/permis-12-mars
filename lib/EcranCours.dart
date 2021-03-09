@@ -8,7 +8,10 @@ class EcranCours extends StatefulWidget {
 
 class _EcranCoursState extends State<EcranCours> {
 
-
+@override
+  void initState() {
+     super.initState();
+  }
 
   @override
   void dispose() {

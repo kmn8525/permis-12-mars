@@ -26,6 +26,19 @@ class Resultats extends ChangeNotifier {
   List _listTotalPoint = [ ] ;
 
 
+    void SuprimerLesResultat() {
+      _listeQuestionsUtilisateurs.clear()  ;
+      _listeDeChoixUtilisateurs.clear()  ;
+      _listColoueurSolution.clear();
+      _listSelectionA.clear();
+      _listSelectionB.clear();
+      _listSelectionC.clear();
+      _listColoueurBoutonA.clear();
+      _listColoueurBoutonB.clear();
+      _listColoueurBoutonC.clear();
+      _listChoixUtilisateur.clear();
+      _listTotalPoint.clear();
+    }
 
 
 
@@ -128,19 +141,19 @@ void ajouterCouleurResultats(  Color couleur){
 
   }
 
-  void ajouterQuestion( String nouvelQuestion , bool choixA , bool choixB , bool choixC , bool nouvelFaute ,  String nouvelExplication , int nouveauPoint ){
+  void ajouterQuestion( String idQuestion , String nouvelQuestion , bool choixA , bool choixB , bool choixC , bool nouvelFaute ,  String nouvelExplication , int nouveauPoint ){
 
 
-    final tampon =  Question( nouvelQuestion , choixA , choixB ,  choixC , nouvelFaute , nouvelExplication , nouveauPoint)  ;
+    final tampon =  Question.Q1(idQuestion , nouvelQuestion , choixA , choixB ,  choixC , nouvelFaute , nouvelExplication , nouveauPoint)  ;
     _listeQuestionsUtilisateurs.add(tampon) ;
     notifyListeners() ;
 
 
   }
 
-  void ajouterReponse(   String reponseA , String reponseB ,  String reponseC ){
+  void ajouterReponse(  String idChoix ,  String reponseA , String reponseB ,  String reponseC ){
 
-  final tampon = Option( reponseA , reponseB , reponseC ) ;
+  final tampon = Option( idChoix , reponseA , reponseB , reponseC ) ;
   _listeDeChoixUtilisateurs.add(tampon) ;
   notifyListeners() ;
 

@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Constantes.dart';
 import 'EcranQuestionExamen.dart';
 import 'EcranQuestions.dart';
-import 'ListeConducteurPassager.dart';
 import 'ListeDefinition.dart';
 import 'Utility.dart';
 
@@ -126,7 +124,7 @@ class HorizontalItemQuestionState extends State<HorizontalItemQuestion> {
 
               Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
                   builder: (BuildContext context  ) =>
-                      EcranQuestions(titrePage: '${ widget.nomTheme}' , NumSauvegarder: 0)));
+                      EcranQuestions(titrePage: '${ widget.nomTheme}' , NumImage: 0)));
 
             },
 
@@ -277,7 +275,7 @@ print(numQD) ;
 
                         Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
                             builder: (BuildContext context  ) =>
-                                EcranQuestions(titrePage: '${ widget.nomTheme}' , NumSauvegarder: numQD)));
+                                EcranQuestions(titrePage: '${ widget.nomTheme}' , NumImage: numQD)));
 
                       },
 
@@ -299,7 +297,7 @@ print(numQD) ;
 
                         Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
                             builder: (BuildContext context  ) =>
-                                EcranQuestions(titrePage: '${ widget.nomTheme}' , NumSauvegarder: 0)));
+                                EcranQuestions(titrePage: '${ widget.nomTheme}' , NumImage: 0)));
 
                       },
 
@@ -322,7 +320,7 @@ print(numQD) ;
 
                 Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
                     builder: (BuildContext context  ) =>
-                        EcranQuestions(titrePage: '${ widget.nomTheme}' , NumSauvegarder: numQD)));
+                        EcranQuestions(titrePage: '${ widget.nomTheme}' , NumImage: numQD)));
 
               }
 

@@ -7,6 +7,7 @@ import 'Constantes.dart';
 import 'EcranQuestions.dart';
 import 'EcranResultats.dart';
 import 'ListeDefinition.dart';
+import 'ListeFavoris.dart';
 import 'ListeResultats.dart';
 import 'NomProfil.dart';
 
@@ -26,6 +27,7 @@ void main() =>
           ChangeNotifierProvider(create: (_) => Definition.C2()),
           ChangeNotifierProvider(create: (_) => EcranQuestionsState()),
            ChangeNotifierProvider(create: (_) => EcranProfilState()),
+            ChangeNotifierProvider(create: (_) => Favoris()),
 
 
         ],

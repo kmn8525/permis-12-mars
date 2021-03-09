@@ -49,7 +49,7 @@ import 'Question.dart';
     _numeroQuestion = value ;
     _numeroChoix = value ;
 
-    print('    _numeroQuestion') ;
+    print('  _numeroQuestion') ;
 
     print(_numeroQuestion) ;
 
@@ -58,16 +58,16 @@ import 'Question.dart';
   }
 
    List<Option> _listeDeChoix = [
-     Option('Un accotement en saillie', ' Un accotement de plain pied',
+     Option('d_o1' ,'Un accotement en saillie', ' Un accotement de plain pied',
          'Une piste cyclable'),
-     Option('La voie publique', ' La chaussée', 'La bande de circulation'),
-     Option('Oui', ' Non', ' Non c’est une piste cyclable'),
+     Option('d_o2','La voie publique', ' La chaussée', 'La bande de circulation'),
+     Option('d_o3', 'Oui', ' Non', ' Non c’est une piste cyclable'),
 
    ] ;
 
    List<Question> _listeDefinition = [
-     Question(
-         ' Cette partie est : ',
+     Question.Q1(
+        'd_q1' , ' Cette partie est : ',
          false,
          false,
          true,
@@ -75,8 +75,8 @@ import 'Question.dart';
          ' Une piste Cyclable ',
          1),
 
-     Question(
-         'Cette partie est : ',
+     Question.Q1(
+         'd_q2' , 'Cette partie est : ',
          true,
          false,
          false,
@@ -84,8 +84,8 @@ import 'Question.dart';
          ' La voie publique',
          1),
 
-     Question(
-         'Cette bande rouge fait partie de la chaussée',
+     Question.Q1(
+         'd_q3'  , 'Cette bande rouge fait partie de la chaussée',
          true,
          false,
          false,
@@ -101,11 +101,34 @@ import 'Question.dart';
    int get getNumQueDef =>  _numeroQuestion ;
    int get getNumChoDef =>  _numeroChoix ;
 
+int ver(){
 
 
 
 
 
+
+    var i =  _listeDefinition.indexWhere((innerElement) => innerElement.id =='d_q1');
+   print('---------------i  i i ------------') ;
+  print(i) ;
+
+
+
+}
+
+ 
+
+   String getIdQuestion() {
+     return _listeDefinition[_numeroChoix].id;
+   }
+
+   String getIdOption() {
+     return _listeDeChoix[_numeroChoix].id;
+   }
+
+   String getOptionA() {
+     return _listeDeChoix[_numeroChoix].option_A;
+   }
    List listeQuestionDefinition() {
      return _listeDefinition;
    }
@@ -118,9 +141,6 @@ import 'Question.dart';
      return _listeDefinition.length;
    }
 
-   String getOptionA() {
-     return _listeDeChoix[_numeroChoix].option_A;
-   }
 
    String getOptionB() {
      return _listeDeChoix[_numeroChoix].option_B;
@@ -186,7 +206,13 @@ import 'Question.dart';
        _numeroChoix = 0;
      }
 
-}
+
+
+
+
+
+
+   }
 
 
 
@@ -195,40 +221,7 @@ import 'Question.dart';
 
 
 
-/*
-  String serireCommencer() {
-    Utility.instance.getIntegerValue(cleNumQ)
-        .then((value) =>
-        setState(() {
-          _numeroQuestion = value;
-        }));
 
-
-    Utility.instance.getIntegerValue(cleNumC)
-        .then((value) =>
-        setState(() {
-          _numeroChoix = value;
-        }));
-
-
-    if (_numeroQuestion == null) {
-      setState(() {
-        _numeroQuestion = 0;
-      });
-
-      Utility.instance
-          .setIntegerValue(cleNumQ, _numeroQuestion);
-
-      return 'oui';
-    } else if (_numeroQuestion > 0) {
-      return 'non';
-    }
-
-    else if (_numeroQuestion >= _listeDefinition.length - 1) {
-      return 'fin';
-    }
-  }
-*/
 
 
 

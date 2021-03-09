@@ -6,19 +6,29 @@ class Incjontion {
   int _nombreDeChoix = 0;
 
   List<Option> _listeDeChoix= [
-    Option( 'Oui' , 'Non' , 'null' ) ,
-    Option( 'Je peux passer' , 'Je dois m'
+    Option( 'i_o1', 'Oui' , 'Non' , 'null' ) ,
+    Option( 'i_o2', 'Je peux passer' , 'Je dois m'
         'arrêter' , 'null' ) ,
 
 
 
   ] ;
   List<Question> _listeInjonction = [
-    Question('Je peux continuer tout droit' , true , false , null , false, 'Cette injonction est équivalente au feu vert l’agent ouvre le carrefour' , 1) ,
-    Question('Je désire continuer tout droit' , true , false , null , true, 'Cette injonction est équivalente au feu rouge' , 5  ),
+    Question.Q1('i_q1','Je peux continuer tout droit' , true , false , null , false, 'Cette injonction est équivalente au feu vert l’agent ouvre le carrefour' , 1) ,
+    Question.Q1('i_q2','Je désire continuer tout droit' , true , false , null , true, 'Cette injonction est équivalente au feu rouge' , 5  ),
 
 
   ] ;
+
+
+  String getIdQuestionFeux() {
+    return _listeInjonction[_nombreDeQuestion].id;
+  }
+
+  String getIdOptionFeux() {
+    return _listeDeChoix[_nombreDeChoix].id;
+  }
+
 
 
   String getOptionA() {

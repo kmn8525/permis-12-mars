@@ -1379,17 +1379,19 @@ class EcranQuestionsExamenState extends State<EcranQuestionsExamen>  with Change
                         Provider.of<Resultats>(context , listen: false).ajouterCouleurResultats(CouleurAchoisi);
 
                         BoutonValider();
-
+                        String idQuestion = tampon.getIdQuestion();
                         String q = tampon.getQuestionText();
-                        String g = tampon.getFauteGrave() ;
+                        bool g = tampon.getFauteGrave() ;
                         String e = tampon.getExplication();
 
                         String optionA = tampon.getOptionA() ;
+
+                        String idChoix = tampon.getOptionA() ;
                         String optionB = tampon.getOptionB();
                         String optionC = tampon.getOptionC();
 
-                       //  Provider.of<Resultats>(context , listen: false).ajouterQuestion(q , choix_1 , choix_2, choix_3, g , e);
-                        Provider.of<Resultats>(context , listen: false).ajouterReponse(optionA, optionB, optionC);
+                        Provider.of<Resultats>(context , listen: false).ajouterQuestion(idQuestion , q , choix_1 , choix_2, choix_3, g , e , point);
+                        Provider.of<Resultats>(context , listen: false).ajouterReponse(idChoix ,optionA, optionB, optionC);
 
                         setState(() {
                           desactive_boutonA = !desactive_boutonA;

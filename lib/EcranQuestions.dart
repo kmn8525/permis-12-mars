@@ -15,6 +15,7 @@ import 'Dessiner.dart';
 import 'EcranSolutions.dart';
 import 'ListeConducteurPassager.dart';
 import 'ListeDefinition.dart';
+import 'ListeFavoris.dart';
 import 'ListeFeux.dart';
 import 'ListeInjonction.dart';
 import 'ListeResultats.dart';
@@ -25,18 +26,18 @@ var listRep = [] ;
 //    languages = await flutterTts.setLanguage("fr-BE");
 
 var tampon = null ;
-String chemin ;
+String chemin_image ;
 String TitreTheme ;
 int MoyennePoint = 0 ;
 
 class EcranQuestions extends StatefulWidget  {
 
   final String titrePage;
-  final int NumSauvegarder ;
+  final int NumImage ;
 
 
 
-    EcranQuestions({Key key , this.titrePage, this.NumSauvegarder}) : super(key: key);
+    EcranQuestions({Key key , this.titrePage, this.NumImage}) : super(key: key);
 
 
   @override
@@ -46,11 +47,9 @@ class EcranQuestions extends StatefulWidget  {
   Object chargementListesDeQuestion() {
 
     if (titrePage == 'DEFINITION') {
-      var d = () => Definition.C1(NumSauvegarder);
+      var d = () => Definition.C1(NumImage);
       tampon = d();
-      chemin = 'imageDefinition';
-
-
+      chemin_image = 'imageDefinition';
 
     }
 
@@ -58,21 +57,21 @@ class EcranQuestions extends StatefulWidget  {
       {
         var c = () => ConducteurPassager();
         tampon = c();
-        chemin = 'imageConducteurPassager';
+        chemin_image = 'imageConducteurPassager';
       }
     }
     else if (titrePage == 'INJONCTIONS') {
       {
         var i = () => Incjontion();
         tampon = i();
-        chemin = 'ImageInjonction';
+        chemin_image = 'ImageInjonction';
       }
     }
     else if (titrePage == 'FEUX') {
       {
         var f = () => Feux();
         tampon = f();
-        chemin = 'ImageSignaux';
+        chemin_image = 'ImageSignaux';
       }
     }
     return tampon ;
@@ -124,7 +123,7 @@ class EcranQuestionsState extends State<EcranQuestions>  with ChangeNotifier , S
 
   String liensImage (){
 
-    return chemin ;
+    return chemin_image ;
   }
 
   String TitreQuestion (){
@@ -132,9 +131,9 @@ class EcranQuestionsState extends State<EcranQuestions>  with ChangeNotifier , S
     return widget.titrePage ;
   }
 
-  int NumImage (){
+  int getNumImage (){
 
-    return widget.NumSauvegarder ;
+    return widget.NumImage ;
   }
 
 
@@ -156,6 +155,89 @@ class EcranQuestionsState extends State<EcranQuestions>  with ChangeNotifier , S
   int i ;
   int numeroImage  = 0 ;
   String RcleQD=""  ;
+  String IdQuestion ;
+  String IdOption ;
+  bool verifExisteQuestion ;
+
+  Color couleurPardefault_A = Color(0xffffffff) ;
+  Color couleurPardefault_B =  Color(0xffffffff) ;
+  Color couleurPardefault_C =  Color(0xffffffff) ;
+  Color couleurPardefault_bouton_Explication =  Colors.blue;
+  Color couleurPardefault_Sauvegarde =  Colors.grey;
+
+
+
+  Color couleurApresSelection_A = Colors.orange;
+  Color couleurApresSelection_B = Colors.orange;
+  Color couleurApresSelection_C = Colors.orange;
+  Color couleurApresSelection_bouton_Explication =  Colors.blue;
+  Color couleurApresSelection_bouton_Sauvegarde  =  Colors.blue;
+
+
+  Color couleurAnimation = Colors.white ;
+
+  AnimationController _animationController;
+  bool animer = false ;
+  int t = 2 ;
+  Timer _timer;
+  int _start = 4;
+  bool val = false ;
+  String f ;
+
+
+  bool choix_1;
+  bool choix_2;
+  bool choix_3;
+  bool valeur_choisi;
+  int  point ;
+
+  int indice  ;
+
+
+
+
+  bool clic_bouton_A = false;
+  bool clic_bouton_B = false;
+  bool clic_bouton_C = false;
+  bool clic_bouton_explication = false;
+  bool clic_bouton_sauvegarde = false;
+  bool clic_bouton_Volume = true;
+
+
+  bool visibilite_bouton_Valider = true;
+  bool visibilite_bouton_explication = false;
+  bool visibilite_bouton_sauvegarde = false;
+
+  bool visibilite_bouton_Suivant = false;
+  bool visibilite_bouton_C = false;
+
+
+  bool desactive_boutonA = false;
+  bool desactive_boutonB = false;
+  bool desactive_boutonC = false;
+  bool desactive_bouton_Explication= false;
+  bool desactive_bouton_Sauvegarde = false;
+
+  String _tf = 'Aucun texte saisi';
+  String _tfS = 'Aucun texte soumis';
+  String _cTf = 'Aucun texte saisi';
+  String _cTfS = 'Aucun texte soumis';
+  String selectedCurrency = "Il y a une erreur dans le contenue";
+
+  String dropdownValue = 'One';
+
+
+
+
+
+  FlutterTts flutterTts;
+  dynamic languages;
+  //String language;
+  double volume = 1.0;
+  double pitch = 1.1;
+  double rate = 1.0;
+  String _text_parler ;
+
 
   void  StatusTheme() {
 
@@ -165,10 +247,10 @@ class EcranQuestionsState extends State<EcranQuestions>  with ChangeNotifier , S
 
     }));
 
-
-
-
   }
+
+
+
 
 
 
@@ -177,11 +259,23 @@ class EcranQuestionsState extends State<EcranQuestions>  with ChangeNotifier , S
 
    // Provider.of<Definition>(context , listen: false).sauvegarQuestion() ;
 
+
     RcleQD =  Provider.of<Definition>(context , listen: false).getCleNumQueDef ;
+
 
      widget.chargementListesDeQuestion();
     widget.chargementTitreTheme();
-      numeroImage = widget.NumSauvegarder +1 ;
+    verifExisteQuestion =  Provider.of<Favoris>(context , listen: false).VerificationQuestionFavoris(IdQuestion) ;
+
+    IdQuestion =      tampon.getIdQuestion() ;
+
+    print('IdQuestion') ;
+    print(IdQuestion) ;
+
+      Provider.of<Favoris>(context , listen: false).afficheFavoris() ;
+var b =       Provider.of<Favoris>(context , listen: false).listeQuestionFavoris() ;
+
+    numeroImage = widget.NumImage +1 ;
 
 
     Future.delayed(Duration(milliseconds: 500) * 5, () {
@@ -201,6 +295,11 @@ class EcranQuestionsState extends State<EcranQuestions>  with ChangeNotifier , S
     resetColor();
     initTts();
     _speak() ;
+     visibilite_bouton_explication = false ;
+    visibilite_bouton_sauvegarde = false ;
+    clic_bouton_Volume = false ;
+
+
 
     super.initState();
 
@@ -208,56 +307,6 @@ class EcranQuestionsState extends State<EcranQuestions>  with ChangeNotifier , S
   }
 
 
-
-
-  Color couleurPardefault_A = Color(0xffffffff) ;
-  Color couleurPardefault_B =  Color(0xffffffff) ;
-  Color couleurPardefault_C =  Color(0xffffffff) ;
-
-  Color couleurApresSelection_A = Colors.orange;
-  Color couleurApresSelection_B = Colors.orange;
-  Color couleurApresSelection_C = Colors.orange;
-  Color couleurAnimation = Colors.white ;
-
-   AnimationController _animationController;
-   bool animer = false ;
-   int t = 2 ;
-   Timer _timer;
-   int _start = 4;
-   bool val = false ;
-   String f ;
-
-
-  bool choix_1;
-  bool choix_2;
-  bool choix_3;
-  bool valeur_choisi;
- int  point ;
-
-int indice  ;
-
-
-
-
-  bool clic_bouton_A = false;
-  bool clic_bouton_B = false;
-  bool clic_bouton_C = false;
-
-  bool visibilite_bouton_Valider = true;
-  bool visibilite_bouton_Suivant = false;
-  bool visibilite_bouton_C = false;
-
-  bool desactive_boutonA = false;
-  bool desactive_boutonB = false;
-  bool desactive_boutonC = false;
-
-  FlutterTts flutterTts;
-  dynamic languages;
-  //String language;
-  double volume = 1.0;
-  double pitch = 1.1;
-  double rate = 1.0;
-  String _text_parler ;
 
   TtsState ttsState = TtsState.stopped;
 
@@ -932,6 +981,7 @@ int getIndiceTotal()
 
                 onPressed: ()
                 {
+                  Provider.of<Resultats>(context , listen: false).SuprimerLesResultat();
 
                   Provider.of<Resultats>(context , listen: false).reset();
 
@@ -971,6 +1021,8 @@ int getIndiceTotal()
 
               onPressed:  () {
 _stop();
+Provider.of<Resultats>(context , listen: false).SuprimerLesResultat();
+
 Provider.of<Resultats>(context , listen: false).reset();
 
                 Navigator.of(context, rootNavigator: false ).push(MaterialPageRoute(
@@ -995,7 +1047,8 @@ Provider.of<Resultats>(context , listen: false).reset();
 
 
               onPressed:  () {
-_stop();
+
+                _stop();
                 Navigator.of(context, rootNavigator: false ).push(MaterialPageRoute(
                     builder: (BuildContext context  ) =>
                         EcranSolutions(TitreTheme: '${TitreTheme}' )));
@@ -1031,6 +1084,8 @@ _stop();
         tampon.questionSuivante();
         tampon.optionSuivante();
         numeroImage++;
+
+
         masqueBouton( ) ;
         resetColor();
 
@@ -1095,6 +1150,7 @@ _stop();
 
     return valeur_choisi;
   }
+
   void masqueBouton( ) {
 
     setState(() {
@@ -1126,13 +1182,15 @@ print(_text_parler);
 
   }
 
+
   EcranQuestionsState () {
     intro = Intro(
-      stepCount: 2,
+      stepCount: 3,
 
       /// use defaultTheme, or you can implement widgetBuilder function yourself
       widgetBuilder: StepWidgetBuilder.useDefaultTheme(
         texts: [
+          '',
           '',
           '',
          ],
@@ -1146,16 +1204,19 @@ print(_text_parler);
 
   }
 
-  String _tf = 'Aucun texte saisi';
-  String _tfS = 'Aucun texte soumis';
-  String _cTf = 'Aucun texte saisi';
-  String _cTfS = 'Aucun texte soumis';
-  String selectedCurrency = "Il y a une erreur dans le contenue";
 
-  String dropdownValue = 'One';
+  var IconSongAlumer =   Icon(
+    Icons.volume_up,
+    color: Colors.black ,
+    size: 20,
+  );
+  var IconSongEteind = Icon(
+    Icons.volume_mute,
+    color: Colors.black ,
+    size: 20,
+  );
 
-  var currentSelectedValue;
-  static const deviceTypes = ["Mac", "Windows", "Mobile"];
+
 
 
   static const List<String> currenciesList = <String>[
@@ -1234,42 +1295,36 @@ print(_text_parler);
     return Platform.isIOS ? iOSPicker() : androidDropdown(context);
 
   }
-
+  String newValue ;
 
     @override
     Widget androidDropdown(BuildContext context) {
-      return Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: FormField<String>(
-          builder: (FormFieldState<String> state) {
-            return InputDecorator(
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0))),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  hint: Text("Select Device"),
-                  value: currentSelectedValue,
-                  isDense: true,
-                  onChanged: (newValue) {
-                    setState(() {
-                      currentSelectedValue = newValue;
-                    });
-                    print(currentSelectedValue);
-                  },
-                  items: deviceTypes.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-              ),
-            );
-          },
+      return DropdownButton<String>(
+        value: dropdownValue,
+        icon: Icon(Icons.arrow_downward),
+        iconSize: 24,
+        elevation: 16,
+        style: TextStyle(color: Colors.deepPurple),
+        underline: Container(
+          height: 2,
+          color: Colors.deepPurpleAccent,
         ),
-      );
+        onChanged: (  newValue) {
+           setState(() {
 
+            dropdownValue =  newValue;
+
+
+          });
+        },
+        items: <String>['One', 'Two', 'Free', 'Four']
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+      );
   }
 
 
@@ -1324,10 +1379,6 @@ print(_text_parler);
                         .setIntegerValue(RcleQD, tampon.getNumQueDef);
 
 
-
-
-
-
                     BoutonValider();
 
                     /*print(' 3 --- text parler dans le PLAY -----') ;
@@ -1335,18 +1386,30 @@ print(_text_parler);
 
                     _stop();
                     setState(() {
+                      visibilite_bouton_explication = true ;
+                        visibilite_bouton_sauvegarde = true ;
 
                     });
+
+                    IdQuestion =      tampon.getIdQuestion() ;
+
+                    verifExisteQuestion =  Provider.of<Favoris>(context , listen: false).VerificationQuestionFavoris(IdQuestion) ;
+
+
+
+                    String idQuestion = tampon.getIdQuestion();
                     String q = tampon.getQuestionText();
                     bool g = tampon.getFauteGrave() ;
                     String e = tampon.getExplication();
 
                     String optionA = tampon.getOptionA() ;
+
+                    String idChoix = tampon.getOptionA() ;
                     String optionB = tampon.getOptionB();
                     String optionC = tampon.getOptionC();
 
-                    Provider.of<Resultats>(context , listen: false).ajouterQuestion(q , choix_1 , choix_2, choix_3, g , e , point);
-                    Provider.of<Resultats>(context , listen: false).ajouterReponse(optionA, optionB, optionC);
+                    Provider.of<Resultats>(context , listen: false).ajouterQuestion(idQuestion , q , choix_1 , choix_2, choix_3, g , e , point);
+                    Provider.of<Resultats>(context , listen: false).ajouterReponse(idChoix ,optionA, optionB, optionC);
 
                     setState(() {
                       desactive_boutonA = !desactive_boutonA;
@@ -1373,9 +1436,14 @@ print(_text_parler);
                   ),
                   onPressed: () {
 
+                    setState(() {
+                      clic_bouton_Volume = false ;
+                      visibilite_bouton_explication = false ;
+                      visibilite_bouton_sauvegarde = false ;
+
+
+                    });
                     BoutonSuivant();
-
-
 
                     /* print('4 --- text parler dans le NEXT -- ---') ;
                     print(_text_parler);*/
@@ -1404,7 +1472,7 @@ print(_text_parler);
   Widget build(BuildContext context) {
     double hauteur = MediaQuery.of(context).size.height;
     final Size size = MediaQuery.of(context).size;
-
+    //StatutFavoris() ;
 StatusTheme() ;
     return Scaffold(
       extendBody: true,
@@ -1437,12 +1505,26 @@ StatusTheme() ;
 
             IconButton(
               padding: EdgeInsets.fromLTRB(70, 0, 0, 0),
-                icon: Icon(
-                  Icons.volume_up,
-                  // color: currentIndex == 1 ? Colors.orange : Colors.grey.shade400,
-                ),
+                color:
+                clic_bouton_C ? couleurApresSelection_C : couleurPardefault_C,
+
+                icon: clic_bouton_Volume ? IconSongEteind : IconSongAlumer ,                  // color: currentIndex == 1 ? Colors.orange : Colors.grey.shade400,
+
                 onPressed: () {
-                  _stop();
+                setState(() {
+                  clic_bouton_Volume = !clic_bouton_Volume;
+
+                });
+
+                if ( clic_bouton_Volume == false ) {
+                  _speak() ;
+
+                }
+                else {
+                  _stop() ;
+                }
+
+
                 }),
 
             IconButton(
@@ -1507,7 +1589,7 @@ StatusTheme() ;
                         Expanded(
                           child: Container(
                               child: Image.asset(
-                                'assets/$chemin/$numeroImage.jpg',
+                                'assets/$chemin_image/$numeroImage.jpg',
                                 height: 270,
                               ),
                             ),
@@ -1518,11 +1600,15 @@ StatusTheme() ;
                   ),
                   Container(
                       margin: EdgeInsets.all(1),
-                      child: Text(
-                        tampon.getQuestionText()   ,
+                      child: Column(
+                        children: [
+                          Text(
+                            tampon.getQuestionText()    ,
 
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       )),
                   Expanded(
                     child: SingleChildScrollView(
@@ -1828,73 +1914,175 @@ StatusTheme() ;
                 ),
 
                 ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(0, 10, 200, 0),
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.info_outline_rounded,
-                      size : 30 ,
-                        color: Colors.blue,
-                      //color: currentIndex == 0 ? Colors.white : Colors.blue,
+                Visibility(
+                  visible: visibilite_bouton_explication,
+
+                  child: AbsorbPointer(
+                    absorbing: desactive_bouton_Explication,
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(0, 10, 200, 0),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.info_outline_rounded,
+                          size : 30 ,
+                          color: clic_bouton_explication
+                              ? couleurApresSelection_bouton_Explication
+                              : couleurPardefault_bouton_Explication,
+                          //color: currentIndex == 0 ? Colors.white : Colors.blue,
+                        ),
+                        onPressed: () {
+
+setState(() {
+  clic_bouton_explication = !clic_bouton_explication;
+
+});
+                          setBottomBarIndex(0);
+
+                          showDialog(
+                               context: context,
+                               barrierDismissible: true,
+                               builder: (BuildContext context) {
+                                 return AlertDialog(
+                                   title: Text(tampon.getExplication()),
+                                    actions: <Widget>[
+                                     Container(
+                                         key: intro.keys[0],
+                                         child: Text(tampon.getExplication()  )
+                                     ),
+
+                                      Stack(
+                                         children: <Widget>[
+                                          Container(
+                                            key: intro.keys[1],
+
+                                            child: Image.asset(
+                                              'assets/$chemin_image/$numeroImage.jpg',
+                                              height: 270,
+                                            ),
+                                          ),
+                                           Container(
+                                             padding: EdgeInsets.fromLTRB(60, 80, 100, 0),
+
+                                             child: SizedBox(
+
+                                               width: 50,
+
+                                              key: intro.keys[2],
+
+                                              child:SvgPicture.asset(
+                                                'assets/iconTheme/stop.svg',
+                                                  width: 50.0,
+                                                allowDrawingOutsideViewBox: true,
+                                              ),
+                                          ),
+                                           ),
+                                        ],
+                                      ) ,
+
+                                      FlatButton(
+                                         onPressed: () {
+                                           intro.dispose();
+                                           intro.start(context);
+
+                                         },
+                                         child: Text('Animer') ,
+                                      ) ,
+
+                                   ],
+                                 );
+                               });
+
+
+                        },
+                        splashColor: Colors.white,
+                      ),
                     ),
-                    onPressed: () {
-
-
-                      setBottomBarIndex(0);
-
-                      showDialog(
-                           context: context,
-                           barrierDismissible: true,
-                           builder: (BuildContext context) {
-                             return AlertDialog(
-                               title: Text(tampon.getExplication()),
-                                actions: <Widget>[
-                                 Container(
-                                     key: intro.keys[0],
-                                     child: Text(tampon.getExplication()  )
-                                 ),
-                                  Container(
-                                    key: intro.keys[1],
-
-                                    child: Image.asset(
-                                      'assets/$chemin/$numeroImage.jpg',
-                                      height: 270,
-                                    ),
-                                  ),
-
-                                  FlatButton(
-                                     onPressed: () {
-                                       intro.dispose();
-                                       intro.start(context);
-
-                                     },
-                                     child: Text('Animer') ,
-                                  ) ,
-
-                               ],
-                             );
-                           });
-
-
-                    },
-                    splashColor: Colors.white,
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(200, 10, 0, 0),
-                   child: IconButton(
-                    icon: Icon(
+                Visibility(
+                  visible: visibilite_bouton_sauvegarde,
 
-                      Icons.save_alt,
-                      size : 30 ,
-                      color: Colors.blue,
+                  child: AbsorbPointer(
+                    absorbing: desactive_bouton_Sauvegarde,
 
-                      // color:currentIndex == 1 ? Colors.white : Colors.blue,
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(200, 10, 0, 0),
+                       child: IconButton(
+                        icon: Icon(
+
+
+                          Icons.save,
+                          size : 30 ,
+                          color:  verifExisteQuestion ? couleurApresSelection_bouton_Sauvegarde : couleurPardefault_Sauvegarde
+
+                          // color:currentIndex == 1 ? Colors.white : Colors.blue,
+                        ),
+                        onPressed: () {
+
+
+                          String idQuestion = tampon.getIdQuestion();
+
+                           String q = tampon.getQuestionText();
+                          bool g = tampon.getFauteGrave() ;
+                          String e = tampon.getExplication();
+
+                          String optionA = tampon.getOptionA() ;
+
+                          String idChoix = tampon.getOptionA() ;
+                          String optionB = tampon.getOptionB();
+                          String optionC = tampon.getOptionC();
+                          bool repA = tampon.getBonneReponseA() ;
+                          bool repB = tampon.getBonneReponseB() ;
+                          bool repC = tampon.getBonneReponseC() ;
+                          int NumeroImage = getNumImage() ;
+
+                          Provider.of<Definition>(context , listen: false).ver();
+                          Provider.of<Favoris>(context , listen: false).ajouterQuestion(idQuestion , q ,repA , repB , repC , g , e ,point , chemin_image , NumeroImage );
+
+                        //   Provider.of<Favoris>(context , listen: false).ajouterQuestion( idQuestion , q ,  reponse_A , reponse_B , reponse_C , g , e , point , chemin_image , NumeroImage) ;
+
+
+
+/*
+                          if ( verifExisteQuestion == false ) {
+
+                            String idQuestion = tampon.getIdQuestion();
+                            String q = tampon.getQuestionText();
+                            bool g = tampon.getFauteGrave() ;
+                            String e = tampon.getExplication();
+
+
+                            String optionA = tampon.getOptionA() ;
+                            String idChoix = tampon.getOptionA() ;
+                            String optionB = tampon.getOptionB();
+                            String optionC = tampon.getOptionC();
+
+                            bool reponse_A = tampon.getOptionA() ;
+
+                            bool reponse_B = tampon.getOptionB();
+                            bool reponse_C = tampon.getOptionC();
+                            int NumeroImage = getNumImage() ;
+
+
+
+                            Provider.of<Favoris>(context , listen: false).ajouterReponse(idChoix ,optionA, optionB, optionC);
+
+                            Provider.of<Favoris>(context , listen: false).ajouterQuestion( idQuestion , q ,  reponse_A , reponse_B , reponse_C , g , e , point , chemin_image , NumeroImage) ;
+
+
+                            setState(() {
+
+                              verifExisteQuestion != verifExisteQuestion ;
+
+                            });
+
+                          }
+*/
+
+                            setBottomBarIndex(1);
+                        },
+                       ),
                     ),
-                    onPressed: () {
-                        setBottomBarIndex(1);
-                    },
-                    splashColor: Colors.white,
                   ),
                 ),
 

@@ -218,6 +218,9 @@ void BoutonSuivant() {
                           child: Icon(Icons.close),
                           elevation: 0.1,
                           onPressed: () {_likeThis();
+
+                          Provider.of<Resultats>(context , listen: false).SuprimerLesResultat();
+
                           }),
                     ),
                     Container(
@@ -226,27 +229,13 @@ void BoutonSuivant() {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          IconButton(
-                            icon: Icon(
-                              Icons.home,
-                              color:   Colors.orange  ,
-                            ),
-                            onPressed: () {
-                             },
-                            splashColor: Colors.white,
-                          ),
+
 
                           Container(
                             width: size.width * 0.20,
                           ),
 
-                          IconButton(
-                              icon: Icon(
-                                Icons.notifications,
-                                //color: currentIndex == 3 ? Colors.orange : Colors.grey.shade400,
-                              ),
-                              onPressed: () {
-                               }),
+
                         ],
                       ),
                     )

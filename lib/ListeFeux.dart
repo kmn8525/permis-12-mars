@@ -6,7 +6,7 @@ class Feux {
   int _nombreDeChoix = 0;
 
   List<Question> _listeFeux = [
-    Question('Je peux franchir le feu jaune-orange fixe si, au moment où il s’allume' ,
+    Question.Q1('f_q1','Je peux franchir le feu jaune-orange fixe si, au moment où il s’allume' ,
         false , true , false , true,
         ' Vous ne pouvez pas rouler trop vite., et vous devez prévoir la succession des feux. '
             'Le feu jaune-orange fixe ne peut être franchi que, '
@@ -14,19 +14,26 @@ class Feux {
             ' proche pour vous arrêter dans des conditions de'
             ' sécurité suffisantes. Abordez un feu vert avec MEFIANCE, non avec confiance' , 5) ,
 
-    Question('Le feu est rouge. Je m’immobilise' , false , true , null , false,
+    Question.Q1('f_q2' , 'Le feu est rouge. Je m’immobilise' , false , true , null , false,
         'La ligne transversale est une ligne d’arrêt Elle vous indique l’endroit où vous devez vous immobiliser pour un feu ou un « Stop ».' , 1 ),
 
 
   ] ;
   List<Option> _listeDeChoix= [
-    Option( 'Je roule trop vite' , 'J’en suis trop proche' , 'Je suis surpris' ) ,
-    Option( 'A hauteur du feu' , 'A la ligne transversale' , 'null' ) ,
+    Option( 'f_o1' , 'Je roule trop vite' , 'J’en suis trop proche' , 'Je suis surpris' ) ,
+    Option( 'f_o1' , 'A hauteur du feu' , 'A la ligne transversale' , 'null' ) ,
 
 
   ] ;
 
 
+  String getIdQuestion () {
+    return _listeFeux[_nombreDeQuestion].id;
+  }
+
+  String getIdOption() {
+    return _listeDeChoix[_nombreDeChoix].id;
+  }
 
 
   String getOptionA() {
