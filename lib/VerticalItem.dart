@@ -6,7 +6,9 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'Constantes.dart';
 import 'EcranQuestionExamen.dart';
 import 'EcranQuestions.dart';
+import 'ListeConducteurPassager.dart';
 import 'ListeDefinition.dart';
+import 'ListeFavoris.dart';
 import 'Utility.dart';
 
 var tampon = null ;
@@ -51,136 +53,51 @@ class HorizontalItemQuestionState extends State<HorizontalItemQuestion> {
   Color c ;
   String etat ;
 
-  int numQD = 0   ;
+  int numQ_Definition = 0   ;
+  int numQ_ConducteurPass = 0   ;
+
   int nbCD  ;
   int nbQCO  ;
   int nbQCCO  ;
 
-  String RcleQD=""  ;
+  String RecuperCleQDefinion =" "  ;
+  String RecuperCleQConducteurPass =" "  ;
+  String RecuperCleListeFavoris=" " ;
+  List  ListeFavoriSauver = [] ;
+
   int i = 0 ;
-  String cleNumQD = "qDef";
-  void  StatuTheme( BuildContext context  ) {
 
-    Utility.instance.getIntegerValue(RcleQD)
+
+  Future<void> recupereDonneSauvegarde() async {
+    Utility.instance.getIntegerValue(RecuperCleQDefinion)
         .then((value) => setState(() {
-      numQD = value ;
+       numQ_Definition = value ;
+
+    }));
+
+    Utility.instance.getIntegerValue(RecuperCleQConducteurPass)
+        .then((value) => setState(() {
+      numQ_ConducteurPass = value ;
 
     }));
 
 
-
-    if    ((widget.nomTheme == 'DEFINITION' ) && ( numQD == 0) ) {
-      c = Colors.black ;
-
-
-    }
-
-    else {
-      c = Colors.red ;
-      var alertStyle = AlertStyle(
-        animationType: AnimationType.fromTop,
-        isCloseButton: false,
-        isOverlayTapDismiss: false,
-        descStyle: TextStyle(fontWeight: FontWeight.bold),
-        descTextAlign: TextAlign.start,
-        animationDuration: Duration(milliseconds: 500),
-        alertBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          side: BorderSide(
-            color: Colors.grey,
-          ),
-        ),
-        titleStyle: TextStyle(
-          color: Colors.green,
-        ),
-        alertAlignment: Alignment.center,
-      );
-      Alert(
-        context: context,
-        style: alertStyle,
-        image: SvgPicture.asset(
-          'assets/emoji/happy.svg',
-          height: 43.0,
-          width: 43.0,
-          allowDrawingOutsideViewBox: true,
-        ),
-        // type: AlertType.info,
-        title: "FIN DE LA SERIE",
-
-        // desc: "Voulez-vous continuez ?.",
-
-        buttons: [
-
-          DialogButton(
-            //  padding: EdgeInsets.all(15),
-
-            child: Text(
-              "CORRECTION",
-              style: TextStyle(color: Colors.white, fontSize: 8),
-            ),
-
-
-            onPressed:  () {
-
-              Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
-                  builder: (BuildContext context  ) =>
-                      EcranQuestions(titrePage: '${ widget.nomTheme}' , NumImage: 0)));
-
-            },
-
-
-
-          )
-
-        ],
-
-
-
-      ).show();
-
-
-
-    }
-
-
-  }
-
-
-  Future<Null> getSharedPrefs() async {
-    Utility.instance.getIntegerValue(RcleQD)
+    Utility.instance.getListData(RecuperCleListeFavoris)
         .then((value) => setState(() {
-       numQD = value ;
+      ListeFavoriSauver = value ;
 
     }));
   }
 
-  Widget  buildSharedPreferencesCounter() {
-    return FutureBuilder<int>(
-      future: Utility.instance.getIntegerValue(RcleQD),
-      builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-        if (snapshot.hasData) {
-          numQD = snapshot.data;
-
-          return Text(snapshot.data.toString()) ;
-        }
-
-        return Text("null");
-      },
-    );
-  }
 
   @override
   void initState() {
-    RcleQD =  Provider.of<Definition>(context , listen: false).getCleNumQueDef ;
+    RecuperCleQDefinion =  Provider.of<Definition>(context , listen: false).getCleNumQueDef ;
+    RecuperCleQConducteurPass =  Provider.of<ConducteurPassager>(context , listen: false).getCleNumQueCondPass ;
 
+    RecuperCleListeFavoris =  Provider.of<Favoris>(context , listen: false).getcleListeSauvegarder ;
 
-    getSharedPrefs() ;
-       /*Utility.instance.getIntegerValue(RcleQD)
-        .then((value) => setState(() {
-       numQD = value ;
-
-    }));*/
-
+    recupereDonneSauvegarde() ;
 
 
 super.initState();
@@ -188,9 +105,10 @@ super.initState();
   }
 
   void chargeCouleur() {
-    if  ((widget.nomTheme == "DEFINITION" ) )
+    if  (widget.nomTheme == "DEFINITION" )
       {
-        if ( numQD > 0) {
+
+        if ( numQ_Definition > 0) {
 
           setState(() {
             c = Colors.red ;
@@ -202,6 +120,21 @@ super.initState();
 
         }
       }
+
+    else if ( widget.nomTheme == "CONDUCTEUR" ) {
+      if ( numQ_ConducteurPass > 0) {
+
+        setState(() {
+          c = Colors.red ;
+        });
+      }
+
+      else {
+        c = Colors.black ;
+
+      }
+
+    }
 
   }
 
@@ -220,12 +153,12 @@ super.initState();
 
         onTap: () {
 
-print('numQD') ;
-print(numQD) ;
 
-            if  ((widget.nomTheme == "DEFINITION" ) )
-            {
-              if ( numQD > 0) {
+
+            if  (widget.nomTheme == "DEFINITION" )
+
+              {
+              if ( numQ_Definition > 0) {
                 var alertStyle = AlertStyle(
                   animationType: AnimationType.fromTop,
                   isCloseButton: false,
@@ -275,7 +208,7 @@ print(numQD) ;
 
                         Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
                             builder: (BuildContext context  ) =>
-                                EcranQuestions(titrePage: '${ widget.nomTheme}' , NumImage: numQD)));
+                                EcranQuestions(titrePage: '${ widget.nomTheme}' , NumImage: numQ_Definition)));
 
                       },
 
@@ -320,7 +253,113 @@ print(numQD) ;
 
                 Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
                     builder: (BuildContext context  ) =>
-                        EcranQuestions(titrePage: '${ widget.nomTheme}' , NumImage: numQD)));
+                        EcranQuestions(titrePage: '${ widget.nomTheme}' , NumImage: numQ_Definition)));
+
+              }
+
+
+            }
+
+            else if (widget.nomTheme == "CONDUCTEUR" ) {
+
+              if ( numQ_ConducteurPass > 0) {
+
+
+                var alertStyle = AlertStyle(
+                  animationType: AnimationType.fromTop,
+                  isCloseButton: false,
+                  isOverlayTapDismiss: true,
+                  descStyle: TextStyle(fontWeight: FontWeight.bold),
+                  descTextAlign: TextAlign.start,
+                  animationDuration: Duration(milliseconds: 500),
+                  alertBorder: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    side: BorderSide(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  titleStyle: TextStyle(
+                    color: Colors.green,
+                  ),
+                  alertAlignment: Alignment.center,
+                );
+                Alert(
+                  context: context,
+                  style: alertStyle,
+                  image: SvgPicture.asset(
+                    'assets/emoji/happy.svg',
+                    height: 43.0,
+                    width: 43.0,
+                    allowDrawingOutsideViewBox: true,
+                  ),
+                  // type: AlertType.info,
+                  title: "Ce Theme a deja ete Commencer voulez-vous reprendre",
+
+                  // desc: "Voulez-vous continuez ?.",
+
+                  buttons: [
+
+
+                    DialogButton(
+                      margin: EdgeInsets.all(15),
+
+                      child: Text(
+
+                        "OUI",
+                        style: TextStyle(color: Colors.white, fontSize: 8),
+                      ),
+
+
+                      onPressed:  () {
+
+                        Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
+                            builder: (BuildContext context  ) =>
+                                EcranQuestions(titrePage: '${ widget.nomTheme}' , NumImage: numQ_ConducteurPass)));
+
+                      },
+
+
+                      color: Colors.green,
+
+                    ) ,
+                    DialogButton(
+                      margin: EdgeInsets.all(15),
+
+                      child: Text(
+
+                        "NON",
+                        style: TextStyle(color: Colors.white, fontSize: 8),
+                      ),
+
+
+                      onPressed:  () {
+
+                        Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
+                            builder: (BuildContext context  ) =>
+                                EcranQuestions(titrePage: '${ widget.nomTheme}' , NumImage: 0)));
+
+                      },
+
+
+                      color: Colors.deepOrangeAccent,
+
+                    ) ,
+
+
+                  ],
+
+
+
+                ).show();
+
+
+              }
+
+              else {
+
+                Navigator.of(context, rootNavigator: true ).push(MaterialPageRoute(
+                    builder: (BuildContext context  ) =>
+                        EcranQuestions(titrePage: '${ widget.nomTheme}' , NumImage: numQ_ConducteurPass)));
 
               }
 

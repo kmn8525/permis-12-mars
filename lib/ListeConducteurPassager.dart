@@ -1,9 +1,59 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
 import 'Option.dart';
 import 'Question.dart';
 
-class ConducteurPassager {
-  int _nombreDeQuestion = 0;
-  int _nombreDeChoix = 0;
+class ConducteurPassager with  ChangeNotifier , DiagnosticableTreeMixin  {
+  int _numeroQuestion = 0;
+  int _numeroChoix = 0;
+
+  String cleNumQcondPass = "qConPass";
+  bool serieFini = false;
+
+  int total = 15;
+
+  int NbBonneReponse = 0;
+
+  int NbMovaiseReponse = 0;
+
+  int NbQuestionReondue = 0;
+
+  Color commencer = Colors.black;
+
+  Color enCours = Colors.lightBlue;
+
+
+  ConducteurPassager.C1( int a ) {
+    _numeroQuestion = a ;
+    _numeroChoix = a ;
+
+  }
+  ConducteurPassager.C2( ) ;
+
+
+  String get getCleNumQueCondPass =>  cleNumQcondPass ;
+  int get getNumQuestionCondPass =>  _numeroQuestion ;
+  int get getNumChoixCondPass=>  _numeroChoix ;
+
+  void   SetNumQueCondPass( int value ) {
+
+
+    _numeroQuestion = value ;
+    _numeroChoix = value ;
+
+    notifyListeners();
+
+  }
+
+
+
+  int retourneIndiceQuestion( String value){
+
+    var  indice =  _listeConducteurPassager.indexWhere((innerElement) => innerElement.id == value);
+
+return indice ;
+  }
 
   List<Option> _listeDeChoix= [
    Option('cp_o1' , 'Oui' , ' Non, je dois être titulaire d’un permis de conduire catégorie C	 ' , 'Non, je dois être titulaire d’un permis de conduire catégorie C ou D' ) ,
@@ -29,65 +79,63 @@ class ConducteurPassager {
         , true , false , false , true,'Chaque passager prenant place à l’avant d’un véhicule doit disposer d’une largeur minimale de 40 cm.'
             ' Le chauffeur doit quant à lui, disposer de 55 cm minimum.' ,5 ) ,
 
-
-
   ] ;
 
 
   String getIdQuestion () {
-    return _listeConducteurPassager[_nombreDeQuestion].id;
+    return _listeConducteurPassager[_numeroQuestion].id;
   }
 
   String getIdOption () {
-    return _listeDeChoix[_nombreDeChoix].id;
+    return _listeDeChoix[_numeroChoix].id;
   }
 
   String getOptionA() {
-    return _listeDeChoix[_nombreDeChoix].option_A;
+    return _listeDeChoix[_numeroChoix].option_A;
   }
   String getOptionB() {
-    return _listeDeChoix[_nombreDeChoix].option_B;
+    return _listeDeChoix[_numeroChoix].option_B;
   }
   String getOptionC() {
-    return _listeDeChoix[_nombreDeChoix].option_C;
+    return _listeDeChoix[_numeroChoix].option_C;
   }
 
 
   String getQuestionText() {
-    return _listeConducteurPassager[_nombreDeQuestion].questionText;
+    return _listeConducteurPassager[_numeroQuestion].questionText;
   }
 
   bool getBonneReponseA() {
 
-    return _listeConducteurPassager[_nombreDeQuestion].reponse_A;
+    return _listeConducteurPassager[_numeroQuestion].reponse_A;
   }
   bool getBonneReponseB() {
 
 
-    return _listeConducteurPassager[_nombreDeQuestion].reponse_B;
+    return _listeConducteurPassager[_numeroQuestion].reponse_B;
   }
   bool getBonneReponseC() {
 
 
-    return _listeConducteurPassager[_nombreDeQuestion].reponse_C;
+    return _listeConducteurPassager[_numeroQuestion].reponse_C;
   }
 
 
   bool getFauteGrave() {
 
 
-    return _listeConducteurPassager[_nombreDeQuestion].fauteGrave;
+    return _listeConducteurPassager[_numeroQuestion].fauteGrave;
   }
 
   String getExplication() {
 
-    return _listeConducteurPassager[_nombreDeQuestion].explication;
+    return _listeConducteurPassager[_numeroQuestion].explication;
   }
 
   int getPoint() {
 
 
-    return _listeConducteurPassager[_nombreDeQuestion].point;
+    return _listeConducteurPassager[_numeroQuestion].point;
   }
 
 
@@ -95,22 +143,21 @@ class ConducteurPassager {
 
 
   void questionSuivante() {
-    if (_nombreDeQuestion <= _listeConducteurPassager.length - 1) {
-      _nombreDeQuestion++;
+    if (_numeroQuestion <= _listeConducteurPassager.length - 1) {
+      _numeroQuestion++;
     }
   }
 
   void optionSuivante() {
-    if (_nombreDeChoix <= _listeDeChoix.length - 1) {
-      _nombreDeChoix++;
+    if (_numeroChoix <= _listeDeChoix.length - 1) {
+      _numeroChoix++;
     }
   }
 
-  bool estFini() {
-    if (_nombreDeQuestion >= _listeConducteurPassager.length - 1) {
+  bool FinTheme() {
+    if (_numeroQuestion >= _listeConducteurPassager.length - 1) {
 
-      print('Now returning true');
-      return true;
+       return true;
 
     } else {
       return false;
@@ -118,8 +165,8 @@ class ConducteurPassager {
   }
 
   void reset() {
-    _nombreDeQuestion = 0;
-    _nombreDeChoix = 0 ;
+    _numeroQuestion = 0;
+    _numeroChoix = 0 ;
   }
 
 

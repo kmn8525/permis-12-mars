@@ -13,9 +13,7 @@ import 'Question.dart';
    int _numeroChoix = 0  ;
 
    String cleNumQD = "qDef";
-   String cleNumCD = "cDef";
-   String cleNumQCO = "qCon";
-   String cleNumCCO = "cCon";
+
 
    bool serieFini = false;
 
@@ -37,21 +35,17 @@ import 'Question.dart';
      _numeroChoix = a ;
     }
 
+   String get getCleNumQueDef =>  cleNumQD ;
+   int get getNumQueDef =>  _numeroQuestion ;
+   int get getNumChoDef =>  _numeroChoix ;
+
    Definition.C2( );
 
    void   SetNumQueOpt( int value ) {
 
 
-    print('dans sauvegarder value') ;
-
-    print(value) ;
-
     _numeroQuestion = value ;
     _numeroChoix = value ;
-
-    print('  _numeroQuestion') ;
-
-    print(_numeroQuestion) ;
 
     notifyListeners();
 
@@ -96,25 +90,13 @@ import 'Question.dart';
 
    ];
 
-   String get getCleNumQueDef =>  cleNumQD ;
 
-   int get getNumQueDef =>  _numeroQuestion ;
-   int get getNumChoDef =>  _numeroChoix ;
+   int retourneIndiceQuestion( String value){
 
-int ver(){
+     var  indice =  _listeDefinition.indexWhere((innerElement) => innerElement.id == value);
 
-
-
-
-
-
-    var i =  _listeDefinition.indexWhere((innerElement) => innerElement.id =='d_q1');
-   print('---------------i  i i ------------') ;
-  print(i) ;
-
-
-
-}
+     return indice ;
+   }
 
  
 

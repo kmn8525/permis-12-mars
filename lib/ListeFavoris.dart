@@ -17,6 +17,9 @@ class Favoris  with  ChangeNotifier , DiagnosticableTreeMixin {
   String cleNumQCO = "qCon";
   String cleNumCCO = "cCon";
 
+  String cleListeSauvegarder = "listFavoriSauver";
+
+
   bool serieFini = false;
 
   int total = 15;
@@ -33,68 +36,62 @@ class Favoris  with  ChangeNotifier , DiagnosticableTreeMixin {
 
 
 
-  List<Question> _listeFavoris = [ ];
+  List<Question> _listeQuestionFavoris = [
 
-  List<Option> _listeDeChoix = [ ] ;
+  ];
+
+  List<Option> _listeDeChoixFavoris = [ ] ;
 
 
   bool   VerificationQuestionFavoris( String  value ) {
 
 
 
-    print(value) ;
+     if ((_listeQuestionFavoris.singleWhere((innerElement) => innerElement.id == value,
+        orElse: () => null)) != null) {
 
+      return true ;
+    } else {
 
-   if ( _listeFavoris.contains(value)) {
-     return true ;
-   }
-   else {
-     return false ;
-   }
+      return false ;
+
+    }
 
 
 
   }
 
+  int retourneIndiceQuestion( String value){
+
+    var  indice =  _listeQuestionFavoris.indexWhere((innerElement) => innerElement.id == value);
+
+    return indice ;
+  }
 
 
   void ajouterQuestion( String idQuestion , String nouvelQuestion , bool choixA , bool choixB , bool choixC , bool nouvelFaute ,  String nouvelExplication , int nouveauPoint , String cheminImage , int numeroImage ){
 
 
       final tampon =  Question.Q2(idQuestion , nouvelQuestion , choixA , choixB ,  choixC , nouvelFaute , nouvelExplication , nouveauPoint , cheminImage ,numeroImage )  ;
-    _listeFavoris.add(tampon) ;
+    _listeQuestionFavoris.add(tampon) ;
     notifyListeners() ;
 
-      print('----------Liste de favoris juste apres lajout-------------') ;
 
-      print(_listeFavoris) ;
-  }
-
-  void afficheFavoris() {
-     print('----------Liste de favoris-------------') ;
-
-     print(_listeFavoris) ;
+   }
 
 
-
-
-  }
 
 
   void ajouterReponse(  String idChoix ,  String reponseA , String reponseB ,  String reponseC ){
 
     final tampon = Option( idChoix , reponseA , reponseB , reponseC ) ;
-    _listeDeChoix.add(tampon) ;
+    _listeDeChoixFavoris.add(tampon) ;
     notifyListeners() ;
 
   }
 
   void   SetNumQueOpt( int value ) {
 
-
-    print('dans sauvegarder value') ;
-
-    print(value) ;
 
     _numeroQuestion = value ;
     _numeroChoix = value ;
@@ -107,90 +104,109 @@ class Favoris  with  ChangeNotifier , DiagnosticableTreeMixin {
 
 
 
+  String get getcleListeSauvegarder =>  cleListeSauvegarder ;
 
   String get getCleNumQueDef =>  cleNumQD ;
 
   int get getNumQueDef =>  _numeroQuestion ;
   int get getNumChoDef =>  _numeroChoix ;
 
+  void RemoveQuestions( int IdAsuprimer) {
+
+      _listeQuestionFavoris.removeAt(IdAsuprimer);
+  }
+
+
+
 
   String getIdQuestion() {
-    return _listeFavoris[_numeroChoix].id;
+    return _listeQuestionFavoris[_numeroChoix].id;
   }
 
   String getIdOption() {
-    return _listeDeChoix[_numeroChoix].id;
+    return _listeDeChoixFavoris[_numeroChoix].id;
   }
 
 
   List listeQuestionFavoris() {
-    return _listeFavoris;
+    return _listeQuestionFavoris;
   }
 
   List listeOptionDefinition() {
-    return _listeDeChoix;
+    return _listeDeChoixFavoris;
   }
 
   int getTaille() {
-    return _listeFavoris.length;
+    return _listeQuestionFavoris.length;
   }
 
   String getOptionA() {
-    return _listeDeChoix[_numeroChoix].option_A;
+    return _listeDeChoixFavoris[_numeroChoix].option_A;
   }
 
   String getOptionB() {
-    return _listeDeChoix[_numeroChoix].option_B;
+    return _listeDeChoixFavoris[_numeroChoix].option_B;
   }
 
   String getOptionC() {
-    return _listeDeChoix[_numeroChoix].option_C;
+    return _listeDeChoixFavoris[_numeroChoix].option_C;
   }
+
 
 
   String getQuestionText() {
-    return _listeFavoris[_numeroQuestion].questionText;
+    return _listeQuestionFavoris[_numeroQuestion].questionText;
+  }
+
+  int getNumeroImage() {
+    return _listeQuestionFavoris[_numeroQuestion].numeroImage;
+  }
+
+  String getCheminImage() {
+    return _listeQuestionFavoris[_numeroQuestion].cheminImage;
+  }
+
+
+  int getPoint() {
+    return _listeQuestionFavoris[_numeroQuestion].point;
   }
 
   bool getBonneReponseA() {
-    return _listeFavoris[_numeroQuestion].reponse_A;
+    return _listeQuestionFavoris[_numeroQuestion].reponse_A;
   }
 
   bool getBonneReponseB() {
-    return _listeFavoris[_numeroQuestion].reponse_B;
+    return _listeQuestionFavoris[_numeroQuestion].reponse_B;
   }
 
   bool getBonneReponseC() {
-    return _listeFavoris[_numeroQuestion].reponse_C;
+    return _listeQuestionFavoris[_numeroQuestion].reponse_C;
   }
 
 
   bool getFauteGrave() {
-    return _listeFavoris[_numeroQuestion].fauteGrave;
+    return _listeQuestionFavoris[_numeroQuestion].fauteGrave;
   }
 
   String getExplication() {
-    return _listeFavoris[_numeroQuestion].explication;
+    return _listeQuestionFavoris[_numeroQuestion].explication;
   }
 
-  int getPoint() {
-    return _listeFavoris[_numeroQuestion].point;
-  }
 
   void questionSuivante() {
-    if (_numeroQuestion <= _listeFavoris.length - 1) {
+    if (_numeroQuestion <= _listeQuestionFavoris.length - 1) {
       _numeroQuestion++;
     }
   }
 
   void optionSuivante() {
-    if (_numeroChoix <= _listeDeChoix.length - 1) {
+    if (_numeroChoix <= _listeDeChoixFavoris.length - 1) {
       _numeroChoix++;
     }
   }
 
   bool FinTheme() {
-    if (_numeroQuestion >= _listeFavoris.length - 1) {
+    if (_numeroQuestion >= _listeQuestionFavoris.length - 1) {
       return true;
     } else {
       return false;

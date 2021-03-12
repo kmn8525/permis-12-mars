@@ -54,7 +54,7 @@ class EcranQuestionsExamen extends StatefulWidget  {
 
     else if (titrePage == 'CONDUCTEUR') {
       {
-        var c = () => ConducteurPassager();
+        var c = () => ConducteurPassager.C2();
         tampon = c();
         chemin = 'imageConducteurPassager';
       }

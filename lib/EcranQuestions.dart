@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_intro/flutter_intro.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permis/Acceuil.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -55,7 +56,7 @@ class EcranQuestions extends StatefulWidget  {
 
     else if (titrePage == 'CONDUCTEUR') {
       {
-        var c = () => ConducteurPassager();
+        var c = () => ConducteurPassager.C1(NumImage);
         tampon = c();
         chemin_image = 'imageConducteurPassager';
       }
@@ -73,6 +74,12 @@ class EcranQuestions extends StatefulWidget  {
         tampon = f();
         chemin_image = 'ImageSignaux';
       }
+    }
+    else if (titrePage == 'FAVORIS') {
+      var f = () => Favoris();
+      tampon = f();
+      chemin_image = 'disk';
+
     }
     return tampon ;
 
@@ -102,6 +109,12 @@ class EcranQuestions extends StatefulWidget  {
         TitreTheme = 'FEUX' ;
 
       }
+
+    }
+
+    else if (titrePage ==  'disk') {
+
+      TitreTheme = 'disk' ;
     }
     return TitreTheme ;
 
@@ -148,13 +161,17 @@ class EcranQuestionsState extends State<EcranQuestions>  with ChangeNotifier , S
   String cleNumQCO = "qco";
 
   String cleNumCCO = "cco";
-  int numQD  = 0 ;
+  int numQDefinition  = 0 ;
+  int numQconducPasseger  = 0 ;
+
   int nbCD  ;
   int nbQCO  ;
   int nbQCCO  ;
   int i ;
   int numeroImage  = 0 ;
-  String RcleQD=""  ;
+  String RecupereCleQuestionDefinition=""  ;
+  String RecupereCleQuestionConducteurPass=""  ;
+
   String IdQuestion ;
   String IdOption ;
   bool verifExisteQuestion ;
@@ -237,15 +254,52 @@ class EcranQuestionsState extends State<EcranQuestions>  with ChangeNotifier , S
   double pitch = 1.1;
   double rate = 1.0;
   String _text_parler ;
+  String  id = "";
+  String RecuperCleListeFavoris=" " ;
+  List  ListeFavoriSauver = [] ;
 
+  Future<void> recupereListeFavorisSauvegarde() async {
 
-  void  StatusTheme() {
-
-    Utility.instance.getIntegerValue(RcleQD)
+    Utility.instance.getListData(RecuperCleListeFavoris)
         .then((value) => setState(() {
-      numQD = value ;
+       ListeFavoriSauver = value ;
 
     }));
+
+
+
+  }
+
+
+  void  StatusThemeEtListeSauvegarder() {
+
+    Utility.instance.getIntegerValue(RecupereCleQuestionDefinition)
+        .then((value) => setState(() {
+      numQDefinition = value ;
+
+    }));
+
+
+    Utility.instance.getIntegerValue(RecupereCleQuestionConducteurPass)
+        .then((value) => setState(() {
+      numQconducPasseger = value ;
+
+    }));
+
+
+    Utility.instance.getListData(RecuperCleListeFavoris)
+        .then((value) => setState(() {
+      ListeFavoriSauver = value ;
+
+    }));
+
+    IdQuestion =   tampon.getIdQuestion() ;
+
+    verifExisteQuestion =  Provider.of<Favoris>(context , listen: false).VerificationQuestionFavoris(IdQuestion) ;
+
+
+
+
 
   }
 
@@ -257,23 +311,23 @@ class EcranQuestionsState extends State<EcranQuestions>  with ChangeNotifier , S
   @override
   void initState() {
 
-   // Provider.of<Definition>(context , listen: false).sauvegarQuestion() ;
 
 
-    RcleQD =  Provider.of<Definition>(context , listen: false).getCleNumQueDef ;
+    RecupereCleQuestionDefinition =  Provider.of<Definition>(context , listen: false).getCleNumQueDef ;
 
+    RecupereCleQuestionConducteurPass =  Provider.of<ConducteurPassager>(context , listen: false).getCleNumQueCondPass ;
 
-     widget.chargementListesDeQuestion();
+    widget.chargementListesDeQuestion();
     widget.chargementTitreTheme();
+
+    IdQuestion = tampon.getIdQuestion();
     verifExisteQuestion =  Provider.of<Favoris>(context , listen: false).VerificationQuestionFavoris(IdQuestion) ;
+    RecuperCleListeFavoris =  Provider.of<Favoris>(context , listen: false).getcleListeSauvegarder ;
 
-    IdQuestion =      tampon.getIdQuestion() ;
+    recupereListeFavorisSauvegarde();
 
-    print('IdQuestion') ;
-    print(IdQuestion) ;
 
-      Provider.of<Favoris>(context , listen: false).afficheFavoris() ;
-var b =       Provider.of<Favoris>(context , listen: false).listeQuestionFavoris() ;
+
 
     numeroImage = widget.NumImage +1 ;
 
@@ -322,11 +376,6 @@ var b =       Provider.of<Favoris>(context , listen: false).listeQuestionFavoris
   Intro intro;
 
 
-  void setNumImage (int value ) {
-      numeroImage =  value ;
-
-     notifyListeners();
-  }
   Color couleurChoix = Colors.red;
   Future _getLanguages() async {
     languages = await flutterTts.setLanguage("fr-FR");
@@ -934,7 +983,10 @@ int getIndiceTotal()
          _stop();
 
          Utility.instance
-             .setIntegerValue(RcleQD, 0);
+             .setIntegerValue(RecupereCleQuestionDefinition, 0);
+         Utility.instance
+             .setIntegerValue(RecupereCleQuestionConducteurPass, 0);
+
 
          var alertStyle = AlertStyle(
           animationType: AnimationType.fromTop,
@@ -1169,8 +1221,7 @@ Provider.of<Resultats>(context , listen: false).reset();
       else {
         visibilite_bouton_C = true ;
         _text_parler  = tampon.getQuestionText()  + "," +tampon.getOptionA() + " ,  Reponse A , " +  tampon.getOptionB() + " , Reponse B , " +  tampon.getOptionC()+ " , Reponse C ";
-print(_text_parler);
-         _speak();
+          _speak();
 
 
       }
@@ -1180,6 +1231,27 @@ print(_text_parler);
 
 
 
+  }
+
+  void messageApresSauvegarde() {
+    Fluttertoast.showToast(
+        timeInSecForIosWeb : 1 ,
+        gravity: ToastGravity.CENTER_RIGHT,
+
+        msg: "Question Sauvegarder",
+        toastLength: Toast.LENGTH_SHORT,
+        backgroundColor: Colors.green,
+        textColor: Colors.white);
+  }
+  void messageApresSupression() {
+    Fluttertoast.showToast(
+        gravity: ToastGravity.CENTER_RIGHT,
+
+        timeInSecForIosWeb : 1 ,
+         msg: "Question Suprimer",
+        toastLength: Toast.LENGTH_SHORT,
+        backgroundColor: Colors.red,
+        textColor: Colors.white);
   }
 
 
@@ -1375,14 +1447,21 @@ print(_text_parler);
 
                     Provider.of<Resultats>(context , listen: false).ajouterCouleurResultats(CouleurAchoisi);
 
-                    Utility.instance
-                        .setIntegerValue(RcleQD, tampon.getNumQueDef);
+
+                    if (  widget.titrePage   == "CONDUCTEUR" ) {
+                      Utility.instance
+                          .setIntegerValue(RecupereCleQuestionConducteurPass ,  tampon.getNumQuestionCondPass);
+
+                    }
+                    else if (widget.titrePage   == "DEFINITION"  ) {
+                      Utility.instance
+                          .setIntegerValue(RecupereCleQuestionDefinition, tampon.getNumQueDef);
+
+                    }
 
 
                     BoutonValider();
 
-                    /*print(' 3 --- text parler dans le PLAY -----') ;
-                    print(_text_parler);*/
 
                     _stop();
                     setState(() {
@@ -1391,9 +1470,6 @@ print(_text_parler);
 
                     });
 
-                    IdQuestion =      tampon.getIdQuestion() ;
-
-                    verifExisteQuestion =  Provider.of<Favoris>(context , listen: false).VerificationQuestionFavoris(IdQuestion) ;
 
 
 
@@ -1445,9 +1521,6 @@ print(_text_parler);
                     });
                     BoutonSuivant();
 
-                    /* print('4 --- text parler dans le NEXT -- ---') ;
-                    print(_text_parler);*/
-
 
 
                   },
@@ -1473,7 +1546,7 @@ print(_text_parler);
     double hauteur = MediaQuery.of(context).size.height;
     final Size size = MediaQuery.of(context).size;
     //StatutFavoris() ;
-StatusTheme() ;
+StatusThemeEtListeSauvegarder() ;
     return Scaffold(
       extendBody: true,
 
@@ -1603,11 +1676,13 @@ StatusTheme() ;
                       child: Column(
                         children: [
                           Text(
-                            tampon.getQuestionText()    ,
+                            tampon.getQuestionText()     ,
 
                             textAlign: TextAlign.center,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
+
+
                         ],
                       )),
                   Expanded(
@@ -2019,65 +2094,60 @@ setState(() {
                         ),
                         onPressed: () {
 
+setState(() {
 
-                          String idQuestion = tampon.getIdQuestion();
+  if (verifExisteQuestion == false ) {
 
-                           String q = tampon.getQuestionText();
-                          bool g = tampon.getFauteGrave() ;
-                          String e = tampon.getExplication();
+    String idQuestion = tampon.getIdQuestion();
 
-                          String optionA = tampon.getOptionA() ;
+    String q = tampon.getQuestionText();
+    bool g = tampon.getFauteGrave() ;
+    String e = tampon.getExplication();
 
-                          String idChoix = tampon.getOptionA() ;
-                          String optionB = tampon.getOptionB();
-                          String optionC = tampon.getOptionC();
-                          bool repA = tampon.getBonneReponseA() ;
-                          bool repB = tampon.getBonneReponseB() ;
-                          bool repC = tampon.getBonneReponseC() ;
-                          int NumeroImage = getNumImage() ;
+    String optionA = tampon.getOptionA() ;
 
-                          Provider.of<Definition>(context , listen: false).ver();
-                          Provider.of<Favoris>(context , listen: false).ajouterQuestion(idQuestion , q ,repA , repB , repC , g , e ,point , chemin_image , NumeroImage );
+    String idChoix = tampon.getOptionA() ;
+    String optionB = tampon.getOptionB();
+    String optionC = tampon.getOptionC();
+    bool repA = tampon.getBonneReponseA() ;
+    bool repB = tampon.getBonneReponseB() ;
+    bool repC = tampon.getBonneReponseC() ;
+    int NumeroImage = getNumImage() ;
+
+    Provider.of<Favoris>(context , listen: false).ajouterQuestion(idQuestion , q ,repA , repB , repC , g , e ,point , chemin_image , NumeroImage );
+    Provider.of<Favoris>(context , listen: false).ajouterReponse(idChoix ,optionA, optionB, optionC);
+
+    verifExisteQuestion != verifExisteQuestion ;
+
+    Utility.instance
+        .setListData(RecuperCleListeFavoris, ListeFavoriSauver);
+
+     messageApresSauvegarde() ;
+
+  }
+
+  else {
+
+    verifExisteQuestion =  Provider.of<Favoris>(context , listen: false).VerificationQuestionFavoris(IdQuestion) ;
+   int indexAsuprimer =  Provider.of<Favoris>(context , listen: false).retourneIndiceQuestion(IdQuestion) ;
+
+
+
+    Provider.of<Favoris>(context , listen: false).RemoveQuestions(indexAsuprimer) ;
+
+     Utility.instance
+        .setListData(RecuperCleListeFavoris, ListeFavoriSauver);
+
+    messageApresSupression() ;
+
+  }
+});
+
 
                         //   Provider.of<Favoris>(context , listen: false).ajouterQuestion( idQuestion , q ,  reponse_A , reponse_B , reponse_C , g , e , point , chemin_image , NumeroImage) ;
 
 
 
-/*
-                          if ( verifExisteQuestion == false ) {
-
-                            String idQuestion = tampon.getIdQuestion();
-                            String q = tampon.getQuestionText();
-                            bool g = tampon.getFauteGrave() ;
-                            String e = tampon.getExplication();
-
-
-                            String optionA = tampon.getOptionA() ;
-                            String idChoix = tampon.getOptionA() ;
-                            String optionB = tampon.getOptionB();
-                            String optionC = tampon.getOptionC();
-
-                            bool reponse_A = tampon.getOptionA() ;
-
-                            bool reponse_B = tampon.getOptionB();
-                            bool reponse_C = tampon.getOptionC();
-                            int NumeroImage = getNumImage() ;
-
-
-
-                            Provider.of<Favoris>(context , listen: false).ajouterReponse(idChoix ,optionA, optionB, optionC);
-
-                            Provider.of<Favoris>(context , listen: false).ajouterQuestion( idQuestion , q ,  reponse_A , reponse_B , reponse_C , g , e , point , chemin_image , NumeroImage) ;
-
-
-                            setState(() {
-
-                              verifExisteQuestion != verifExisteQuestion ;
-
-                            });
-
-                          }
-*/
 
                             setBottomBarIndex(1);
                         },

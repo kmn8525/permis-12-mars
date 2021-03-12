@@ -53,6 +53,19 @@ class Utility {
     myPrefs.setString(key, value);
   }
 
+
+
+  setListData(String key, List<String> value) async {
+    SharedPreferences myPrefs = await SharedPreferences.getInstance();
+    myPrefs.setStringList(key, value);
+  }
+
+  Future<List<String>> getListData(String key) async {
+    SharedPreferences myPrefs = await SharedPreferences.getInstance();
+    return myPrefs.getStringList(key);
+  }
+
+
   Future<String> getStringValue(String key) async {
     SharedPreferences myPrefs = await SharedPreferences.getInstance();
     return myPrefs.getString(key) ?? "Entrez Votre Nom";
